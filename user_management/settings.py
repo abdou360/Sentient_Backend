@@ -11,14 +11,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
-import pymysql
+# import pymysql
 
 # To keep secret keys in environment variables
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
-pymysql.install_as_MySQLdb()
+# pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UserConfig',
     'social_django',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -91,8 +92,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ar-crud-project',
         'USER': 'root',
-        'PASSWORD': 'root',
-        'PORT': '8889',
+        'PASSWORD': '',
+        'PORT': '3306',
         'HOST': '127.0.0.1'
     }
 }
@@ -149,6 +150,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR/'static/'
 STATICFILES_DIRS = [
     'user_management/static',
+    'dashboard/static',
 ]
 
 LOGIN_REDIRECT_URL = '/'
