@@ -10,7 +10,7 @@ from filiere.models import Filiere
 class Niveau(models.Model):
     nom_niveau = models.CharField(max_length=100, null=True)
     type_niveau = models.CharField(max_length=100, null=True)
-    filliere = models.ForeignKey(Filiere , null=True,  on_delete= models.SET_NULL )
+    filiere = models.ForeignKey(Filiere , null=True,  on_delete= models.SET_NULL )
 
 
 
