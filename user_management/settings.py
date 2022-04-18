@@ -9,16 +9,17 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+from dotenv import load_dotenv
 import os
 from pathlib import Path
 import pymysql
+pymysql.version_info = (1, 4, 6, 'final', 0)
+pymysql.install_as_MySQLdb()
 
 # To keep secret keys in environment variables
-from dotenv import load_dotenv
 
 load_dotenv()
 
-pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -47,7 +48,7 @@ INSTALLED_APPS = [
     'users.apps.UserConfig',
     'social_django',
     'semestre',
-     'filiere',
+    'filiere',
     'emploie',
     'module',
     'cours',
