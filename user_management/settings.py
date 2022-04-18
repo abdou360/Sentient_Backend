@@ -49,8 +49,12 @@ INSTALLED_APPS = [
     'semestre',
      'filiere',
     'emploie',
-    'module'
+    'module',
+    'cours',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -94,9 +98,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ar-crud-project',
         'USER': 'root',
-        'PASSWORD': '',
-        'PORT': '3306',
-        'HOST': '127.0.0.1'
+        'PASSWORD': 'root1234500',
+        # 'PORT': '3306',
+        # 'HOST': '127.0.0.1'
     }
 }
 
@@ -152,6 +156,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR/'static/'
 STATICFILES_DIRS = [
     'user_management/static',
+    'cours/static'
 ]
 
 LOGIN_REDIRECT_URL = '/'
