@@ -1,4 +1,7 @@
 from django.contrib import admin
-from .models import Profile
+from .models import  *
 
-admin.site.register(Profile)
+admin.site.register(Admin)
+admin.site.register(Teachers)
+admin.site.register(Students)
+
