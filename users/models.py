@@ -77,3 +77,22 @@ def save_user_profile(sender, instance, **kwargs):
     
 
 
+        if img.height > 100 or img.width > 100:
+            new_img = (100, 100)
+            img.thumbnail(new_img)
+            img.save(self.avatar.path)
+
+
+class Etudiant(models.Model):
+    nom = models.CharField(max_length=200, null=True)
+    prenom = models.CharField(max_length=200, null=True)
+    cne = models.CharField(max_length=6, null=True)
+    user = models.OneToOneField(User ,  null=True , on_delete= models.SET_NULL)
+
+
+class Professeur(models.Model):
+    nom = models.CharField(max_length=200, null=True)
+    prenom = models.CharField(max_length=200, null=True)
+    matricule = models.CharField(max_length=20, null=True)
+    user = models.OneToOneField(User ,  null=True, on_delete= models.SET_NULL)
+
