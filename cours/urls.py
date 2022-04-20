@@ -4,7 +4,7 @@ from django.urls import path
 # from .views import chapitres_list
 from django.conf.urls import url
 from django.urls import path, include
-from cours.views import chapitres_list, add_chapitre, delete_chapitre, update_chapitre
+from cours.views import chapitres_list, add_chapitre, delete_chapitre, update_chapitre,chapitre_details
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -13,6 +13,7 @@ urlpatterns = [
     path('', chapitres_list, name='chapitres_list'),
     path('add_chapitre', add_chapitre, name='add_chapitre'),
     path('update_chapitre/<int:id>', update_chapitre, name='update_chapitre'),
+     path('chapitre/<int:id>', chapitre_details, name='chapitre_details'),
     path('delete_chapitre/<int:id>', delete_chapitre, name='delete_chapitre'),
     
     # path('', home, name='users-home'),

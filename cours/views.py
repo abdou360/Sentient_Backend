@@ -31,7 +31,19 @@ def chapitres_list(request):
         "professeur": professeur
     }
     return render(request, 'cours/chapitres.html', context) 
-    
+def chapitre_details(request,id): 
+    professeur = Professeur.objects.filter(user = request.user.id).first()
+    chapitre = Chapitre.objects.filter(id = id).first()
+    traitements = Traitement.objects.filter(chapitre_id = id).all()
+    documents=Document.objects.filter(chapitre_id = id).all()
+    context = {
+        "chapitre": chapitre,
+        "professeur": professeur,
+        "traitements":traitements,
+        "documents":documents,
+    }
+    # context = {'chapitre_details': Traitem.objects.all()}
+    return render(request, 'cours/chapitre_details.html',context) 
 
 def add_chapitre(request): 
     professeur = Professeur.objects.filter(user = request.user.id).first()
