@@ -75,11 +75,11 @@ class TraitementForm(forms.ModelForm):
     class Meta:
         model = Traitement
         fields = {
-            'titre',
-            'label'
+            'type',
+            'label',
         }
         labels = {
-            'titre': 'Nom du modèle',
+            'type': 'type de generqteur du modele',
             'label': 'Label',
         }
         widgets={

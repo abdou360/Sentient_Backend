@@ -4,8 +4,7 @@ from django.urls import path
 # from .views import chapitres_list
 from django.conf.urls import url
 from django.urls import path, include
-from cours.views import chapitres_list, add_chapitre, delete_chapitre, update_chapitre,chapitre_details
-
+from cours.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -16,6 +15,12 @@ urlpatterns = [
      path('chapitre/<int:id>', chapitre_details, name='chapitre_details'),
     path('delete_chapitre/<int:id>', delete_chapitre, name='delete_chapitre'),
     
+    path('delete_traitement/<int:id>', delete_Traitement, name='delete_traitement'),
+    path('add_traitement/<int:id>', add_traitement, name='add_traitement'),
+
+    path('delete_document/<int:id>', delete_document, name='delete_document'),
+    # path('update_document/<int:id>', update_Document, name='update_document'),
+
     # path('', home, name='users-home'),
     
 #     path('register/', RegisterView.as_view(), name='users-register'),

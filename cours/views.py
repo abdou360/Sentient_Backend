@@ -3,7 +3,7 @@ from tkinter import Image
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from pymysql import NULL
-from cours.forms import ChapitreForm
+from cours.forms import *
 
 from cours.models import Chapitre, Document, Modele3D, Traitement
 from filiere.models import Filiere
@@ -88,13 +88,14 @@ def update_chapitre(request, id):
     return render(request, 'cours/update_chapitre.html', context={'updated_chapitre': updated_chapitre})
     
     
+
 def delete_document(request, id):
     document = Document.objects.get(id=id)
     if document.delete():
         messages.success(request, ('Le document a été supprimé !'))
     else:
         messages.error(request, 'Erreur : Le document n\'a pas été supprimé')
-    return redirect('#')
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 def delete_modele(request, id):
     traitement = Traitement.objects.get(id=id)
@@ -116,4 +117,31 @@ def delete_image(request, id):
     else:
         messages.error(request, 'Erreur : L\'image n\'a pas été supprimé')
     return redirect('#')
+
+def delete_Traitement(request, id):
+    traitement = Traitement.objects.get(id=id)
+    # image = Image.objects.get(id=traitement.image.id)
+    if traitement.delete():
+        messages.success(request, ('Le modele AR a été supprimé !'))
+    else:
+        messages.error(request, 'Erreur : Le modele  n\'a pas été supprimé')
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
+def add_traitement(request,id): 
+    chapitre = Chapitre.objects.filter(id = id).first()
+    if request.method == "GET":
+        new_traitement = TraitementForm()
+    elif request.method == "POST":
+        new_traitement = TraitementForm(request.POST, request.FILES)
+        if new_traitement.is_valid():
+            Traitement = new_traitement.save(commit=False)
+            Traitement.chapitre = chapitre
+            Traitement.save()
+            messages.success(request, ('Le modele AR a été ajouté avec succès'))
+            return redirect('chapitre_details',id)
+        else:
+            messages.error(request, 'Erreur : Le chapitre n\'a pas été ajouté')
+            return redirect('add_traitement')
+    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement})
+        
 
