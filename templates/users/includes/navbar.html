@@ -163,7 +163,7 @@
         aria-labelledby="userDropdown"
       >
         {% if user.is_authenticated %}
-        <a class="dropdown-item" href="{% url 'users-profile' %}">
+        <a class="dropdown-item" href="#">
           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
           Profile
         </a>
@@ -174,7 +174,7 @@
         <div class="dropdown-divider"></div>
         <a
           class="dropdown-item"
-          href="{% url 'logout' %}"
+          href="adminlogin"
           data-toggle="modal"
           data-target="#logoutModal"
         >
@@ -182,7 +182,7 @@
           Logout
         </a>
         {% else %}
-        <a class="dropdown-item" href="{% url 'login' %}">
+        <a class="dropdown-item" href="adminlogin">
           <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
           login
         </a>
