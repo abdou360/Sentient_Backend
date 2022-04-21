@@ -178,6 +178,7 @@ STATICFILES_DIRS = [
     'user_management/static',
     'dashboard/static',
     os.path.join(BASE_DIR, 'static'),
+    'filiere/static',
 ]
 
 MEDIA_URL = '/media/'

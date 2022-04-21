@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+<<<<<<< HEAD
 from users import views
 from users.views import home
 from django.contrib.auth.views import LoginView, LogoutView
@@ -57,3 +58,34 @@ urlpatterns = [
 
     
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+=======
+from .views import home, profile, RegisterView
+from django.urls import path, include, re_path
+
+
+urlpatterns = [
+    path('', home, name='users-home'),
+    path('register/', RegisterView.as_view(), name='users-register'),
+    path('profile/', profile, name='users-profile'),
+     path('admin/', admin.site.urls),
+
+    path('login/', CustomLoginView.as_view(redirect_authenticated_user=True, template_name='users/login.html',
+                                           authentication_form=LoginForm), name='login'),
+
+    path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+
+    path('password-reset/', ResetPasswordView.as_view(), name='password_reset'),
+
+    path('password-reset-confirm/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'),
+         name='password_reset_confirm'),
+
+    path('password-reset-complete/',
+         auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
+         name='password_reset_complete'),
+
+    path('password-change/', ChangePasswordView.as_view(), name='password_change'),
+
+     re_path(r'^oauth/', include('social_django.urls', namespace='social')),
+]
+>>>>>>> ecaf05613685bad4c664a487587c9d81ef7f8e59

@@ -14,5 +14,6 @@ urlpatterns = [
     path('niveau/',include('semestre.urls.niveau.urls')),
     
     path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    path('filiere_etab/', include('filiere.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

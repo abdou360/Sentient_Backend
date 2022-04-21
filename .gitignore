@@ -7,6 +7,6 @@ db.sqlite3
 
 .env
 venv/
-
+.secrets.sh
 .idea/
 .vscode
