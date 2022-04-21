@@ -3,7 +3,7 @@ from operator import imod
 from tokenize import group
 from django.db import models
 from semestre.models import Groupe
-from users.models import Professeur
+from users.models import Teachers
 
 
 class Salle(models.Model):
@@ -21,7 +21,7 @@ class Planning(models.Model):
     liblle =  models.CharField(max_length=100, null=True) 
     groupe = models.ForeignKey(Groupe , null = True , on_delete= models.SET_NULL )
     salle = models.ForeignKey(Salle , null = True , on_delete= models.SET_NULL )
-    professeur = models.ForeignKey(Professeur , null = True , on_delete= models.SET_NULL )
+    professeur = models.ForeignKey(Teachers , null = True , on_delete= models.SET_NULL )
     # element de module 
 
 class Seance(models.Model):

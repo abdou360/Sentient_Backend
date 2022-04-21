@@ -3,7 +3,7 @@ from django.urls import path
 from users import views
 from users.views import home
 from django.contrib.auth.views import LoginView, LogoutView
-from . import SuperusersViews, AdminViews, TeacherViews, StudentViews
+from . import AdminViews, TeacherViews, StudentViews
 from django.conf import settings
 from django.conf.urls.static import static
 

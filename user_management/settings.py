@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-from dotenv import load_dotenv
 import os
 from pathlib import Path
 import pymysql
@@ -17,9 +16,6 @@ pymysql.version_info = (1, 4, 6, 'final', 0)
 pymysql.install_as_MySQLdb()
 
 pymysql.install_as_MySQLdb()
-# To keep secret keys in environment variables
-
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,13 +43,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UserConfig',
-    'social_django',
     'semestre',
     'filiere',
     'emploie',
     'module',
-    'crispy_forms'
+    'crispy_forms',
+    'rest_framework',
+    'graphql_auth',
+    'rest_framework.authtoken',
+    'graphene_django',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -67,6 +75,23 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+GRAPHENE = {
+    'SCHEMA': 'auth.schema.schema', # this file doesn't exist yet
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
+}
+
+GRAPHQL_JWT = {
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+}
+
+AUTHENTICATION_BACKENDS = (
+    'graphql_auth.backends.GraphQLAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 ROOT_URLCONF = 'user_management.urls'
 
@@ -97,8 +122,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ar-crud-project',
         'USER': 'root',
-        'PASSWORD': '',
-        'PORT': '3306',
+        'PASSWORD': 'root',
+        'PORT': '8889',
         'HOST': '127.0.0.1'
     }
 }
@@ -121,11 +146,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

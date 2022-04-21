@@ -1,7 +1,7 @@
 from django.db import models
 
-from users.models import Etudiant
 from filiere.models import Filiere
+from users.models import Students
 
 
 # Create your models here.
@@ -22,7 +22,7 @@ class Groupe(models.Model):
 
 class AnneUniversitaire(models.Model):
     group = models.ForeignKey(Groupe , null=True,  on_delete= models.SET_NULL )
-    etudiant = models.ForeignKey(Etudiant , null=True,  on_delete= models.SET_NULL)
+    etudiant = models.ForeignKey(Students , null=True,  on_delete= models.SET_NULL)
     libelle = models.CharField(max_length=100, null=True)
     date = models.DateField(null = False )
 

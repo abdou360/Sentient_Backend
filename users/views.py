@@ -21,7 +21,7 @@ def doLogin(request):
     else:
         user = EmailBackEnd.authenticate(request, username=request.POST.get('email'), password=request.POST.get('password'))
         if user != None:
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             user_type = user.user_type                
             if user_type == '1':
                 return redirect('admin_home')

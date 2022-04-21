@@ -1,7 +1,7 @@
 from operator import mod
 from django.db import models
 from semestre.models import Semestre
-from users.models import Professeur
+from users.models import Teachers
 
 class Module(models.Model):
     libelle_module = models.CharField(max_length=200, null=True)
@@ -15,7 +15,7 @@ class ElementModule(models.Model):
 
 
 class Enseignant_Responsable(models.Model):
-    enseignant = models.ForeignKey(Professeur,null=True, on_delete= models.SET_NULL)
+    enseignant = models.ForeignKey(Teachers,null=True, on_delete= models.SET_NULL)
     element_module = models.ForeignKey(ElementModule ,null=True, on_delete= models.SET_NULL)
     is_responsable = models.BooleanField(null = False  )
     annee_universitaire = models.DateField(null = False )
