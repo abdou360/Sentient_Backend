@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'graphql_auth',
     'rest_framework.authtoken',
     'graphene_django',
+    'cours',
 ]
 
 REST_FRAMEWORK = {
@@ -72,7 +73,6 @@ REST_FRAMEWORK = {
 }
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -131,8 +131,8 @@ DATABASES = {
         'NAME': 'ar-crud-project',
         'USER': 'root',
         'PASSWORD': '',
-        'PORT': '3306',
-        'HOST': '127.0.0.1'
+        # 'PORT': '3306',
+        # 'HOST': '127.0.0.1'
     }
 }
 
@@ -179,6 +179,7 @@ STATICFILES_DIRS = [
     'dashboard/static',
     os.path.join(BASE_DIR, 'static'),
     'filiere/static',
+    'cours/static'
 ]
 
 MEDIA_URL = '/media/'

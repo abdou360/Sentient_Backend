@@ -10,10 +10,8 @@ from graphene_django.views import GraphQLView
 
 urlpatterns = [
     path('', include('users.urls')),
-        
-    path('niveau/',include('semestre.urls.niveau.urls')),
-    
     path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
     path('filiere_etab/', include('filiere.urls')),
-
+    path('cours/', include('cours.urls')),
+    path('niveau/',include('semestre.urls.niveau.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
