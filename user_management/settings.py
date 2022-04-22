@@ -57,9 +57,7 @@ INSTALLED_APPS = [
     'module',
     'crispy_forms',
     'rest_framework',
-    'graphql_auth',
     'rest_framework.authtoken',
-    'graphene_django',
     'cours',
 ]
 
@@ -84,20 +82,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-GRAPHENE = {
-    'SCHEMA': 'auth.schema.schema', # this file doesn't exist yet
-    'MIDDLEWARE': [
-        'graphql_jwt.middleware.JSONWebTokenMiddleware',
-    ],
-}
-
-GRAPHQL_JWT = {
-    "JWT_VERIFY_EXPIRATION": True,
-    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
-}
-
 AUTHENTICATION_BACKENDS = (
-    'graphql_auth.backends.GraphQLAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -130,9 +115,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ar-crud-project',
         'USER': 'root',
-        'PASSWORD': '',
-        # 'PORT': '3306',
-        # 'HOST': '127.0.0.1'
+        'PASSWORD': 'root',
+        'PORT': '8889',
+        'HOST': '127.0.0.1'
     }
 }
 

@@ -5,7 +5,7 @@ import datetime
 import time
 from PIL import Image
 
-from users.models import Professeur
+from users.models import Teachers
 
 def upload_location(instance, filename):
         filebase, extension = filename.split('.')
@@ -20,7 +20,7 @@ class Chapitre(models.Model):
     # document = models.ForeignKey(Document , null=True,  on_delete= models.SET_NULL)
     image = models.ImageField(upload_to=upload_location, default='/img/cours/folder-files-and-folders-svgrepo-com.svg')
     element_module = models.ForeignKey(ElementModule , null=True,  on_delete= models.SET_NULL)
-    professeur = models.ForeignKey(Professeur,null=False, on_delete= models.CASCADE)
+    professeur = models.ForeignKey(Teachers,null=False, on_delete= models.CASCADE)
     # enseignant_responsable
     # visibilite
     created_at = models.DateTimeField(auto_now_add=True, editable=False)

@@ -10,3 +10,5 @@ venv/
 .secrets.sh
 .idea/
 .vscode
+
+# */migration
