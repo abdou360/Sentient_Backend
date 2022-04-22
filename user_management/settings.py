@@ -11,6 +11,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+# import pymysql
+
+# To keep secret keys in environment variables
+# from dotenv import load_dotenv
+
+# load_dotenv()
+
+# pymysql.install_as_MySQLdb()
 import pymysql
 pymysql.version_info = (1, 4, 6, 'final', 0)
 pymysql.install_as_MySQLdb()
@@ -49,9 +57,8 @@ INSTALLED_APPS = [
     'module',
     'crispy_forms',
     'rest_framework',
-    'graphql_auth',
     'rest_framework.authtoken',
-    'graphene_django',
+    'cours',
 ]
 
 REST_FRAMEWORK = {
@@ -65,7 +72,6 @@ REST_FRAMEWORK = {
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -76,20 +82,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-GRAPHENE = {
-    'SCHEMA': 'auth.schema.schema', # this file doesn't exist yet
-    'MIDDLEWARE': [
-        'graphql_jwt.middleware.JSONWebTokenMiddleware',
-    ],
-}
-
-GRAPHQL_JWT = {
-    "JWT_VERIFY_EXPIRATION": True,
-    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
-}
-
 AUTHENTICATION_BACKENDS = (
-    'graphql_auth.backends.GraphQLAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -167,7 +160,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 #STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
+    'user_management/static',
+    'dashboard/static',
     os.path.join(BASE_DIR, 'static'),
+    'filiere/static',
+    'cours/static'
 ]
 
 MEDIA_URL = '/media/'
