@@ -128,20 +128,30 @@ def delete_Traitement(request, id):
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 def add_traitement(request,id): 
+    
+    # if else for images type
+    
     chapitre = Chapitre.objects.filter(id = id).first()
     if request.method == "GET":
         new_traitement = TraitementForm()
+        new_image = ImageForm()
+        new_modele3d = Modele3DForm()
+        new_file = FileForm()
     elif request.method == "POST":
+        new_image = ImageForm(request.POST, request.FILES)
+        new_modele3d = Modele3DForm(request.POST, request.FILES)
+        # new_file = (request.POST, request.FILES)
         new_traitement = TraitementForm(request.POST, request.FILES)
-        if new_traitement.is_valid():
-            Traitement = new_traitement.save(commit=False)
-            Traitement.chapitre = chapitre
-            Traitement.save()
-            messages.success(request, ('Le modele AR a été ajouté avec succès'))
-            return redirect('chapitre_details',id)
-        else:
-            messages.error(request, 'Erreur : Le chapitre n\'a pas été ajouté')
-            return redirect('add_traitement')
-    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement})
-        
+        # new_traitement = TraitementForm(request.POST, request.FILES)
+        # if new_traitement.is_valid():
+        #     Traitement = new_traitement.save(commit=False)
+        #     Traitement.chapitre = chapitre
+        #     Traitement.save()
+        #     messages.success(request, ('Le modele AR a été ajouté avec succès'))
+        #     return redirect('chapitre_details',id)
+        # else:
+        #     messages.error(request, 'Erreur : Le chapitre n\'a pas été ajouté')
+        #     return redirect('add_traitement')
+    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file})
+
 

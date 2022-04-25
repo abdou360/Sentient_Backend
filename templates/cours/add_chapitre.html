@@ -25,12 +25,8 @@
                     <hr class="mb-6">
                 </div>   
             </div>
-            {% comment %} <form class="row g-3" method="post" autocomplete="off"> {% endcomment %}
-
             <form class="row g-3" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {% comment %} {{new_chapitre.libelle|as_crispy_field}} {% endcomment %}
-                {% comment %} <div class="col-12"> {% endcomment %}
                 <div class="form-group col-12 mr-3">
                     <div class="col-12 p-3"> {{new_chapitre.libelle|as_crispy_field}}</div>
                 </div>
@@ -43,14 +39,6 @@
                 <div class="form-group col-12 mr-3">
                     <div class="col-12 p-3"> {{new_chapitre.element_module|as_crispy_field}}</div>
                 </div>
-                {% comment %} <div class="form-group"> {% endcomment %}
-                    {% comment %} <label for="inputLibelle" class="form-label"></label> {% endcomment %}
-                    {% comment %} {{new_chapitre.libelle}} {% endcomment %}
-                    {% comment %} {{new_chapitre.libelle}} {% endcomment %}
-                    {% comment %} <div class="col-12"> {{new_chapitre.libelle|as_crispy_field}}</div> {% endcomment %}
-                    {% comment %} <div class="col-md-6 form-control">{{new_chapitre.libelle|as_crispy_field}}</div> {% endcomment %}
-                    {% comment %} <input type="text" class="form-control" id="inputLibelle"> {% endcomment %}
-                {% comment %} </div> {% endcomment %}
                 <div class="form-group col-12 text-center mr-3">
                     <button type="submit" class="btn btn-primary col-11">Confirmer</button>
                 </div>

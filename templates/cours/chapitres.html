@@ -4,56 +4,16 @@
 
 {% block title %} Chapitres {% endblock title%}
 {% block content %}
-    {% comment %} <div class="jumbotron">
-        <h1 class="display-4">Welcome, {{user.username|default:'Guest'}}</h1>
-        <p class="lead">
-            This is <b>user registration and login system</b> build with django 
-        </p>
-        <hr class="my-4">
-        <p class="lead">
-            {% if user.is_authenticated %}
-                <a class="btn btn-primary btn-lg" href="{% url 'logout' %}" role="button">Logout</a>
-            {% else %}
-                <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Sign in</a>
-            {% endif %}
-        </p>
-    </div> {% endcomment %}
-
-
     {% if messages %}
-    {% comment %} <ul class="messages"> {% endcomment %}
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }}" role="alert">
             {{ message }} 
             {{ message.tags }}
         </div>
-        {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
-        {% comment %} <div class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    {{ message }}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div> {% endcomment %}
         {% endfor %}
-    {% comment %} </ul> {% endcomment %}
     {% endif %}
-
-    {% comment %} <div class="toast align-items-center text-white bg-primary border-0">
-        <div class="d-flex">
-            <div class="toast-body">
-               hi
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    </div> {% endcomment %}
-    
-    
-
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
-            <!-- Nested Row within Card Body -->
             <div class="row mr-3">
                 <form class="col-md-2 col-sm-6 d-none d-block"  action="#">
                     <select class="custom-select custom-select-sm form-control form-control-sm m-3" aria-label=".form-select-sm example">
@@ -87,30 +47,15 @@
                         <option value="3">Three</option>
                     </select>
                 </div>
-                {% comment %} <form class="form-inline col-md-4 col-sm-12 d-none d-block" action="{% url 'index' %}"> {% endcomment %}
                 <form class=" col-md-4 col-sm-12 d-none d-block" action="#">
-                    {% comment %} <label> {% endcomment %}
                         <input class="form-control form-control-sm m-3" type="search" placeholder="Search ..." area-controls="dataTable" name="search">
-                        {% comment %} Search
-                    </label> {% endcomment %}
                 </form>
-                {% comment %} <div class="col-lg-6 d-none d-lg-block"></div>
-                <div class="col-lg-6">
-                    <div class="p-5">
-                        <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
-                            <p class="mb-4">We get it, stuff happens. Just enter your email address below
-                                and we'll send you a link to reset your password!</p>
-                        </div>
-                    </div>
-                </div> {% endcomment %}
             </div>
         </div>
     </div>
 
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
-            <!-- Nested Row within Card Body -->
             <div class="row">
                 <div class="col-12 d-none d-block text-center">
                     <p class="m-3">
@@ -118,19 +63,13 @@
                     </p>
                     <hr class="mb-6">
                 </div>
-                {% comment %} <form class="col form-inline my-2 my-lg-0" action="#">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search ..." area-controls="dataTable" name="search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form> {% endcomment %}
             </div>
-            {% comment %} <hr class="mb-6"> {% endcomment %}
             <div class="row">
                 {% for chapitre in chapitres %}
                 <div class="col-md-4 col-sm-6 col-lg-3 d-none d-block p-3 text-center">
                     <div class="card">
                         <img
                             class="p-3"
-                            {% comment %} src="{{STATIC_URL}}{{chapitre.image}}" {% endcomment %}
                             src="{{chapitre.image.url}}"
                             alt="..."
                             height="210" 
@@ -138,71 +77,12 @@
                             />
                         <div class="card-body">
                           <h5 class="card-title">{{chapitre.libelle}}</h5>
-                          {% comment %} <p>{{chapitre.image.url}}</p> {% endcomment %}
                           <p class="card-text">{{chapitre.description|default_if_none:"---"}}</p>
                           <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Voir le Chapitre</a>
-                          {% comment %} <a href="{% url 'update_chapitre' chapitre.id %}" class="btn btn-success">Update</a>
-                          <a href="{% url 'delete_chapitre' chapitre.id %}" class="btn btn-danger">Delete</a> {% endcomment %}
                         </div>
                     </div>
                 </div> 
                 {% endfor %}
-                {% comment %} <div class="col-md-4 col-sm-6 col-lg-3 d-none d-block p-3 text-center">
-                    <div class="card">
-                        <img
-                            class="p-3"
-                            src="{% static 'img/folder-files-and-folders-svgrepo-com.svg' %}"
-                            alt="..."
-                            />
-                        <div class="card-body">
-                          <h5 class="card-title">Nom du chapitre</h5>
-                          <p class="card-text">Description du Chapitre</p>
-                          <a href="#" class="btn btn-primary">Voir le Chapitre</a>
-                        </div>
-                    </div>
-                </div>   
-                <div class="col-md-4 col-sm-6 col-lg-3 d-none d-block p-3 text-center">
-                    <div class="card">
-                        <img
-                            class="p-3"
-                            src="{% static 'img/folder-files-and-folders-svgrepo-com.svg' %}"
-                            alt="..."
-                            />
-                        <div class="card-body">
-                          <h5 class="card-title">Nom du chapitre</h5>
-                          <p class="card-text">Description du Chapitre</p>
-                          <a href="#" class="btn btn-primary">Voir le Chapitre</a>
-                        </div>
-                    </div>
-                </div>   
-                <div class="col-md-4 col-sm-6 col-lg-3 d-none d-block p-3 text-center">
-                    <div class="card">
-                        <img
-                            class="p-3"
-                            src="{% static 'img/folder-files-and-folders-svgrepo-com.svg' %}"
-                            alt="..."
-                            />
-                        <div class="card-body">
-                          <h5 class="card-title">Nom du chapitre</h5>
-                          <p class="card-text">Description du Chapitre</p>
-                          <a href="#" class="btn btn-primary">Voir le Chapitre</a>
-                        </div>
-                    </div>
-                </div>   
-                <div class="col-md-4 col-sm-6 col-lg-3 d-none d-block p-3 text-center">
-                    <div class="card">
-                        <img
-                            class="p-3"
-                            src="{% static 'img/folder-files-and-folders-svgrepo-com.svg' %}"
-                            alt="..."
-                            />
-                        <div class="card-body">
-                          <h5 class="card-title">Nom du chapitre</h5>
-                          <p class="card-text">Description du Chapitre</p>
-                          <a href="#" class="btn btn-primary">Voir le Chapitre</a>
-                        </div>
-                    </div>
-                </div>     {% endcomment %}
             </div>
             <a href="{% url 'add_chapitre' %}" class="float">
                 <i class="fa fa-plus my-float"></i>

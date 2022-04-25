@@ -2,8 +2,7 @@ from dataclasses import fields
 from pyexpat import model
 from django import forms
 
-from cours.models import Chapitre, Document, Image, Modele3D, Traitement
-
+from cours.models import Chapitre, Document, Image, Modele3D, Traitement, File
 
 class ChapitreForm(forms.ModelForm):
     class Meta:
@@ -22,14 +21,19 @@ class ChapitreForm(forms.ModelForm):
         }
         widgets={
             'libelle': forms.TextInput(attrs={'placeholder': 'Nom du chapitre',
-                                                               'class': 'form-control',
+                                                               'class': 'form-control', 
                                                                }),
             'description': forms.Textarea(attrs={'placeholder': 'Description du chapitre',
                                                                'class': 'form-control',
                                                                'cols': 80, 'rows': 5
                                                                }),
-            # 'image': forms.ImageField(attrs={'class': 'form-control'})
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['libelle'].label = ''
+        self.fields['description'].label = ''
+        self.fields['image'].label = ''
+        self.fields['element_module'].label = ''
 
 class DocumentForm(forms.ModelForm):
     class Meta:
@@ -38,14 +42,12 @@ class DocumentForm(forms.ModelForm):
             'titre',
             'type',
             'path',
-            # 'chapitre'
         )
         labels = {
             'titre': 'Nom du Document',
             'type': 'Type du Document',
             'path': 'Fichier',
             'image': 'Image',
-            # 'chapitre': 'Chapitre'
         }
         widgets={
             'titre': forms.TextInput(attrs={'placeholder': 'Nom du Document',
@@ -60,41 +62,83 @@ class Modele3DForm(forms.ModelForm):
     class Meta:
         model = Modele3D
         fields = {
-            'path'
+            'titre',
         }
         labels = {
-            'path': 'Modèle 3D'
+            'titre': 'Nom du Modèle 3D'
         }
         widgets={
-            'path': forms.TextInput(attrs={'placeholder': 'Modèle 3D',
+            'titre': forms.TextInput(attrs={'placeholder': 'Nom du Modèle 3D',
                                                                'class': 'form-control',
                                                                }),
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['titre'].label = ''
         
+CHOICES=[('image','Image'),('texte','Texte'),('qrcode','QR-Code')]
+
 class TraitementForm(forms.ModelForm):
     class Meta:
         model = Traitement
         fields = {
-            'type',
+            'titre',
             'label',
+            'type',
         }
         labels = {
-            'type': 'type de generqteur du modele',
-            'label': 'Label',
+            'titre': 'Titre',
+            'type': 'Type du generateur du modele',
+            'label': 'Label'
         }
         widgets={
-            'path': forms.TextInput(attrs={'placeholder': 'Nom du modèle',
+            'titre': forms.TextInput(attrs={'placeholder': 'Nom',
                                                                'class': 'form-control',
                                                                }),
-            'path': forms.TextInput(attrs={'placeholder': 'Label',
+            'label': forms.Textarea(attrs={'placeholder': 'Label',
                                                                'class': 'form-control',
+                                                               'cols': 80, 'rows': 3
                                                                }),
+            'type': forms.RadioSelect(choices=CHOICES
+                                    #   , attrs={'class': 'custom-control-input'}
+                                      )
+            # 'type': forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'class': 'custom-control-input'}))
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['titre'].label = ''
+        self.fields['label'].label = ''
 
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = {
-            'type': 'Type de l\'Image',
-            'path': 'Image'
+            'name': 'Nom de l\'Image',
+            'path': 'Image',
+            # 'is_qrcode': ''
         }
+        widgets={
+            'name': forms.TextInput(attrs={'placeholder': 'Nom de l\'image',
+                                                               'class': 'form-control',
+                                                               }),
+            # 'is_qrcode': forms.HiddenInput(attrs={'id': 'is-qrcode'})
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = ''
+        self.fields['path'].label = ''
+
+class FileForm(forms.ModelForm):
+    class Meta:
+        model = File
+        fields = {
+            'path': 'Fichier(s)'
+        }
+        # widgets = {
+        #     'path': forms.ClearableFileInput(attrs={'multiple': True}),
+        # }
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['path'].label = ''
+    #     # self.fields['path'].label = ''
+        
