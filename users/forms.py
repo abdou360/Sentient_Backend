@@ -1,75 +1,72 @@
 from django import forms
 from django.forms import Form
-from users.models import * 
+from users.models import *
 
 
 class DateInput(forms.DateInput):
     input_type = "date"
 
 
-class AddStudentForm(forms.Form):
-    email = forms.EmailField(label="Email", max_length=50, widget=forms.EmailInput(attrs={"class":"form-control"}))
-    password = forms.CharField(label="Password", max_length=50, widget=forms.PasswordInput(attrs={"class":"form-control"}))
-    first_name = forms.CharField(label="First Name", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    last_name = forms.CharField(label="Last Name", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    username = forms.CharField(label="Username", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    address = forms.CharField(label="Address", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    cne = forms.CharField(label="C.N.E", max_length=10, widget=forms.TextInput(attrs={"class":"form-control"}))
-    #For Displaying Courses
-    
-    #For Displaying Session Years
-    try:
-        session_years = SessionYearModel.objects.all()
-        session_year_list = []
-        for session_year in session_years:
-            single_session_year = (session_year.id, str(session_year.session_start_year)+" to "+str(session_year.session_end_year))
-            session_year_list.append(single_session_year)
-            
-    except:
-        session_year_list = []
-    
-    gender_list = (
-        ('Male','Male'),
-        ('Female','Female')
-    )
-    
-    gender = forms.ChoiceField(label="Gender", choices=gender_list, widget=forms.Select(attrs={"class":"form-control"}))
-    session_year_id = forms.ChoiceField(label="Session Year", choices=session_year_list, widget=forms.Select(attrs={"class":"form-control"}))
-    # session_start_year = forms.DateField(label="Session Start", widget=DateInput(attrs={"class":"form-control"}))
-    # session_end_year = forms.DateField(label="Session End", widget=DateInput(attrs={"class":"form-control"}))
-    profile_pic = forms.FileField(label="Profile Pic", required=False, widget=forms.FileInput(attrs={"class":"form-control"}))
+class AddStudentForm(forms.ModelForm):
+    class Meta:
+        model = Students
+        fields = ['admin', 'cne', 'adresse', 'telephone', 'path_photos', 'code_apogee']
+        labels = {
+            'admin': 'User',
+            'cne': 'CNE',
+            'adresse': 'Adresse',
+            'telephone': 'Telephone',
+            'path_photos': 'Path Photos',
+            'code_apogee': 'Code Apogee',
 
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(AddStudentForm, self).__init__(*args, **kwargs)
 
 
 class EditStudentForm(forms.Form):
-    email = forms.EmailField(label="Email", max_length=50, widget=forms.EmailInput(attrs={"class":"form-control"}))
-    first_name = forms.CharField(label="First Name", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    last_name = forms.CharField(label="Last Name", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    username = forms.CharField(label="Username", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    address = forms.CharField(label="Address", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    cne = forms.CharField(label="C.N.E", max_length=10, widget=forms.TextInput(attrs={"class":"form-control"}))
-    #For Displaying Courses
-    
-    #For Displaying Session Years
-    try:
-        session_years = SessionYearModel.objects.all()
-        session_year_list = []
-        for session_year in session_years:
-            single_session_year = (session_year.id, str(session_year.session_start_year)+" to "+str(session_year.session_end_year))
-            session_year_list.append(single_session_year)
-            
-    except:
-        session_year_list = []
+    adresse = forms.CharField(label="Adresse", max_length=50, widget=forms.TextInput(attrs={"class": "form-control"}))
+    cne = forms.CharField(label="C.N.E", max_length=10, widget=forms.TextInput(attrs={"class": "form-control"}))
+    path_photos = forms.CharField(label="Path Photos", max_length=10,
+                                  widget=forms.TextInput(attrs={"class": "form-control"}))
+    telephone = forms.CharField(label="Telephone", max_length=10,
+                                widget=forms.TextInput(attrs={"class": "form-control"}))
+    code_apogee = forms.CharField(label="Code Appoge", max_length=10,
+                                  widget=forms.TextInput(attrs={"class": "form-control"}))
+    # For Displaying Courses
 
-    
-    gender_list = (
-        ('Male','Male'),
-        ('Female','Female')
-    )
-    
-    # course_id = forms.ChoiceField(label="Course", choices=course_list, widget=forms.Select(attrs={"class":"form-control"}))
-    gender = forms.ChoiceField(label="Gender", choices=gender_list, widget=forms.Select(attrs={"class":"form-control"}))
-    session_year_id = forms.ChoiceField(label="Session Year", choices=session_year_list, widget=forms.Select(attrs={"class":"form-control"}))
-    # session_start_year = forms.DateField(label="Session Start", widget=DateInput(attrs={"class":"form-control"}))
-    # session_end_year = forms.DateField(label="Session End", widget=DateInput(attrs={"class":"form-control"}))
-    profile_pic = forms.FileField(label="Profile Pic", required=False, widget=forms.FileInput(attrs={"class":"form-control"}))
+    # # form des Etudiants
+    # class EtudiantForm(forms.ModelForm):
+    #     class Meta:
+    #         model = Etudiant
+    #         fields = ['user', 'cne', 'adresse', 'telephone', 'path_photos', 'code_apogee']
+    #         labels = {
+    #             'user': 'User',
+    #             'cne': 'CNE',
+    #             'adresse': 'Adresse',
+    #             'telephone': 'Telephone',
+    #             'path_photos': 'Path Photos',
+    #             'code_apogee': 'Code Apogee',
+    #
+    #         }
+    #
+    #     def __init__(self, *args, **kwargs):
+    #         super(EtudiantForm, self).__init__(*args, **kwargs)
+    #
+    # DEMO_CHOICES = (
+    #     ("1", "Naveen"),
+    #     ("2", "Pranav"),
+    #     ("3", "Isha"),
+    #     ("4", "Saloni"),
+    # )
+    #
+    # def get_demo_choices():
+    #     permissions = Permission.objects.all()
+    #     list_permissions = []
+    #     for permission in permissions:
+    #         list_permissions.append((permission.id, permission.libelle))
+    #     return list_permissions
+    #
+    # class GeeksForm(forms.Form):
+    #     geeks_field = forms.MultipleChoiceField(choices=get_demo_choices)

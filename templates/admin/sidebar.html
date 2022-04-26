@@ -95,6 +95,54 @@
     </a>
   </li>
 
+
+
+
+  <li class="nav-item">
+    {% url 'add_role' as add_role %}
+    <a href="{{ add_role }}" class="nav-link {% if request.path == add_role %} active {% endif %}">
+      <i class="nav-icon fas fa-th"></i>
+      <span>
+        Add Role
+      </span>
+    </a>
+  </li>
+
+
+
+  <li class="nav-item">
+    {% url 'manage_roles' as manage_roles %}
+    <a href="{{ manage_roles }}" class="nav-link {% if request.path == manage_roles %} active {% endif %}">
+      <i class="nav-icon fas fa-person-booth"></i>
+      <span>
+        Manage Roles
+      </span>
+    </a>
+  </li>
+
+
+  <li class="nav-item">
+    {% url 'add_permission' as add_permission %}
+    <a href="{{ add_permission }}" class="nav-link {% if request.path == add_permission %} active {% endif %}">
+      <i class="nav-icon fas fa-th"></i>
+      <span>
+        Add Permission
+      </span>
+    </a>
+  </li>
+
+
+
+  <li class="nav-item">
+    {% url 'manage_permissions' as add_permission %}
+    <a href="{{ add_permission }}" class="nav-link {% if request.path == add_permission %} active {% endif %}">
+      <i class="nav-icon fas fa-lock-open"></i>
+      <span>
+        Manage Permissions
+      </span>
+    </a>
+  </li>
+
   <!-- Divider -->
   <hr class="sidebar-divider d-none d-md-block" />
 
