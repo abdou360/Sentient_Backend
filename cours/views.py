@@ -9,7 +9,7 @@ from cours.models import Chapitre, Document, Modele3D, Traitement
 from filiere.models import Filiere
 from module.models import ElementModule, Enseignant_Responsable, Module
 from semestre.models import Niveau, Semestre
-from users.models import Teachers
+from users.models import Professeur
 
 from django.db.models import Q
 
@@ -19,7 +19,7 @@ from django.contrib.auth.decorators import login_required
 
 
 def chapitres_list(request): 
-    professeur = Teachers.objects.filter(user = request.user.id).first()
+    professeur = Professeur.objects.filter(user = request.user.id).first()
     
     search_chapitre = request.GET.get('search')
     if search_chapitre:
@@ -32,7 +32,7 @@ def chapitres_list(request):
     }
     return render(request, 'cours/chapitres.html', context) 
 def chapitre_details(request,id): 
-    professeur = Teachers.objects.filter(user = request.user.id).first()
+    professeur = Professeur.objects.filter(user = request.user.id).first()
     chapitre = Chapitre.objects.filter(id = id).first()
     traitements = Traitement.objects.filter(chapitre_id = id).all()
     documents=Document.objects.filter(chapitre_id = id).all()
@@ -46,7 +46,7 @@ def chapitre_details(request,id):
     return render(request, 'cours/chapitre_details.html',context) 
 
 def add_chapitre(request): 
-    professeur = Teachers.objects.filter(user = request.user.id).first()
+    professeur = Professeur.objects.filter(user = request.user.id).first()
     if request.method == "GET":
         new_chapitre = ChapitreForm()
     elif request.method == "POST":
