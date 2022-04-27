@@ -43,10 +43,17 @@ def model_image_location(instance, filename):
 #         modele3d = instance.modele3D.titre
 #         return 'img/cours/%s/' % (modele3d)
 
+EXTENSIONS = ['pdf', 'png']
+
 def file_upload_location(instance, filename):
         # now = time.time()
         # stamp = datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d-%H-%M-%S')
         modele3d = instance.modele3D.path_modele3d
+        
+        # filebase, extension = filename.split('.')
+        
+        # if EXTENSIONS.__contains__(extension):
+        
         return '%s/%s' % (modele3d, filename)
 
 # def get_modele_3d(modele_id):

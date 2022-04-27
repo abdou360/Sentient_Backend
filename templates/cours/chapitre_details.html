@@ -111,20 +111,19 @@
                         <div id="ar" class="tab-pane fade">  
                             <div class="row" >
                                 {% for traitement in traitements %} 
-                                <div class="col-lg-4 col-sm-6 mb-4">
+                                <div class="col-lg-4 col-sm-6 my-4 text-center">
                                     {% if traitement.type_traitement == "Image" %}
-                                    {% comment %} <img class="Description"src="https://cdn6.aptoide.com/imgs/2/9/5/29506fa42737453517d5a808589aa21e_icon.png" alt="image" class="rounded"> {% endcomment %}
                                     <img class="Description"src="/media/{{traitement.image.path_image}}" alt="image" class="rounded">
-                                    {% comment %} <img class="Description"src=traitement.image.path_image alt="image" class="rounded"> {% endcomment %}
                                     {% endif %}
                                     {% if traitement.type_traitement == "QR-Code" %}
-                                    <img  class="Description"src="https://fr.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market/generator/dist/generator/assets/images/websiteQRCode_noFrame.png" alt="image" class="rounded">
+                                    <img  class="Description"src="/media/{{traitement.image.path_image}}" alt="image" class="rounded">
+                                    {% comment %} <img  class="Description"src="https://fr.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market/generator/dist/generator/assets/images/websiteQRCode_noFrame.png" alt="image" class="rounded"> {% endcomment %}
                                     {% endif %}
                                     {% if traitement.type_traitement == "Texte" %}
                                     <img  class="Description"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcN-sb-i-ZpzD-w2JVRWNzn5q0bslc-MOQs2WcsFF80xkniCNphQuNHpVGrjQ1tWPBIro&usqp=CAU" alt="image" class="rounded">
                                     {% endif %}
                                     <p>{{traitement.titre_traitement}}</p>  
-                                    <div>
+                                    <div class='border'>
                                         <a id="delete_object"href="{% url 'delete_traitement' traitement.id %}"class="btn btn-primary">Supprimer</a>
                                         {% comment %} <div>/media/{{traitement.image.path_image}}</div> {% endcomment %}
                                         <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Modifier</a>
