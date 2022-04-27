@@ -26,23 +26,14 @@
                         {#                    {% url 'edit_permission_save' id as action_path %}#}
                         {#                    {% include 'admin/form_template.html' with  form=form action_path=action_path button_text="Update Permission" %}#}
                         <div>
-                            <form  action="{% url 'edit_role_save' role.id %}" method="POST" class="col-12">
-                                <div class="col-12">
-                                    <label for="libelle">Libelle</label>
-                                    <input type="text" value="{{ role.libelle }}" name="libelle" id="libelle"><br>
-                                </div>
-                                <div class="col-12">
-                                    <label for="description">Description</label>
-                                    <input type="text" value="{{ role.description }}" name="description"
-                                           id="description"><br>
-                                </div>
+                            <form  action="{% url 'edit_groupe_add_save' id %}" method="POST" class="col-12">
                                 <div>
                                     {% csrf_token %}
                                     <div class="col-12">
                                         {{ form.as_p }}
                                     </div>
                                 </div>
-                                <button class="btn btn-warning" type="submit">Edit Role</button>
+                                <button class="btn btn-warning" type="submit">Ajouer les Groupes</button>
                             </form>
                         </div>
                     </div>
@@ -69,19 +60,19 @@
                             <thead>
                                 <tr>
                                 <th>ID</th>
-                                <th>Libelle</th>
-                                <th>Description</th>
+                                <th>Nom Groupe</th>
+                                <th>Niveau</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for permission in permissions %}
+                                {% for groupe in groupes %}
                                 <tr>
-                                <td>{{ permission.id }}</td>
-                                <td>{{ permission.libelle }}</td>
-                                <td>{{ permission.description }}</td>
+                                <td>{{ groupe.id }}</td>
+                                <td>{{ groupe.nom_group }}</td>
+                                <td>{{ groupe.niveau }}</td>
 
                                 <td>
-                                    <a href="{% url 'delete_role_permission' role.id permission.id %}" class="btn btn-danger">Delete</a>
+                                    <a href="{% url 'delete_student_groupe' student.id groupe.id %}" class="btn btn-danger">Delete</a>
                                 </td>
                                 </tr>
                                 {% endfor %}

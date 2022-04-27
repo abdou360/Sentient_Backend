@@ -10,9 +10,10 @@ class DateInput(forms.DateInput):
 class AddStudentForm(forms.ModelForm):
     class Meta:
         model = Students
-        fields = ['admin', 'cne', 'adresse', 'telephone', 'path_photos', 'code_apogee']
+        fields = ['user', 'admin','cne', 'adresse', 'telephone', 'path_photos', 'code_apogee']
         labels = {
-            'admin': 'User',
+            'admin': 'Admin',
+            'user': 'User',
             'cne': 'CNE',
             'adresse': 'Adresse',
             'telephone': 'Telephone',

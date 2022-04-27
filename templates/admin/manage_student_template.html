@@ -1,3 +1,4 @@
+{## UnivIt responsable : ismail errouk #}
 {% extends 'admin/base-home.html' %}
 
 {% block title %}
@@ -72,6 +73,7 @@
                                 <th>End Year</th>
                                 <th>Last Login</th>
                                 <th>Date Joined</th>
+                                <th>Admin Creator</th>
                                 <th>Action</th>
                                 </tr>
                             </thead>
@@ -80,17 +82,18 @@
                                 <tr>
                                 <td>{{ student.id }}</td>
                                 <td>{{ student.cne }}</td>
-                                <td>{{ student.admin.first_name }}</td>
-                                <td>{{ student.admin.last_name }}</td>
-                                <td>{{ student.admin.username }}</td>
-                                <td>{{ student.admin.email }}</td>
+                                <td>{{ student.user.first_name }}</td>
+                                <td>{{ student.user.last_name }}</td>
+                                <td>{{ student.user.username }}</td>
+                                <td>{{ student.user.email }}</td>
                                 <td>{{ student.adresse }}</td>
                                 <td>{{ student.telephone }}</td>
                                 <td>{{ student.code_apogee }}</td>
                                 <td>{{ student.session_year_id.session_start_year }}</td>
                                 <td>{{ student.session_year_id.session_end_year }}</td>
-                                <td>{{ student.admin.last_login }}</td>
-                                <td>{{ student.admin.date_joined }}</td>
+                                <td>{{ student.user.last_login }}</td>
+                                <td>{{ student.user.date_joined }}</td>
+                                <td>{{ student.admin.admin.username }}</td>
                                 <td>
                                     <a href="{% url 'edit_student' student.id %}" class="btn btn-success">Edit</a>
                                     <a href="{% url 'delete_student' student.id %}" class="btn btn-danger">Delete</a>

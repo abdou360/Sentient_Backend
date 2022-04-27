@@ -25,7 +25,8 @@ class Admin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
-
+    def __str__(self):
+        return self.admin.username
 
 class Teachers(models.Model):
     id = models.AutoField(primary_key=True)
@@ -35,14 +36,16 @@ class Teachers(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
-
+# UnivIt responsable : ismail errouk
 class Students(models.Model):
     cne = models.CharField(max_length=10, default="")
     adresse = models.CharField(max_length=100, default="")
     path_photos = models.CharField(max_length=200, default="")
     telephone = models.CharField(max_length=10, default="")
     code_apogee = models.CharField(max_length=10, default="")
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    admin = models.ForeignKey(Admin, on_delete=models.CASCADE)
+    groupes = models.ManyToManyField('semestre.Groupe', null=True)
 
 
 # Creating Django Signals
@@ -84,7 +87,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 # ---------------------------
-
+# UnivIt responsable : ismail errouk
 class Permission(models.Model):
     libelle = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
@@ -92,7 +95,7 @@ class Permission(models.Model):
     def __str__(self):
         return self.libelle
 
-
+# UnivIt responsable : ismail errouk
 class Role(models.Model):
     libelle = models.CharField(max_length=100)
     description = models.CharField(max_length=100)

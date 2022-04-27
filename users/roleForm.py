@@ -1,7 +1,8 @@
 from django import forms
 
+from semestre.models import Groupe
 from users.models import Permission
-
+# UnivIt responsable : ismail errouk
 DEMO_CHOICES = (
     ("1", "Naveen"),
     ("2", "Pranav"),
@@ -19,4 +20,18 @@ def get_demo_choices():
 
 
 class GeeksForm(forms.Form):
-    geeks_field = forms.MultipleChoiceField(choices=get_demo_choices)
+    Permissions = forms.MultipleChoiceField(choices=get_demo_choices)
+
+
+# ----------Groupes ----------
+
+def get_groupe_choices():
+    groupes = Groupe.objects.all()
+    list_groupes = []
+    for groupe in groupes:
+        list_groupes.append((groupe.id, groupe.nom_group))
+    return list_groupes
+
+
+class GroupeListForm(forms.Form):
+    Groupes = forms.MultipleChoiceField(choices=get_groupe_choices)

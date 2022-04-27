@@ -4,18 +4,18 @@ from django import forms
 from users.models import Role, Permission
 from users.roleForm import GeeksForm
 
-
+# UnivIt responsable : ismail errouk
 def manageRoles(request):
     roles = Role.objects.all()
     return render(request, 'admin/manage_Role_template.html', {'roles': roles})
 
-
+# UnivIt responsable : ismail errouk
 def addRole(request):
     context = {}
     context['form'] = GeeksForm()
     return render(request, "admin/add_Role_template.html", context)
 
-
+# UnivIt responsable : ismail errouk
 def addRoleSave(request):
     global temp
     context = {}
@@ -25,7 +25,7 @@ def addRoleSave(request):
         libelle = request.POST['libelle']
         description = request.POST['description']
         if form.is_valid():
-            temp = form.cleaned_data.get("geeks_field")
+            temp = form.cleaned_data.get("Permissions")
         permissions = []
         for t in temp:
             print("hey " + t)
@@ -38,13 +38,13 @@ def addRoleSave(request):
             role.permissions.add(permission)
     return redirect(to='manage_roles')
 
-
+# UnivIt responsable : ismail errouk
 def deleteRole(request, id):
     role = Role.objects.get(id=id)
     role.delete()
     return redirect(to='manage_roles')
 
-
+# UnivIt responsable : ismail errouk
 def editRole(request, id):
     role = Role.objects.get(id=id)
     permissions = role.permissions.all()
@@ -59,7 +59,7 @@ def editRole(request, id):
     }
     return render(request, "admin/edit_role_template.html", context)
 
-
+# UnivIt responsable : ismail errouk
 def editRoleSave(request, id):
     global temp
     context = {}
@@ -69,7 +69,7 @@ def editRoleSave(request, id):
         role_lib = request.POST['libelle']
         role_description = request.POST['description']
         if form.is_valid():
-            temp = form.cleaned_data.get("geeks_field")
+            temp = form.cleaned_data.get("Permissions")
         permissions = []
         for t in temp:
             print("hey " + t)
@@ -82,7 +82,7 @@ def editRoleSave(request, id):
         role.save()
     return redirect(to='edit_role', id=id)
 
-
+# UnivIt responsable : ismail errouk
 def deleteRolePermission(request, id1, id2):
     role = Role.objects.get(pk=id1)
     permission = Permission.objects.get(pk=id2)

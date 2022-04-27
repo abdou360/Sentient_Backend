@@ -21,9 +21,13 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        {% url 'add_student_save' as action_path %}
-                        {% include 'admin/form_template.html' with messages=messages form=form action_path=action_path button_text="Save & Add Groups" %}
-
+                        <form action="{% url 'add_student_groups_save' id %}" method="post">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                {{ form.as_p }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Groupe</button>
+                        </form>
                     </div>
                     <!-- /.card -->
 

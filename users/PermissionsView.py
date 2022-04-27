@@ -8,12 +8,12 @@ import datetime  # To Parse input DateTime into Python Date Time Object
 from users.models import *
 from users.permissionForm import AddPermissionForm, EditPermissionForm
 
-
+# UnivIt responsable : ismail errouk
 def addPermission(request):
     form = AddPermissionForm()
     return render(request, 'admin/add_Permission_template.html', {'form': form})
 
-
+# UnivIt responsable : ismail errouk
 def addPermissionSave(request):
     form = AddPermissionForm(request.POST, request.FILES)
     if form.is_valid():
@@ -23,7 +23,7 @@ def addPermissionSave(request):
 
     return redirect(to='manage_permissions')
 
-
+# UnivIt responsable : ismail errouk
 def editPermission(request, id):
     form = EditPermissionForm()
     permission = Permission.objects.get(id=id)
@@ -36,7 +36,7 @@ def editPermission(request, id):
     }
     return render(request, "admin/edit_permission_template.html", context)
 
-
+# UnivIt responsable : ismail errouk
 def editPermissionSave(request, id):
     form = EditPermissionForm(request.POST, request.FILES)
     permission = Permission.objects.get(id=id)
@@ -46,14 +46,14 @@ def editPermissionSave(request, id):
         permission.save()
     return redirect(to='manage_permissions')
 
-
+# UnivIt responsable : ismail errouk
 def deletePermission(request, id):
     permission = Permission.objects.get(id=id)
     permission.delete()
     return redirect(to='manage_permissions')
 
 
-
+# UnivIt responsable : ismail errouk
 def managePermission(request):
     permissions = Permission.objects.all()
     return render(request, 'admin/manage_Permission_template.html', {'permissions': permissions})
