@@ -10,12 +10,29 @@ from django.template import loader
 from filiere.forms import FiliereForm
 from filiere.forms import EtablissementForm
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
 from filiere.models import Filiere
 from filiere.models import Etablissement
+
+from .serializers import FiliereSerializer
+from .serializers import EtablissementSerializer
 
 ######################################################
 # gestion des Fillieres
 ######################################################
+
+#Filiere rest api pour l'envoie de liste des filieres existes
+@api_view(['GET'])
+def filiere_liste(request,id):
+    try:
+        etab = Etablissement.objects.get(id=id)
+        filieres = Filiere.objects.filter(etablissement__nom=etab.nom)
+        serializer = FiliereSerializer(filieres,many=True)
+        return Response(serializer.data)
+    except Etablissement.DoesNotExist:
+        return Response([])
 
 # return la page principale
 def index(request):
@@ -109,6 +126,16 @@ def filiere_edit(request,id):
 ######################################################
 # gestion des Etablissements
 ######################################################
+
+#Filiere rest api pour l'envoie de liste des filieres existes
+@api_view(['GET'])
+def etablissement_liste(request):
+    try:
+        etablissements = Etablissement.objects.all()
+        serializer = EtablissementSerializer(etablissements,many=True)
+        return Response(serializer.data)
+    except Etablissement.DoesNotExist:
+        return Response([])
 
 # affichage du page de gestion des etablissements
 @login_required(login_url="/login/")
