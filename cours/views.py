@@ -1,4 +1,5 @@
 from distutils.command import check
+import sys
 from tkinter import Image
 from django.contrib import messages
 from django.shortcuts import redirect, render
@@ -12,6 +13,11 @@ from semestre.models import Niveau, Semestre
 from users.models import Professeur
 
 from django.db.models import Q
+
+import datetime
+import time
+
+import os
 
 # Create your views here.
 
@@ -137,11 +143,101 @@ def add_traitement(request,id):
         new_image = ImageForm()
         new_modele3d = Modele3DForm()
         new_file = FileForm()
+        # trait = TraitementForm()
+        # print('<message>', file=sys.stderr)
     elif request.method == "POST":
-        new_image = ImageForm(request.POST, request.FILES)
-        new_modele3d = Modele3DForm(request.POST, request.FILES)
+        print('<message>', file=sys.stderr)
+        # new_image = ImageForm(request.POST, request.FILES)
         # new_file = (request.POST, request.FILES)
         new_traitement = TraitementForm(request.POST, request.FILES)
+        
+        print('<titre_modele3d>'+request.POST.get("titre_modele3d"), file=sys.stderr)
+        print('<titre_traitement>'+request.POST.get("titre_traitement"), file=sys.stderr)
+        print('<label_traitement>'+request.POST.get("label_traitement"), file=sys.stderr)
+        print('<type_traitement>'+request.POST.get("type_traitement"), file=sys.stderr)
+        
+        if new_traitement.is_valid():
+            print('<traitement valid>', file=sys.stderr)
+            traitement = new_traitement.save(commit=False)
+            traitement.chapitre = chapitre
+            print('<traitement>'+traitement.type_traitement, file=sys.stderr)
+            if traitement.type_traitement == "Image":
+                new_image = ImageForm(request.POST, request.FILES)
+                if new_image.is_valid():
+                    image = new_image.save(commit=False)
+                    image.is_qrcode = False
+                    image.save()
+                    traitement.image = image
+            # elif traitement.type == "texte":
+            #     traitement.label 
+            elif traitement.type_traitement == "QR-Code":
+                new_qrcode = ImageForm(request.POST, request.FILES)
+                if new_qrcode.is_valid():
+                    qrcode = new_qrcode.save(commit=False)
+                    qrcode.is_qrcode = True
+                    qrcode.save()
+                    traitement.image = qrcode
+            new_modele3d = Modele3DForm(request.POST, request.FILES)
+            # print(new_modele3d.cleaned_data)
+            print('<new_modele3d["titre_modele3d"]>'+new_modele3d['titre_modele3d'].value(), file=sys.stderr)
+            if new_modele3d.is_valid():
+                new_modele = new_modele3d.save(commit=False)
+                new_modele.path_modele3d = model_location(new_modele3d['titre_modele3d'].value())
+                makedirs(new_modele.path_modele3d)
+                new_modele.save()
+                # modele3d = Modele3D.objects.filter(titre_modele3d = new_modele3d['titre_modele3d'].value()).first()
+                
+                print('<modele3d //>'+str(new_modele.id), file=sys.stderr)
+                # print('<new_modele3d>'+str(new_modele3d.id), file=sys.stderr)
+                
+                files = request.FILES.getlist('path_file')
+                # files = request.FILES['path_file']
+                # files = FileForm(request.POST, request.FILES.getlist('path_file'))
+                # files = FileForm(request.POST, request.FILES)
+                # files = FileForm(request.POST, request.FILES['path_file'])
+                # if files.is_valid():
+                #     handle_file_upload(request.FILES['path_file'])
+                for f in files:
+                    
+                    print('<file name>'+f.name, file=sys.stderr)
+                    
+                    obj = File.objects.create(modele3D = new_modele, path_file=f)
+                    
+                    # new_file = FileForm(request.POST, request.FILES)
+                    
+                    # file = new_file.save(commit=False)
+                    # file.modele3D = new_modele
+                    # file.save()
+                    
+                    # obj = new_file.save(commit=False)
+                    # if request.FILES:
+                    #     for f in request.FILES.getlist('path_file'):
+                    #         obj = File.model.objects.create(path_file=f)
+                    
+                # for x in files:
+                #     print('<file name>'+x.name, file=sys.stderr)
+                #     process(x, new_modele)
+                    
+                    # handle_file_upload(f, new_modele)
+                    # new_file = FileForm(request.POST, f)
+                    # if new_file.is_valid():
+                    #     file = new_file.save(commit=False)
+                    #     file.modele3D = new_modele3d
+                    #     file.save()
+                        
+                        
+                traitement.modele3D = new_modele
+                # print(traitement.titre_traitement+"**************/")
+                # print(traitement.label_traitement+"/")
+                # print(traitement.type_traitement+"/")
+                # print(str(traitement.chapitre.id)+"/")
+                # print(str(traitement.image.id)+"/")
+                # print(str(traitement.modele3D.id)+"/")
+                # print(str(traitement.id))
+                # print(traitement.titre_traitement+"**************/"+traitement.label_traitement+"/"+traitement.type_traitement+"/"+str(traitement.chapitre.id)+"/"+str(traitement.image.id)+"/"+str(traitement.modele3D.id)+"/"+str(traitement.id))
+                traitement.save()
+        
+        return redirect('chapitres_list')
         # new_traitement = TraitementForm(request.POST, request.FILES)
         # if new_traitement.is_valid():
         #     Traitement = new_traitement.save(commit=False)
@@ -152,6 +248,55 @@ def add_traitement(request,id):
         # else:
         #     messages.error(request, 'Erreur : Le chapitre n\'a pas été ajouté')
         #     return redirect('add_traitement')
-    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file})
+    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file
+                                                                #  , 'trait': trait
+                                                                 })
 
 
+def file_upload_location(modele3d, filename):
+        # now = time.time()
+        # stamp = datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d-%H-%M-%S')
+        path_modele3d = modele3d.path_modele3d
+        return '%s/%s' % (path_modele3d, filename)
+    
+def model_location(modelName):
+        now = time.time()
+        stamp = datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d-%H-%M-%S')
+        return 'img/cours/modeles_3d/%s-%s' % (modelName, str(stamp))  
+
+def handle_file_upload(f, new_modele):
+    with open(file_upload_location(new_modele,f.name), 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+def makedirs(path):
+    # os.mkdir(os.path.join('/media/', path))
+    try:
+        os.makedirs(os.path.join('/media/', path))
+    except OSError as e:
+        if e.errno == 17:
+            pass
+
+
+# def process(f, new_modele):
+#     with open(new_modele.path_modele3d + str(f), 'wb+') as destination:
+#         # print('<destination>'+str(destination), file=sys.stderr)
+#         for chunk in f.chunks():
+#             print('<chunk>'+str(chunk), file=sys.stderr)
+#             destination.write(chunk)
+
+# def upload_file(request):
+#     if request.method == 'POST':
+#         form = UploadFileForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             handle_uploaded_file(request.FILES['file'])
+#             context = {'msg' : '<span style="color: green;">File successfully uploaded</span>'}
+#             return render(request, "single.html", context)
+#     else:
+#         form = UploadFileForm()
+#     return render(request, 'single.html', {'form': form})
+
+# def handle_uploaded_file(f):
+#     with open(f.name, 'wb+') as destination:
+#         for chunk in f.chunks():
+#             destination.write(chunk)

@@ -3,12 +3,10 @@ var left, opacity, scale;
 var animating;
 var selectedValue;
 
-$("input[type='radio'][name='radioGroup']").change(function() {
-    selectedValue = $("input[type='radio'][name='radioGroup']:checked").val();
+$("input[type='radio'][name='type_traitement']").change(function() {
+    selectedValue = $("input[type='radio'][name='type_traitement']:checked").val();
     // alert( "Handler for .change() called." + selectedValue );
 });
-
-
 
 $(".next-to-2").click(function(){
     if(animating) return false;
@@ -142,3 +140,7 @@ $(".previous-to-2").click(function(){
         easing: 'easeInOutBack'
     });
 });
+
+// $(".submit_traitement").click(function() {
+//     alert( "Handler for .change() called." );
+// })
