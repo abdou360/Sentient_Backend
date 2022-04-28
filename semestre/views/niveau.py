@@ -27,13 +27,13 @@ def niveau_form(request, id=0):
             form = NiveauForm(request.POST,instance= niveau)
         if form.is_valid():
             form.save()
-        return redirect('semestre/niveau/list')
+        return redirect('/semestre/niveau/list')
 
 
 def niveau_delete(request,id):
     niveau = Niveau.objects.get(pk=id)
     niveau.delete()
-    return redirect('semestre/niveau/list')
+    return redirect('/semestre/niveau/list')
 
 def niveauDelails(request , id):
     niveau = Niveau.objects.get(pk=id)
