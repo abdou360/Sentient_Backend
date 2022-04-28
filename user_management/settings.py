@@ -110,16 +110,16 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ar-crud-project-1-4',
-        'USER': 'root',
-        'PASSWORD': '',
-        'PORT': '3306',
-        'HOST': '127.0.0.1'
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ar-crud-project-1-4',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'PORT': '3306',
+#         'HOST': '127.0.0.1'
+#     }
+# }
 
 
 # Password validation
