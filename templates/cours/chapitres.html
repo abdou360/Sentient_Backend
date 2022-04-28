@@ -4,14 +4,32 @@
 
 {% block title %} Chapitres {% endblock title%}
 {% block content %}
-    {% if messages %}
+    {% comment %} {% if messages %}
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }}" role="alert">
             {{ message }} 
             {{ message.tags }}
         </div>
         {% endfor %}
+    {% endif %} {% endcomment %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% comment %} {{ message.tags }} {% endcomment %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }} 
+                    {% comment %} {{ message.tags }} {% endcomment %}
+                </div>
+            {% elif message.tags == "success" %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }} 
+                    {% comment %} {{ message.tags }} {% endcomment %}
+                </div>
+            {% endif %}
+        {% endfor %}
     {% endif %}
+    
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
             <div class="row mr-3">

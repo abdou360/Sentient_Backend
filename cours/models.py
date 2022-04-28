@@ -43,7 +43,7 @@ def model_image_location(instance, filename):
 #         modele3d = instance.modele3D.titre
 #         return 'img/cours/%s/' % (modele3d)
 
-EXTENSIONS = ['pdf', 'png']
+# EXTENSIONS = ['pdf', 'png']
 
 def file_upload_location(instance, filename):
         # now = time.time()
@@ -95,7 +95,7 @@ class Image(models.Model):
     # type = models.CharField(max_length=10,null = False, default=IMAGE_TYPES[0] )
     is_qrcode = models.BooleanField(default=False)
     # path = models.CharField(max_length=100,null = False )
-    path_image = models.FileField(upload_to=model_image_location,null = False )
+    path_image = models.FileField(upload_to=model_image_location,null = False, default=NULL )
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -104,7 +104,7 @@ class Traitement(models.Model):
     label_traitement = models.CharField(max_length=100,null = True, blank=True)
     type_traitement = models.CharField(max_length=25,null = False )
     chapitre = models.ForeignKey(Chapitre , null=False,  on_delete= models.CASCADE)
-    image = models.ForeignKey(Image , null=True, blank=True,  on_delete= models.SET_NULL)
+    image = models.ForeignKey(Image , null=True, blank=True,  on_delete= models.SET_NULL, default=NULL)
     modele3D = models.ForeignKey(Modele3D , null=False,  on_delete= models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)

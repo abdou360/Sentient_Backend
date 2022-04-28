@@ -6,53 +6,25 @@
 {% block content %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    {% comment %} <div class="jumbotron">
-        <h1 class="display-4">Welcome, {{user.username|default:'Guest'}}</h1>
-        <p class="lead">
-            This is <b>user registration and login system</b> build with django 
-        </p>
-        <hr class="my-4">
-        <p class="lead">
-            {% if user.is_authenticated %}
-                <a class="btn btn-primary btn-lg" href="{% url 'logout' %}" role="button">Logout</a>
-            {% else %}
-                <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Sign in</a>
-            {% endif %}
-        </p>
-    </div> {% endcomment %}
-
-
     {% if messages %}
-    {% comment %} <ul class="messages"> {% endcomment %}
         {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" role="alert">
-            {{ message }} 
-            {{ message.tags }}
-        </div>
-        {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
-        {% comment %} <div class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    {{ message }}
+            {% if message.tags == "error" %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }} 
+                    {% comment %} {{ message.tags }} {% endcomment %}
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div> {% endcomment %}
+            {% elif message.tags == "success" %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }} 
+                    {% comment %} {{ message.tags }} {% endcomment %}
+                </div>
+            {% endif %}
         {% endfor %}
-    {% comment %} </ul> {% endcomment %}
     {% endif %}
 
-    {% comment %} <div class="toast align-items-center text-white bg-primary border-0">
-        <div class="d-flex">
-            <div class="toast-body">
-               hi
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
+    {% comment %} <div class="alert alert-error" role="alert">
+        iihdjkh
     </div> {% endcomment %}
-    
-    
-
 
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
@@ -75,12 +47,22 @@
                     <hr>
                     <div class="tab-content scroll">  
                         <div id="description" class="tab-pane fade in active">  
-                            <h3>Description</h3>  
-                            <p> {{chapitre.description}} </p>  
+                            <div class='row'>
+                                <div class='col col-md-4 col-sm-6 col-12 '>
+                                    {% comment %} {% if  %} {% endcomment %}
+                                        <img class=""src="/media/{{chapitre.image}}" alt="image" class="img-fluid">
+                                    {% comment %} {% else %}
+                                    {% endif %} {% endcomment %}
+                                </div>
+                                <div class='col col-md-8 col-sm-6 col-12'>
+                                    <h2>Description</h2>  
+                                    <p> {{chapitre.description}} </p>  
+                                </div>
+                            </div>
                         </div> 
             
                         <div id="document" class="tab-pane fade">  
-                            <h3>Document</h3> 
+                            <h2>Document</h2> 
                             <div class="row content" >
                             {% for document in documents %} 
     

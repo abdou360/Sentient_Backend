@@ -8,6 +8,23 @@
 {% endblock style%}
 
 {% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == "error" %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }} 
+                    {% comment %} {{ message.tags }} {% endcomment %}
+                </div>
+            {% elif message.tags == "success" %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }} 
+                    {% comment %} {{ message.tags }} {% endcomment %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
     <div class="row">
         <div class="col-md-12 col-md-offset-3">
             <form id="msform" action="" method="post" enctype="multipart/form-data">
