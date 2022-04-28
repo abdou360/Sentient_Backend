@@ -9,7 +9,7 @@
             <div class="row mr-3">
                 <div class="col col-12 text-center">
                     <h4 class="m-3">
-                        Ajout d'un Chapitre
+                        Ajout d'un Modele AR
                     </h4>
                 </div>
             </div>
@@ -25,25 +25,35 @@
                     <hr class="mb-6">
                 </div>   
             </div>
-            <form class="row g-3" action="" method="post" enctype="multipart/form-data">
+
+             <form class="row g-3" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group col-12 mr-3">
-                    <div class="col-12 p-3"> {{new_chapitre.libelle|as_crispy_field}}</div>
+                    <div class="col-12 p-3"> </div>
                 </div>
                 <div class="form-group col-12 mr-3">
-                    <div class="col-12 p-3"> {{new_chapitre.description|as_crispy_field}}</div>
+                    <div class="col-12 p-3"> </div>
                 </div>
                 <div class="form-group col-12 mr-3">
-                    <div class="col-12 p-3"> {{new_chapitre.image|as_crispy_field}}</div>
+                    <div class="col-12 p-3"> </div>
                 </div>
-                {% comment %} <div class="form-group col-12 mr-3">
-                    <div class="col-12 p-3"> {{new_chapitre.element_module|as_crispy_field}}</div>
-                </div> {% endcomment %}
+                <div class="form-group col-12 mr-3">
+                    <div class="col-12 p-3"> </div>
+                </div>
+                <!-- {% comment %} <div class="form-group"> {% endcomment %}
+                    {% comment %} <label for="inputLibelle" class="form-label"></label> {% endcomment %}
+                    {% comment %} {{new_chapitre.libelle}} {% endcomment %}
+                    {% comment %} {{new_chapitre.libelle}} {% endcomment %}
+                    {% comment %} <div class="col-12"> {{new_chapitre.libelle|as_crispy_field}}</div> {% endcomment %}
+                    {% comment %} <div class="col-md-6 form-control">{{new_chapitre.libelle|as_crispy_field}}</div> {% endcomment %}
+                    {% comment %} <input type="text" class="form-control" id="inputLibelle"> {% endcomment %}
+                {% comment %} </div> {% endcomment %} -->
                 <div class="form-group col-12 text-center mr-3">
                     <button type="submit" class="btn btn-primary col-11">Confirmer</button>
                 </div>
             </form>
-            {% comment %} <div class="row">
+            
+            <!-- {% comment %} <div class="row">
                 {% for chapitre in chapitres %}
                 <div class="col-md-4 col-sm-6 col-lg-3 d-none d-block p-3 text-center">
                     <div class="card">
@@ -60,7 +70,7 @@
                     </div>
                 </div> 
                 {% endfor %}
-            </div> {% endcomment %}
+            </div> {% endcomment %} -->
         </div>
     </div>
 
