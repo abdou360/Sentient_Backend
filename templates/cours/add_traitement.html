@@ -63,7 +63,9 @@
                 </fieldset>
                 <fieldset id='fs-qrcode'>
                     <h2 class="fs-title">Ajout du QR Code</h2>
-                    <h3 class="fs-subtitle">Veuillez ajouter le texte</h3>*
+                    <h3 class="fs-subtitle">Veuillez ajouter le QR Code</h3>
+                    {{new_image.name_image|as_crispy_field}}
+                    {{new_image.path_image|as_crispy_field}}
                     <input type="button" name="previous" class="previous-to-1 action-button-previous" value="Précédant"/>
                     <input type="button" name="next" class="next-to-3 action-button" value="Suivant"/>
                 </fieldset>

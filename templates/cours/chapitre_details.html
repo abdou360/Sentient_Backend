@@ -28,7 +28,6 @@
 
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
-            <!-- Nested Row within Card Body -->
             <div class="row">
                 <div class="col-12 d-none d-block text-center">
                     <p class="m-3">
@@ -48,13 +47,13 @@
                     <div class="tab-content scroll">  
                         <div id="description" class="tab-pane fade in active">  
                             <div class='row'>
-                                <div class='col col-md-4 col-sm-6 col-12 '>
+                                <div class='col col-md-5 col-sm-6 col-12 '>
                                     {% comment %} {% if  %} {% endcomment %}
-                                        <img class=""src="/media/{{chapitre.image}}" alt="image" class="img-fluid">
+                                        <img src="/media/{{chapitre.image}}" alt="..." class="img-fluid">
                                     {% comment %} {% else %}
                                     {% endif %} {% endcomment %}
                                 </div>
-                                <div class='col col-md-8 col-sm-6 col-12'>
+                                <div class='col col-md-7 col-sm-6 col-12'>
                                     <h2>Description</h2>  
                                     <p> {{chapitre.description}} </p>  
                                 </div>
