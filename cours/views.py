@@ -25,8 +25,8 @@ from django.contrib.auth.decorators import login_required
 
 
 def chapitres_list(request): 
-    # professeur = Professeur.objects.filter(user = request.user.id).first()
-    professeur = Professeur.objects.filter(admin_id = 1).first()
+    professeur = Professeur.objects.filter(admin_id = request.user.id).first()
+    # professeur = Professeur.objects.filter(admin_id = 1).first()
     
     search_chapitre = request.GET.get('search')
     if search_chapitre:
@@ -136,7 +136,7 @@ def delete_Traitement(request, id):
         messages.error(request, 'Erreur : Le modele  n\'a pas été supprimé')
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
-EXTENSIONS = ['pdf', 'png']
+EXTENSIONS = ['jpg', 'png', 'bin', 'gltf']
 
 def add_traitement(request,id): 
     

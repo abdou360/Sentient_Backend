@@ -38,10 +38,10 @@
             </div>
             <div class="row">
                 <div class="maincontainer">
-                    <ul class="nav justify-content-center nav-pills">  
-                        <li class="nav" class="active"><a data-toggle="tab" href="#description">Description</a></li>  
-                        <li class="nav" ><a data-toggle="tab" href="#document">Documents</a></li>  
-                        <li class="nav" ><a data-toggle="tab" href="#ar">Modele AR</a></li>  
+                    <ul class="nav justify-content-center nav-pills"> 
+                        <li class="active customized-nav"><a data-toggle="tab" href="#description">Description</a></li>  
+                        <li class="customized-nav" ><a data-toggle="tab" href="#document">Documents</a></li>  
+                        <li class="customized-nav" ><a data-toggle="tab" href="#ar">Modele AR</a></li>  
                     </ul> 
                     <hr>
                     <div class="tab-content scroll">  
@@ -92,23 +92,25 @@
                         <div id="ar" class="tab-pane fade">  
                             <div class="row" >
                                 {% for traitement in traitements %} 
-                                <div class="col-lg-4 col-sm-6 my-4 text-center">
-                                    {% if traitement.type_traitement == "Image" %}
-                                    <img class="Description"src="/media/{{traitement.image.path_image}}" alt="image" class="rounded">
-                                    {% endif %}
-                                    {% if traitement.type_traitement == "QR-Code" %}
-                                    <img  class="Description"src="/media/{{traitement.image.path_image}}" alt="image" class="rounded">
-                                    {% comment %} <img  class="Description"src="https://fr.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market/generator/dist/generator/assets/images/websiteQRCode_noFrame.png" alt="image" class="rounded"> {% endcomment %}
-                                    {% endif %}
-                                    {% if traitement.type_traitement == "Texte" %}
-                                    <img  class="Description"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcN-sb-i-ZpzD-w2JVRWNzn5q0bslc-MOQs2WcsFF80xkniCNphQuNHpVGrjQ1tWPBIro&usqp=CAU" alt="image" class="rounded">
-                                    {% endif %}
+                                <div class="col col-lg-4 col-sm-6 my-4 text-center">
+                                    <div class="col col-12">
+                                        {% if traitement.type_traitement == "Image" %}
+                                        <img class="Description"src="/media/{{traitement.image.path_image}}" alt="image" class="rounded">
+                                        {% endif %}
+                                        {% if traitement.type_traitement == "QR-Code" %}
+                                        <img  class="Description"src="/media/{{traitement.image.path_image}}" alt="image" class="rounded">
+                                        {% comment %} <img  class="Description"src="https://fr.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market/generator/dist/generator/assets/images/websiteQRCode_noFrame.png" alt="image" class="rounded"> {% endcomment %}
+                                        {% endif %}
+                                        {% if traitement.type_traitement == "Texte" %}
+                                        <img  class="Description"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcN-sb-i-ZpzD-w2JVRWNzn5q0bslc-MOQs2WcsFF80xkniCNphQuNHpVGrjQ1tWPBIro&usqp=CAU" alt="image" class="rounded">
+                                        {% endif %}
+                                    </div>
                                     <p>{{traitement.titre_traitement}}</p>  
-                                    <div class='border'>
+                                    {% comment %} <div class='border'> {% endcomment %}
                                         <a id="delete_object"href="{% url 'delete_traitement' traitement.id %}"class="btn btn-primary">Supprimer</a>
                                         {% comment %} <div>/media/{{traitement.image.path_image}}</div> {% endcomment %}
                                         <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Modifier</a>
-                                    </div>
+                                    {% comment %} </div> {% endcomment %}
                                 </div>
                                 {% endfor %}
                             </div>
@@ -150,7 +152,7 @@ margin-right: 5%;
 margin-top: 1%;
 scrollbar-color: red;
 }
-.nav{
+.customized-nav{
     padding-right: 5%;
 }
 

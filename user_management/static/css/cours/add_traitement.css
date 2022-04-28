@@ -5,6 +5,10 @@
             padding: 0;
         }
 
+        .customized-nav{
+            padding-right: 5%;
+        }
+
         html {
             height: 100%;
             background: #6441A5; /* fallback for old browsers */

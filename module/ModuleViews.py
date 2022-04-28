@@ -5,7 +5,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse
-from numpy import int16
 from module.models import *
 from semestre.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
