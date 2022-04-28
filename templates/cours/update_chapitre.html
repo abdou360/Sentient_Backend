@@ -25,12 +25,8 @@
                     <hr class="mb-6">
                 </div>   
             </div>
-            {% comment %} <form class="row g-3" method="post" autocomplete="off"> {% endcomment %}
-
             <form class="row g-3" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {% comment %} {{updated_chapitre.libelle|as_crispy_field}} {% endcomment %}
-                {% comment %} <div class="col-12"> {% endcomment %}
                 <div class="form-group col-12 mr-3">
                     <div class="col-12 p-3"> {{updated_chapitre.libelle|as_crispy_field}}</div>
                 </div>
@@ -43,40 +39,10 @@
                 <div class="form-group col-12 mr-3">
                     <div class="col-12 p-3"> {{updated_chapitre.element_module|as_crispy_field}}</div>
                 </div>
-                {% comment %} <div class="form-group"> {% endcomment %}
-                    {% comment %} <label for="inputLibelle" class="form-label"></label> {% endcomment %}
-                    {% comment %} {{updated_chapitre.libelle}} {% endcomment %}
-                    {% comment %} {{updated_chapitre.libelle}} {% endcomment %}
-                    {% comment %} <div class="col-12"> {{updated_chapitre.libelle|as_crispy_field}}</div> {% endcomment %}
-                    {% comment %} <div class="col-md-6 form-control">{{updated_chapitre.libelle|as_crispy_field}}</div> {% endcomment %}
-                    {% comment %} <input type="text" class="form-control" id="inputLibelle"> {% endcomment %}
-                {% comment %} </div> {% endcomment %}
                 <div class="form-group col-12 text-center mr-3">
                     <button type="submit" class="btn btn-primary">Confirmer</button>
                 </div>
             </form>
-            {% comment %} <div class="row">
-                {% for chapitre in chapitres %}
-                <div class="col-md-4 col-sm-6 col-lg-3 d-none d-block p-3 text-center">
-                    <div class="card">
-                        <img
-                            class="p-3"
-                            src="{{chapitre.image}}"
-                            alt="..."
-                            />
-                        <div class="card-body">
-                          <h5 class="card-title">{{chapitre.libelle}}</h5>
-                          <p class="card-text">{{chapitre.description|default_if_none:"---"}}</p>
-                          <a href="#" class="btn btn-primary">Voir le Chapitre</a>
-                        </div>
-                    </div>
-                </div> 
-                {% endfor %}
-            </div> {% endcomment %}
         </div>
     </div>
-
-    <style>
-        
-    </style>
 {% endblock content %}
