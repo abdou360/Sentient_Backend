@@ -36,8 +36,9 @@ class Perequis(models.Model):
     prerequis_id =models.ForeignKey(ElementModule,null=False, blank=False , on_delete=models.CASCADE , related_name='%(class)s_prerequis')
     
     
-class Enseignant_Responsable(models.Model):
-    enseignant = models.ForeignKey(Professeur,null=True, on_delete= models.SET_NULL)
-    element_module = models.ForeignKey(ElementModule ,null=True, on_delete= models.SET_NULL)
-    is_responsable = models.BooleanField(null = False  )
-    annee_universitaire = models.DateField(null = False )
+    
+# class Enseignant_Responsable(models.Model):
+#     enseignant = models.ForeignKey(Professeur,null=True, on_delete= models.SET_NULL)
+#     element_module = models.ForeignKey(ElementModule ,null=True, on_delete= models.SET_NULL)
+#     is_responsable = models.BooleanField(null = False  )
+#     annee_universitaire = models.DateField(null = False )

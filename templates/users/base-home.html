@@ -26,29 +26,15 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet" />
-<<<<<<< HEAD
 
-=======
->>>>>>> ecaf05613685bad4c664a487587c9d81ef7f8e59
     {% block stylesheets %} {% endblock stylesheets %}
   </head>
 
   <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
-      {% include 'users/includes/sidebar.html' %}
+    
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ecaf05613685bad4c664a487587c9d81ef7f8e59
-      <!-- Content Wrapper -->
-      <div id="content-wrapper" class="d-flex flex-column">
-        <!-- Main Content -->
-        <div id="content">
-          {% include 'users/includes/navbar.html' %}
-<<<<<<< HEAD
-=======
         {% include 'users/includes/sidebar.html' with user=user id=id %} 
         
         <!-- Content Wrapper -->
@@ -58,9 +44,7 @@
             <div id="content">
 
                 {% include 'users/includes/navbar.html' %} 
->>>>>>> master
-=======
->>>>>>> ecaf05613685bad4c664a487587c9d81ef7f8e59
+
 
           <div class="container">{% block content %}{% endblock %}</div>
         </div>
@@ -77,10 +61,7 @@
     </a>
 
     <!-- Logout Modal-->
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ecaf05613685bad4c664a487587c9d81ef7f8e59
+
     <div
       class="modal fade"
       id="logoutModal"
@@ -113,10 +94,9 @@
             >
               Cancel
             </button>
-            <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+            <a class="btn btn-primary" href="">Logout</a>
           </div>
-<<<<<<< HEAD
-=======
+
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -133,9 +113,7 @@
                     <a class="btn btn-primary" href="logout">Logout</a>
                 </div>
             </div>
->>>>>>> master
-=======
->>>>>>> ecaf05613685bad4c664a487587c9d81ef7f8e59
+
         </div>
       </div>
     </div>

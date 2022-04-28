@@ -8,7 +8,7 @@ from cours.forms import *
 
 from cours.models import Chapitre, Document, Modele3D, Traitement, File
 from filiere.models import Filiere
-from module.models import ElementModule, Enseignant_Responsable, Module
+from module.models import ElementModule, Module
 from semestre.models import Niveau, Semestre
 from users.models import Professeur
 
