@@ -5,31 +5,31 @@
 <table class="table table-borderless">
     <thead class="border-bottom font-weight-bold">
         <tr>
-            <td>Nom Niveau</td>
-            <td>Type Niveau</td>
-            <td>Filiere</td>
+            <td>Nom Groupe</td>
+            <td>Niveau</td>
             <td>
-                <a href="{% url 'niveau_insert' %}" class="btn btn-outline-success">
+                <a href="{% url 'groupe_insert' %}" class="btn btn-outline-success">
                     <i class="fas fa-plus"></i> Add New
                 </a>
             </td>
         </tr>
     </thead>
     <tbody>
-        {% for niveau in niveau_list %}
+        {% for groupe in groupe_list %}
             <tr>
-                <td>{{niveau.nom_niveau}}</td>
-                <td>{{niveau.type_niveau}}</td>
-                <td> <a href="">{{niveau.filiere}}</a></td>
+                <td>{{groupe.libelle_groupe}}</td>
+                <td> <a href="{% url 'niveau_details' groupe.niveau.id  %}">{{groupe.niveau}}</a></td>
                 <td>
-                    <a href="" class="btn text-secondary px-0 mr-4">
+                    <a href="{% url 'groupe_details' groupe.id  %}" class="btn text-secondary px-0 mr-4">
                         <i class="fa fa-info-circle"> </i>
                         Details
                     </a>
-                    <a href="{% url 'niveau_update' niveau.id %}" class="btn text-secondary px-0 ">
+
+                    <a href="{% url 'groupe_update' groupe.id  %}"" class="btn text-secondary px-0">
                         <i class="far fa-edit fa-lg"></i>
                     </a>
-                    <form action="{% url 'niveau_delete' niveau.id %}" method="post" class="d-inline">
+                   
+                    <form action="{% url 'groupe_delete' groupe.id  %}"" method="post" class="d-inline">
                         {% csrf_token %}
                         <button type="submit" class="btn">
                             <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
@@ -42,3 +42,5 @@
 </table>
 
 {% endblock content %}
+
+
