@@ -1,13 +1,13 @@
 from pyexpat import model
-# from attr import fields
-# from pyrsistent import field
+from attr import fields
+from pyrsistent import field
 from rest_framework import serializers
 
 from filiere.models import Etablissement, Filiere
 class FiliereSerializer(serializers.ModelSerializer):
     class Meta:
         model=Filiere
-        field='__all__'
+        fields='__all__'
 
 class EtablissementSerializer(serializers.ModelSerializer):
     class Meta:
