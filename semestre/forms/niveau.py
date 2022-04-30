@@ -1,5 +1,5 @@
 from django import forms
-from ...models import Niveau
+from ..models import Niveau
 
 
 class NiveauForm(forms.ModelForm):
