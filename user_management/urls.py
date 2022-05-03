@@ -15,3 +15,5 @@ urlpatterns = [
     path('niveau/',include('semestre.urls.niveau.urls')),
     path('', include('module.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+path('admin/', admin.site.urls),

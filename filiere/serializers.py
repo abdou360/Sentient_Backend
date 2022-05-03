@@ -7,7 +7,7 @@ from filiere.models import Etablissement, Filiere
 class FiliereSerializer(serializers.ModelSerializer):
     class Meta:
         model=Filiere
-        field='__all__'
+        fields='__all__'
 
 class EtablissementSerializer(serializers.ModelSerializer):
     class Meta:
