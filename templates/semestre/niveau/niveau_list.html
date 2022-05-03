@@ -20,9 +20,13 @@
             <tr>
                 <td>{{niveau.nom_niveau}}</td>
                 <td>{{niveau.type_niveau}}</td>
-                <td>{{niveau.filiere}}</td>
+                <td> <a href="">{{niveau.filiere}}</a></td>
                 <td>
-                    <a href="{% url 'niveau_update' niveau.id %}" class="btn text-secondary px-0">
+                    <a href="" class="btn text-secondary px-0 mr-4">
+                        <i class="fa fa-info-circle"> </i>
+                        Details
+                    </a>
+                    <a href="{% url 'niveau_update' niveau.id %}" class="btn text-secondary px-0 ">
                         <i class="far fa-edit fa-lg"></i>
                     </a>
                     <form action="{% url 'niveau_delete' niveau.id %}" method="post" class="d-inline">

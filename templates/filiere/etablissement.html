@@ -33,7 +33,7 @@
     <div class="card-header card-header-primary card-header-flex">
       <div class="card-header">
         <h4 class="card-title">Table des etablissements</h4>
-        <p class="card-category">La liste des etablissements avec ces description</p>
+        <p class="card-category">La liste des etablissements </p>
       </div>
 
       {% comment %} form pour le rechereche du filiere {% endcomment %}
@@ -63,7 +63,7 @@
     <div class="card-body">
       <div class="table-responsive">
         {% if data is None or data.count == 0 %}
-        <h3 class="col-md-12" style="color: red">aucun donnee trouver !</h3>
+        <h3 class="col-md-12" style="color: red">aucune donnée trouvée !</h3>
         {% else %}
 
         <table class="table">
@@ -259,7 +259,7 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Annuler
         </button>
-        <button type="submit" class="btn btn-primary">Creer</button>
+        <button type="submit" class="btn btn-primary">Créer</button>
       </div>
       </form>
     </div>
