@@ -14,6 +14,7 @@ class SessionYearModel(models.Model):
     objects = models.Manager()
 
 
+# Overriding the Default Django Auth User and adding One More Field (user_type)
 class CustomUser(AbstractUser):
     user_type_data = ((1, "Admin"), (2, "Professeur"), (3, "Etudiant"))
     user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
@@ -30,14 +31,12 @@ class Admin(models.Model):
 
 class Professeur(models.Model):
     id = models.AutoField(primary_key=True)
-    matricule = models.CharField(max_length=20)
     admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
-    address = models.TextField()
-    specialite = models.CharField(max_length=20)
-    phone = models.CharField(max_length=12)
-    profile_pic = models.FileField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    specialite = models.CharField(max_length=45, default="informatique")
+    matricule = models.CharField(max_length=45, default="")
+    telephone = models.CharField(max_length=10, default="")
     objects = models.Manager()
 
 # UnivIt responsable : ismail errouk
@@ -67,12 +66,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == 2:
             Professeur.objects.create(admin=instance)
         if instance.user_type == 3:
-            Students.objects.create(admin=instance,
-                                    # course_id=
-                                    session_year_id=SessionYearModel.objects.get(id=1),
-                                    address="",
-                                    profile_pic="",
-                                    gender="")
+            Students.objects.create(admin=instance)
 
 
 @receiver(post_save, sender=CustomUser)

@@ -57,17 +57,19 @@ INSTALLED_APPS = [
     'module',
     'crispy_forms',
     'rest_framework',
+    'api',
     'rest_framework.authtoken',
     'cours',
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
 }
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -110,16 +112,16 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'ar-crud-project-1-4',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'PORT': '3306',
-#         'HOST': '127.0.0.1'
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ar-crud-project-1',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'PORT': '8889',
+        'HOST': '127.0.0.1'
+    }
+}
 
 
 # Password validation
