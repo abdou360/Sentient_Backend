@@ -111,9 +111,23 @@
                             width="100%"
                             /> {% endcomment %}
                         <div class="card-body">
-                          <h5 class="card-title">{{chapitre.libelle}}</h5>
-                          <p class="card-text">{{chapitre.description|default_if_none:"---"}}</p>
-                          <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Voir le Chapitre</a>
+                            <div class="row">
+                                <div class="col col-12">
+                                    <h5 class="card-title">{{chapitre.libelle}}</h5>
+                                </div>
+                                <div class="col col-12">
+                                    <p class="card-text">{{chapitre.description|default_if_none:"---"}}</p>
+                                </div>
+                                <div class="col col-12 mt-3">
+                                    <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Voir le Chapitre</a>
+                                </div>
+                                <div class="col col-12 mt-2">
+                                    <a href="{% url 'update_chapitre' chapitre.id %}" class="btn btn-success">Update</a>
+                                </div>
+                                <div class="col col-12 mt-2">
+                                    <a href="{% url 'delete_chapitre' chapitre.id %}" class="btn btn-danger">Delete</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div> 

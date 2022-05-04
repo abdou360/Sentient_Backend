@@ -5,7 +5,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse
-from numpy import int16
 from module.models import *
 from semestre.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -20,7 +19,7 @@ def add_module_level(request,name_):
     niveau = Niveau.objects.get(nom_niveau=name_)
     semestres = Semestre.objects.filter(niveau=niveau)
     
-    return render(request, "modules/add_module_template.html", {"semestres": semestres , "filiere" : niveau.filliere , "niveau" : niveau})
+    return render(request, "modules/add_module_template.html", {"semestres": semestres , "filiere" : niveau.filiere , "niveau" : niveau})
 
 
 @login_required
@@ -58,7 +57,7 @@ def add_element_module_level(request,name_):
     modules = Module.objects.filter(semestre__in=semestre)
     profs = Professeur.objects.all()
     prerequis = ElementModule.objects.all()
-    return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filliere})
+    return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere})
 
 
 @login_required
@@ -224,7 +223,7 @@ def search_modules_filiere(request,name_):
        
     filiere = Filiere.objects.get(nom_filiere=name_)
     filieres = Filiere.objects.all()
-    niveaux = Niveau.objects.filter(filliere=filiere)
+    niveaux = Niveau.objects.filter(filiere=filiere)
     semestres = Semestre.objects.filter(niveau__in=niveaux)
     modules = Module.objects.filter(semestre__in=semestres)
     
@@ -322,7 +321,7 @@ def display_majors(request):
 @login_required
 def display_levels(request,name_):
     filiere = Filiere.objects.get(nom_filiere=name_)
-    niveaux = Niveau.objects.filter(filliere=filiere)
+    niveaux = Niveau.objects.filter(filiere=filiere)
 
     return render(request, "modules/niveau_template.html", {"filiere": filiere , "niveaux" : niveaux})
 

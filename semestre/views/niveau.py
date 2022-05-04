@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from semestre.forms.niveau.forms import NiveauForm
+from semestre.forms.niveau import NiveauForm
 
 from semestre.models import Niveau
 
@@ -27,10 +27,19 @@ def niveau_form(request, id=0):
             form = NiveauForm(request.POST,instance= niveau)
         if form.is_valid():
             form.save()
-        return redirect('/niveau/list')
+        return redirect('/semestre/niveau/list')
 
 
 def niveau_delete(request,id):
     niveau = Niveau.objects.get(pk=id)
     niveau.delete()
-    return redirect('/niveau/list')
+    return redirect('/semestre/niveau/list')
+
+def niveauDelails(request , id):
+    niveau = Niveau.objects.get(pk=id)
+    form = NiveauForm(instance= niveau)
+    form.fields["nom_niveau"].disabled = True
+    form.fields["type_niveau"].disabled = True
+    form.fields["filiere"].disabled = True
+    return render(request, "semestre/niveau/niveau_details.html", {'form': form})
+
