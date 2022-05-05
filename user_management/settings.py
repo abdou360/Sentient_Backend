@@ -114,11 +114,11 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ar-crud-project-1',
+        'NAME': 'ar-crud-project',
         'USER': 'root',
         'PASSWORD': '',
-        # 'PORT': '8889',
-        # 'HOST': '127.0.0.1'
+        'PORT': '3306',
+        'HOST': '127.0.0.1'
     }
 }
 
@@ -165,7 +165,8 @@ STATICFILES_DIRS = [
     'dashboard/static',
     os.path.join(BASE_DIR, 'static'),
     'filiere/static',
-    'cours/static'
+    'cours/static',
+    'emploie/static',
 ]
 
 MEDIA_URL = '/media/'

@@ -10,5 +10,6 @@ venv/
 .secrets.sh
 .idea/
 .vscode
+virenv/
 
 # */migration

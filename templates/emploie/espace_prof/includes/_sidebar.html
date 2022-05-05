@@ -1,9 +1,12 @@
-<!-- Sidebar -->
+<!--
+    EQUIPE : CodeVerse
+    @author : KANNOUFA FATIMA EZZAHRA
+-->
+
 <ul
   class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
   id="accordionSidebar"
 >
-  <!-- Sidebar - Brand -->
   <a
     class="sidebar-brand d-flex align-items-center justify-content-center"
     href="/"
@@ -14,10 +17,8 @@
     <div class="sidebar-brand-text mx-3">Dashboard <sup>2</sup></div>
   </a>
 
-  <!-- Divider -->
   <hr class="sidebar-divider my-0" />
 
-  <!-- Nav Item - Dashboard -->
   <li class="nav-item">
     {% url 'teacher_home' as teacher_home %}
     <a href="{{ teacher_home }}" class="nav-link {% if request.path == teacher_home %} active {% endif %}">
@@ -25,27 +26,24 @@
       <span>Teacher Home </span>
     </a>
   </li>
+
+  <hr class="sidebar-divider" />
+
+  <div class="sidebar-heading">Interfaces</div>
+  
   <li class="nav-item">
     <a href="{{ emploiProfesseur }}" class="nav-link {% if request.path == emploiProfesseur %} active {% endif %}">
-      <i class="nav-icon fas fa-tachometer-alt"></i>
+      <i class="nav-icon fas fa-calendar-day"></i>
       <span>Mon emploi du temps</span>
     </a>
   </li>
 
-  <!-- Divider -->
-  <hr class="sidebar-divider" />
-
-  <!-- Heading -->
-  <div class="sidebar-heading">Interfaces</div>
-
-
-
-  <!-- Divider -->
   <hr class="sidebar-divider d-none d-md-block" />
+
 
   <!-- Sidebar Toggler (Sidebar) -->
   <div class="text-center d-none d-md-inline">
     <button class="rounded-circle border-0" id="sidebarToggle"></button>
   </div>
+
 </ul>
-<!-- End of Sidebar -->
