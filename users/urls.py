@@ -25,6 +25,7 @@ urlpatterns = [
                   path('edit_teacher/<teacher_id>/', AdminViews.edit_teacher, name="edit_teacher"),
                   path('edit_teacher_save/', AdminViews.edit_teacher_save, name="edit_teacher_save"),
                   path('delete_teacher/<teacher_id>/', AdminViews.delete_teacher, name="delete_teacher"),
+                  
                   # UnivIt responsable : Ettafssaoui Youssef 
                #    path('manage_session/', AdminViews.manage_session, name="manage_session"),
                #    path('add_session/', AdminViews.add_session, name="add_session"),
