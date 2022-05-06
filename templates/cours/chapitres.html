@@ -4,27 +4,15 @@
 
 {% block title %} Chapitres {% endblock title%}
 {% block content %}
-    {% comment %} {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" role="alert">
-            {{ message }} 
-            {{ message.tags }}
-        </div>
-        {% endfor %}
-    {% endif %} {% endcomment %}
-
     {% if messages %}
         {% for message in messages %}
-            {% comment %} {{ message.tags }} {% endcomment %}
             {% if message.tags == 'error' %}
                 <div class="alert alert-danger" role="alert">
-                    {{ message }} 
-                    {% comment %} {{ message.tags }} {% endcomment %}
+                    {{ message }}
                 </div>
             {% elif message.tags == "success" %}
                 <div class="alert alert-success" role="alert">
-                    {{ message }} 
-                    {% comment %} {{ message.tags }} {% endcomment %}
+                    {{ message }}
                 </div>
             {% endif %}
         {% endfor %}
@@ -36,33 +24,42 @@
                 <form class="col-md-2 col-sm-6 d-none d-block"  action="#">
                     <select class="custom-select custom-select-sm form-control form-control-sm m-3" aria-label=".form-select-sm example">
                         <option selected>Filière</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
+                        <option value="">Toutes</option>
+                        {% for filiere in filieres %}
+                        <option value="">{{filiere.nom_filiere}}</option>
+                        {% endfor %}
                     </select>
                 </form>
                 <div class="col-md-2 col-sm-6 d-none d-block">
                     <select class="custom-select custom-select-sm form-control form-control-sm m-3" aria-label=".form-select-sm example">
                         <option selected>Niveau</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option value="">Tous</option>
+                        {% for niveau in niveaux %}
+                        <option value="">{{niveau.nom_niveau}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="col-md-2 col-sm-6 d-none d-block">
                     <select class="custom-select custom-select-sm form-control form-control-sm m-3" aria-label=".form-select-sm example">
                         <option selected>Module</option>
-                        <option value="1">One</option>
+                        <option value="">Tous</option>
+                        {% for element_module in element_modules %}
+                        <option value="">{{element_module.libelle_element_module}}</option>
+                        {% endfor %}
+                        <!-- <option value="1">One</option>
                         <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option value="3">Three</option> -->
                     </select>
                 </div>
                 <div class="col-md-2 col-sm-6 d-none d-block">
                     <select class="custom-select custom-select-sm form-control form-control-sm m-3" aria-label=".form-select-sm example">
                         <option selected>Année</option>
-                        <option value="1">One</option>
+                        {% for annee in annees %}
+                        <option value="">{{annee}}</option>
+                        {% endfor %}
+                        <!-- <option value="1">One</option>
                         <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option value="3">Three</option> -->
                     </select>
                 </div>
                 <form class=" col-md-4 col-sm-12 d-none d-block" action="#">
@@ -86,17 +83,48 @@
                 {% for chapitre in chapitres %}
                 <div class="col-md-4 col-sm-6 col-lg-3 d-none d-block p-3 text-center">
                     <div class="card">
-                        <img
+                        {% if chapitre.image %}
+                            <img
                             class="p-3"
                             src="{{chapitre.image.url}}"
                             alt="..."
                             height="210" 
                             width="100%"
                             />
+                        {% else %}
+                            <img
+                            class="p-3"
+                            src="img/cours/folder-files-and-folders-svgrepo-com.svg"
+                            alt="..."
+                            height="210" 
+                            width="100%"
+                            />
+                        {% endif %}
+                        {% comment %} <img
+                            class="p-3"
+                            src="{{chapitre.image.url}}"
+                            alt="..."
+                            height="210" 
+                            width="100%"
+                            /> {% endcomment %}
                         <div class="card-body">
-                          <h5 class="card-title">{{chapitre.libelle}}</h5>
-                          <p class="card-text">{{chapitre.description|default_if_none:"---"}}</p>
-                          <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Voir le Chapitre</a>
+                            <div class="row">
+                                <div class="col col-12">
+                                    <h5 class="card-title">{{chapitre.libelle}}</h5>
+                                </div>
+                                <div class="col col-12">
+                                    <p class="card-text">{{chapitre.description|default_if_none:"---"}}</p>
+                                </div>
+                                <div class="col col-12 mt-3">
+                                    <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Voir le Chapitre</a>
+                                </div>
+                                <div class="col col-12 mt-2">
+                                    <a href="{% url 'update_chapitre' chapitre.id %}" class="btn btn-success">Update</a>
+                                </div>
+                                <div class="col col-12 mt-2">
+                                    <a href="{% url 'delete_chapitre' chapitre.id %}" class="btn btn-danger">Delete</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div> 

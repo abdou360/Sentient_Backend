@@ -1,88 +1,73 @@
 from django import forms
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-
-from .models import Profile
+from django.forms import Form
+from users.models import *
 
 
-class RegisterForm(UserCreationForm):
-    # fields we want to include and customize in our form
-    first_name = forms.CharField(max_length=100,
-                                 required=True,
-                                 widget=forms.TextInput(attrs={'placeholder': 'First Name',
-                                                               'class': 'form-control',
-                                                               }))
-    last_name = forms.CharField(max_length=100,
-                                required=True,
-                                widget=forms.TextInput(attrs={'placeholder': 'Last Name',
-                                                              'class': 'form-control',
-                                                              }))
-    username = forms.CharField(max_length=100,
-                               required=True,
-                               widget=forms.TextInput(attrs={'placeholder': 'Username',
-                                                             'class': 'form-control',
-                                                             }))
-    email = forms.EmailField(required=True,
-                             widget=forms.TextInput(attrs={'placeholder': 'Email',
-                                                           'class': 'form-control',
-                                                           }))
-    password1 = forms.CharField(max_length=50,
-                                required=True,
-                                widget=forms.PasswordInput(attrs={'placeholder': 'Password',
-                                                                  'class': 'form-control',
-                                                                  'data-toggle': 'password',
-                                                                  'id': 'password',
-                                                                  }))
-    password2 = forms.CharField(max_length=50,
-                                required=True,
-                                widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password',
-                                                                  'class': 'form-control',
-                                                                  'data-toggle': 'password',
-                                                                  'id': 'password',
-                                                                  }))
+class DateInput(forms.DateInput):
+    input_type = "date"
 
+
+class AddStudentForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
+        model = Students
+        fields = ['user', 'admin','cne', 'adresse', 'telephone', 'path_photos', 'code_apogee']
+        labels = {
+            'admin': 'Admin',
+            'user': 'User',
+            'cne': 'CNE',
+            'adresse': 'Adresse',
+            'telephone': 'Telephone',
+            'path_photos': 'Path Photos',
+            'code_apogee': 'Code Apogee',
+
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(AddStudentForm, self).__init__(*args, **kwargs)
 
 
-class LoginForm(AuthenticationForm):
-    username = forms.CharField(max_length=100,
-                               required=True,
-                               widget=forms.TextInput(attrs={'placeholder': 'Username',
-                                                             'class': 'form-control',
-                                                             }))
-    password = forms.CharField(max_length=50,
-                               required=True,
-                               widget=forms.PasswordInput(attrs={'placeholder': 'Password',
-                                                                 'class': 'form-control',
-                                                                 'data-toggle': 'password',
-                                                                 'id': 'password',
-                                                                 'name': 'password',
-                                                                 }))
-    remember_me = forms.BooleanField(required=False)
+class EditStudentForm(forms.Form):
+    adresse = forms.CharField(label="Adresse", max_length=50, widget=forms.TextInput(attrs={"class": "form-control"}))
+    cne = forms.CharField(label="C.N.E", max_length=10, widget=forms.TextInput(attrs={"class": "form-control"}))
+    path_photos = forms.CharField(label="Path Photos", max_length=10,
+                                  widget=forms.TextInput(attrs={"class": "form-control"}))
+    telephone = forms.CharField(label="Telephone", max_length=10,
+                                widget=forms.TextInput(attrs={"class": "form-control"}))
+    code_apogee = forms.CharField(label="Code Appoge", max_length=10,
+                                  widget=forms.TextInput(attrs={"class": "form-control"}))
+    # For Displaying Courses
 
-    class Meta:
-        model = User
-        fields = ['username', 'password', 'remember_me']
-
-
-class UpdateUserForm(forms.ModelForm):
-    username = forms.CharField(max_length=100,
-                               required=True,
-                               widget=forms.TextInput(attrs={'class': 'form-control'}))
-    email = forms.EmailField(required=True,
-                             widget=forms.TextInput(attrs={'class': 'form-control'}))
-
-    class Meta:
-        model = User
-        fields = ['username', 'email']
-
-
-class UpdateProfileForm(forms.ModelForm):
-    avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control-file'}))
-    bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
-
-    class Meta:
-        model = Profile
-        fields = ['avatar', 'bio']
+    # # form des Etudiants
+    # class EtudiantForm(forms.ModelForm):
+    #     class Meta:
+    #         model = Etudiant
+    #         fields = ['user', 'cne', 'adresse', 'telephone', 'path_photos', 'code_apogee']
+    #         labels = {
+    #             'user': 'User',
+    #             'cne': 'CNE',
+    #             'adresse': 'Adresse',
+    #             'telephone': 'Telephone',
+    #             'path_photos': 'Path Photos',
+    #             'code_apogee': 'Code Apogee',
+    #
+    #         }
+    #
+    #     def __init__(self, *args, **kwargs):
+    #         super(EtudiantForm, self).__init__(*args, **kwargs)
+    #
+    # DEMO_CHOICES = (
+    #     ("1", "Naveen"),
+    #     ("2", "Pranav"),
+    #     ("3", "Isha"),
+    #     ("4", "Saloni"),
+    # )
+    #
+    # def get_demo_choices():
+    #     permissions = Permission.objects.all()
+    #     list_permissions = []
+    #     for permission in permissions:
+    #         list_permissions.append((permission.id, permission.libelle))
+    #     return list_permissions
+    #
+    # class GeeksForm(forms.Form):
+    #     geeks_field = forms.MultipleChoiceField(choices=get_demo_choices)

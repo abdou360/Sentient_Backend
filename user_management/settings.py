@@ -9,16 +9,21 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-from dotenv import load_dotenv
 import os
 from pathlib import Path
+# import pymysql
+
+# To keep secret keys in environment variables
+# from dotenv import load_dotenv
+
+# load_dotenv()
+
+# pymysql.install_as_MySQLdb()
 import pymysql
 pymysql.version_info = (1, 4, 6, 'final', 0)
 pymysql.install_as_MySQLdb()
 
-# To keep secret keys in environment variables
-
-load_dotenv()
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,14 +51,26 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UserConfig',
-    'social_django',
     'semestre',
     'filiere',
     'emploie',
     'module',
-    'cours',
     'crispy_forms',
+    'rest_framework',
+    'api',
+    'rest_framework.authtoken',
+    'cours',
 ]
+
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -67,6 +84,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 ROOT_URLCONF = 'user_management.urls'
 
 TEMPLATES = [
@@ -79,10 +100,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                'django.contrib.messages.context_processors.messages'
             ],
         },
     },
@@ -97,11 +115,17 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ar-crud-project',
+        'NAME': 'ar-crud-project-1',
         'USER': 'root',
+<<<<<<< HEAD
         'PASSWORD': 'root1234500',
         # 'PORT': '3306',
         # 'HOST': '127.0.0.1'
+=======
+        'PASSWORD': '',
+        'PORT': '3306',
+        'HOST': '127.0.0.1'
+>>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7
     }
 }
 
@@ -124,13 +148,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.github.GithubOAuth2',
-    'social_core.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-)
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -149,16 +166,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR/'static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     'user_management/static',
+    'dashboard/static',
+    os.path.join(BASE_DIR, 'static'),
+    'filiere/static',
     'cours/static'
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
@@ -167,3 +185,6 @@ LOGIN_URL = 'login'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# For Custom USER
+AUTH_USER_MODEL = "users.CustomUser"
