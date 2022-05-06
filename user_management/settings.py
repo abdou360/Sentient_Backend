@@ -117,8 +117,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ar-crud-project-1',
         'USER': 'root',
-        'PASSWORD': 'root',
-        'PORT': '8889',
+        'PASSWORD': '',
+        'PORT': '3306',
         'HOST': '127.0.0.1'
     }
 }

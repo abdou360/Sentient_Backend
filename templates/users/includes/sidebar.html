@@ -19,17 +19,25 @@
 
   <!-- Nav Item - Dashboard -->
   <li class="nav-item">
-    <a class="nav-link" href="/">
-      <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span>Dashboard</span></a
-    >
+    {% url 'teacher_home' as teacher_home %}
+    <a href="{{ teacher_home }}" class="nav-link {% if request.path == teacher_home %} active {% endif %}">
+      <i class="nav-icon fas fa-tachometer-alt"></i>
+      <span>Teacher Home </span>
+    </a>
   </li>
 
   <!-- Divider -->
   <hr class="sidebar-divider" />
 
   <!-- Heading -->
-  <div class="sidebar-heading">Interfaces</div>
+  <div class="sidebar-heading">Interdfaces</div>
+
+
+
+
+
+
+
 
   <!-- Nav Item - Utilisateurs -->
   <li class="nav-item">
@@ -42,7 +50,7 @@
   <!-- Nav Item - Fillieres -->
   <li class="nav-item">
 
-    <a class="nav-link" href="/dashboard/filiere">
+    <!-- <a class="nav-link" href="/dashboard/filiere"> -->
 
     <a class="nav-link" href="/filiere_etab/filiere">
 
@@ -74,7 +82,7 @@
         <i class="fas fa-fw fa-book"></i>
         <span>gestion des Modules</span>
     </a>
-    <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
         data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h2 class="collapse-header"> Gestion des Modules </h2>
@@ -101,6 +109,13 @@
       <span>gestion des Cours</span></a
     >
   </li>
+
+
+
+
+
+
+
 
   <!-- Divider -->
   <hr class="sidebar-divider d-none d-md-block" />
