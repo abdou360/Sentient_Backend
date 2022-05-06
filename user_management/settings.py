@@ -117,15 +117,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ar-crud-project-1',
         'USER': 'root',
-<<<<<<< HEAD
-        'PASSWORD': 'root1234500',
-        # 'PORT': '3306',
-        # 'HOST': '127.0.0.1'
-=======
         'PASSWORD': '',
         'PORT': '3306',
         'HOST': '127.0.0.1'
->>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7
     }
 }
 
