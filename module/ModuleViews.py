@@ -29,7 +29,6 @@ def add_module_save(request):
     else:
         module_libelle = request.POST.get("module")
         semestre_id = request.POST.get("semestre_id")
-        #semestre = Semestre.objects.all()[semestre_id]
         semestre = Semestre.objects.get(id=semestre_id)
         try:
             course = Module.objects.create(
@@ -43,13 +42,6 @@ def add_module_save(request):
             return HttpResponseRedirect(reverse(add_module_level))
 
 
-# @login_required
-# def add_element_module(request):
-#     modules = Module.objects.all()
-#     profs = Professeur.objects.all()
-#     prerequis = ElementModule.objects.all()
-#     return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis})
-
 @login_required
 def add_element_module_level(request,name_):
     niveau = Niveau.objects.get(nom_niveau=name_)
@@ -57,7 +49,15 @@ def add_element_module_level(request,name_):
     modules = Module.objects.filter(semestre__in=semestre)
     profs = Professeur.objects.all()
     prerequis = ElementModule.objects.all()
-    return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere})
+    
+    if modules.exists() :
+        return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere})
+    else :
+        messages.error(request, "Ajoutez au moins un module ")
+        return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere})
+        
+        
+     
 
 
 @login_required
@@ -74,12 +74,6 @@ def add_element_module_save(request):
         module = Module.objects.get(id=module_id)
         responsable = request.POST.get("responsable")
         niveau = request.POST.get("niveau")
-        # prof = Professeur.objects.get(id=1)
-        # # preqd = ElementModule.objects.get(id=14)
-
-        # element_module.prof_id.add(prof)
-        #prere = Perequis.objects.create(element_module_id=element_module, prerequis_id=preqd)
-
         try:
 
             respo = Professeur.objects.get(id=responsable)
@@ -91,13 +85,7 @@ def add_element_module_save(request):
                 prof = Professeur.objects.get(id=pr)
                 element_module.prof_id.add(prof)
                 element_module.save()
-            #     element_module = ElementModule.objects.create(libelle_element_module=libelle_element_module, volumeHoraire=volumeHoraire,
-            #                                               objectif=objectif,
-            #                                               module=module, prof_id=prof)
-            # element_module = ElementModule.objects.create(libelle_element_module=libelle_element_module, volumeHoraire=volumeHoraire,
-            #                                                 objectif=objectif,
-            #                                                 module=module, prof_id=prof)
-
+         
             for preq in prerequis_id:
                 preqd = ElementModule.objects.get(id=int(preq))
                 d = Perequis.objects.create(
@@ -163,7 +151,6 @@ def edit_module_save(request):
         module_libelle = request.POST.get("module")
         semestre_id = request.POST.get("semestre_id")
         module_id = request.POST.get("module_id")
-        #semestre = Semestre.objects.all()[semestre_id]
         semestre = Semestre.objects.get(id=semestre_id)
         try:
             course = Module.objects.get(id=module_id)
@@ -180,9 +167,9 @@ def edit_module_save(request):
 
 @login_required
 def manage_modules(request):
-    modules = Module.objects.all()
-    semestres = Semestre.objects.all().values('libelle_semestre').distinct()
-    niveaux = Niveau.objects.all()
+    modules = Module.objects.all().order_by('-created_at')
+    semestres = Semestre.objects.filter(id=4444)
+    niveaux = Niveau.objects.filter(id=4444)
     filieres = Filiere.objects.all()
     
     page = request.GET.get('page', 1)
@@ -196,6 +183,27 @@ def manage_modules(request):
         modules_ = paginator.page(paginator.num_pages)
 
     return render(request, "modules/manage_modules.html", {"modules": modules_,"filieres":filieres,"semestres":semestres,"niveaux":niveaux})
+
+
+def search_module(request):
+    query = request.GET.get('q')
+    modules = Module.objects.filter(libelle_module__icontains=query).order_by('-created_at')
+    semestres = Semestre.objects.filter(id=4444)
+    niveaux = Niveau.objects.filter(id=4444)
+    filieres = Filiere.objects.all()
+    
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(modules, 5)
+    try:
+        modules_ = paginator.page(page)
+    except PageNotAnInteger:
+        modules_ = paginator.page(1)
+    except EmptyPage:
+        modules_ = paginator.page(paginator.num_pages)
+
+    return render(request, "modules/manage_modules.html", {"modules": modules_,"filieres":filieres,"semestres":semestres,"niveaux":niveaux})
+
 
 @login_required
 def search_modules_semestres(request,name_):
@@ -238,7 +246,7 @@ def search_modules_filiere(request,name_):
     except EmptyPage:
         modules_ = paginator.page(paginator.num_pages)
 
-    return render(request, "modules/manage_modules.html", {"modules": modules,"filieres":filieres,"semestres":semestres,"niveaux":niveaux})
+    return render(request, "modules/manage_modules.html", {"modules": modules_,"filieres":filieres,"semestres":semestres,"niveaux":niveaux})
 
 @login_required
 def search_modules_niveau(request,name_):
@@ -261,12 +269,124 @@ def search_modules_niveau(request,name_):
     except EmptyPage:
         modules_ = paginator.page(paginator.num_pages)
 
-    return render(request, "modules/manage_modules.html", {"modules": modules,"filieres":filieres,"semestres":semestres,"niveaux":niveaux})
-
+    return render(request, "modules/manage_modules.html", {"modules": modules_,"filieres":filieres,"semestres":semestres,"niveaux":niveaux})
 
 
 @login_required
-def manage_elem_modules(request):
+def search_elem_modules_filiere(request,name_): 
+    filiere = Filiere.objects.get(nom_filiere=name_)
+    niveaux = Niveau.objects.filter(filiere=filiere)
+    semestres = Semestre.objects.filter(niveau__in=niveaux)
+    modules = Module.objects.filter(semestre__in=semestres)
+    filieres = Filiere.objects.all()
+    elem_modules = ElementModule.objects.filter(module__in=modules).order_by('-created_at')
+    prerequis = Perequis.objects.all()
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(elem_modules, 5)
+    try:
+        elem_modules_ = paginator.page(page)
+    except PageNotAnInteger:
+        elem_modules_ = paginator.page(1)
+    except EmptyPage:
+        elem_modules_ = paginator.page(paginator.num_pages)
+    
+    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules_,"prerequis":prerequis , "filieres":filieres,"semestres":semestres,"niveaux":niveaux,"modules":modules})
+
+@login_required
+def search_elem_modules_niveau(request,name_): 
+    filieres = Filiere.objects.all()
+    niveaux = Niveau.objects.all()
+    niveau = Niveau.objects.filter(nom_niveau=name_)
+    semestres = Semestre.objects.filter(niveau__in=niveau)
+    modules = Module.objects.filter(semestre__in=semestres)
+    filieres = Filiere.objects.all()
+    elem_modules = ElementModule.objects.filter(module__in=modules).order_by('-created_at')
+    prerequis = Perequis.objects.all()
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(elem_modules, 5)
+    try:
+        elem_modules_ = paginator.page(page)
+    except PageNotAnInteger:
+        elem_modules_ = paginator.page(1)
+    except EmptyPage:
+        elem_modules_ = paginator.page(paginator.num_pages)
+    
+    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules_,"prerequis":prerequis , "filieres":filieres,"semestres":semestres,"niveaux":niveaux,"modules":modules})
+
+
+@login_required
+def search_elem_modules_semestres(request,name_): 
+    semestres = Semestre.objects.filter(libelle_semestre=name_)
+    semestres_ = Semestre.objects.values('libelle_semestre').distinct()
+    modules = Module.objects.filter(semestre__in=semestres)
+    niveaux = Niveau.objects.all()
+    filieres = Filiere.objects.all()
+    elem_modules = ElementModule.objects.filter(module__in=modules).order_by('-created_at')
+    prerequis = Perequis.objects.all()
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(elem_modules, 5)
+    try:
+        elem_modules_ = paginator.page(page)
+    except PageNotAnInteger:
+        elem_modules_ = paginator.page(1)
+    except EmptyPage:
+        elem_modules_ = paginator.page(paginator.num_pages)
+    
+    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules_,"prerequis":prerequis , "filieres":filieres,"semestres":semestres_,"niveaux":niveaux,"modules":modules})
+
+
+@login_required
+def search_elem_modules_modules(request,name_): 
+    semestres = Semestre.objects.values('libelle_semestre').distinct()
+    modules = Module.objects.filter(libelle_module=name_)
+    modules_ = Module.objects.all()
+    niveaux = Niveau.objects.all()
+    filieres = Filiere.objects.all()
+    elem_modules = ElementModule.objects.filter(module__in=modules).order_by('-created_at')
+    prerequis = Perequis.objects.all()
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(elem_modules, 5)
+    try:
+        elem_modules_ = paginator.page(page)
+    except PageNotAnInteger:
+        elem_modules_ = paginator.page(1)
+    except EmptyPage:
+        elem_modules_ = paginator.page(paginator.num_pages)
+    
+    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules_,"prerequis":prerequis , "filieres":filieres,"semestres":semestres,"niveaux":niveaux,"modules":modules_})
+
+
+@login_required
+def search_elem_module(request): 
+    semestres = Semestre.objects.filter(id=4444)
+    niveaux = Niveau.objects.filter(id=4444)
+    filieres = Filiere.objects.all()
+    query = request.GET.get('q')
+    elem_modules = ElementModule.objects.filter(libelle_element_module__icontains=query).order_by('-created_at')
+    prerequis = Perequis.objects.all()
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(elem_modules, 5)
+    try:
+        elem_modules_ = paginator.page(page)
+    except PageNotAnInteger:
+        elem_modules_ = paginator.page(1)
+    except EmptyPage:
+        elem_modules_ = paginator.page(paginator.num_pages)
+    
+    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules_,"prerequis":prerequis , "filieres":filieres,"semestres":semestres,"niveaux":niveaux})
+
+
+@login_required
+def manage_elem_modules(request): 
+    semestres = Semestre.objects.filter(id=4444)
+    niveaux = Niveau.objects.filter(id=4444)
+    modules = Module.objects.filter(id=4444)
+    filieres = Filiere.objects.all()
     elem_modules = ElementModule.objects.all()
     prerequis = Perequis.objects.all()
     page = request.GET.get('page', 1)
@@ -279,7 +399,7 @@ def manage_elem_modules(request):
     except EmptyPage:
         elem_modules_ = paginator.page(paginator.num_pages)
     
-    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules_,"prerequis":prerequis})
+    return render(request, "modules/manage_elem_modules.html", {"elem_modules": elem_modules_,"prerequis":prerequis , "filieres":filieres,"semestres":semestres,"niveaux":niveaux ,"modules":modules})
 
 
 @login_required
@@ -306,10 +426,15 @@ def delete_elem_module(request, id_):
 
 
 @login_required
-def edit_module(request, id_):
-    semestres = Semestre.objects.all()
+def edit_module(request, name_,id_):
+    
     module = Module.objects.get(id=id_)
-    return render(request, "modules/edit_module_template.html", {"module": module, "semestres": semestres})
+    niveau = Niveau.objects.get(nom_niveau=name_)
+    semestres = Semestre.objects.filter(niveau=niveau)
+    # return HttpResponse(niveau.filiere)
+    return render(request, "modules/edit_module_template.html", {"module":module,"semestres": semestres , "filiere" : niveau.filiere , "niveau" : niveau})
+
+
 
 
 @login_required
