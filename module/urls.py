@@ -5,6 +5,7 @@ from module import ModuleViews
 from django.contrib import admin
 
 urlpatterns = [
+    #*@author ABDELHADI MOUZAFIR BEGIN
     path('modules/filieres', ModuleViews.display_majors, name = "display_majors"),
     path('modules/<str:name_>/niveaux', ModuleViews.display_levels, name = "display_levels"),
     path('modules/add_module', ModuleViews.add_module, name = "add_module"),
@@ -27,7 +28,9 @@ urlpatterns = [
     path('modules/elements_module/filtrebyNiveau<str:name_>', ModuleViews.search_elem_modules_niveau , name="search_elem_modules_niveau"),
     path('modules/elements_module/filtrebySemestre<str:name_>', ModuleViews.search_elem_modules_semestres , name="search_elem_modules_semestres"),
     path('modules/elements_module/filtrebyModule<str:name_>', ModuleViews.search_elem_modules_modules , name="search_elem_modules_modules"),
+    path('edit_element_module_level/<str:name_>/<str:id_>', ModuleViews.edit_element_module_level, name="edit_element_module_level"),
     
+    #*@author ABDELHADI MOUZAFIR END
     
     
     

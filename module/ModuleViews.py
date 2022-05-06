@@ -1,3 +1,7 @@
+
+#*@author ABDELHADI MOUZAFIR ALL
+
+
 from datetime import datetime, date
 from modulefinder import Module
 from django.contrib.auth.decorators import login_required
@@ -450,3 +454,17 @@ def display_levels(request,name_):
 
     return render(request, "modules/niveau_template.html", {"filiere": filiere , "niveaux" : niveaux})
 
+@login_required
+def edit_element_module_level(request,name_,id_):
+    niveau = Niveau.objects.get(nom_niveau=name_)
+    semestre = Semestre.objects.filter(niveau=niveau) 
+    modules = Module.objects.filter(semestre__in=semestre)
+    profs = Professeur.objects.all()
+    prerequis = ElementModule.objects.all()
+    prerequis_ = Perequis.objects.filter(element_module_id=id_)
+    element_module = ElementModule.objects.get(id=id_)
+    
+    #return HttpResponse(element_module)
+    return render(request, "modules/edit_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere,"element":element_module , "prerequis":prerequis_})
+        
+        

@@ -248,7 +248,7 @@
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        <a href="/edit_elem_module/{{ elem_module.id }}">
+                                        <a href="   {% url 'edit_element_module_level' name_=elem_module.module.semestre.niveau.nom_niveau  id_=elem_module.id %}">
                                             <img src="https://img.icons8.com/external-becris-lineal-becris/24/4a90e2/external-edit-mintab-for-ios-becris-lineal-becris.png"/>
                                         </a>
                                         <a href="/delete_elem_module/{{ elem_module.id }}">
