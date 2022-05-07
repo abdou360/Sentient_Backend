@@ -14,11 +14,11 @@ def teacher_home(request):
 
 def teacher_profile(request):
     user = CustomUser.objects.get(id=request.user.id)
-    professeur = Professeur.objects.get(admin=user)
+    teacher = Professeur.objects.get(admin=user)
 
     context={
         "user": user,
-        "professeur": professeur
+        "teacher": teacher
     }
     return render(request, 'teacher/teacher_profile.html', context)
 
@@ -31,7 +31,7 @@ def teacher_profile_update(request):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         password = request.POST.get('password')
-        address = request.POST.get('address')
+        speciality = request.POST.get('speciality')
     
         try:
             customuser = CustomUser.objects.get(id=request.user.id)
@@ -41,9 +41,9 @@ def teacher_profile_update(request):
                 customuser.set_password(password)
             customuser.save()
 
-            professeur = Professeur.objects.get(admin=customuser.id)
-            professeur.address = address
-            professeur.save()
+            teacher = Professeur.objects.get(admin=customuser.id)
+            teacher.speciality = speciality
+            teacher.save()
 
             messages.success(request, "Profile Updated Successfully")
             return redirect('teacher_profile')
