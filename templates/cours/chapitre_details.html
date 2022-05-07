@@ -26,7 +26,7 @@
         iihdjkh
     </div> {% endcomment %}
 
-    <div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card o-hidden border-0 shadow-lg my-3">
         <div class="card-body p-0">
             <div class="row">
                 <div class="col-12 d-none d-block text-center">
@@ -92,10 +92,10 @@
                         <div id="ar" class="tab-pane fade">  
                             <div class="row" >
                                 {% for traitement in traitements %} 
-                                <div class="col col-lg-4 col-sm-6 my-4 text-center">
+                                <div class="col col-lg-3 col-md-4 col-sm-6 my-4 text-center card-border border">
                                     <div class="col col-12">
                                         {% if traitement.type_traitement == "Image" %}
-                                        <img class="Description"src="/media/{{traitement.image.path_image}}" alt="image" class="rounded">
+                                        <img class="Description"src="/media/{{traitement.image.path_image}}" alt="image" class="rounded" width="900" height="100">
                                         {% endif %}
                                         {% if traitement.type_traitement == "QR-Code" %}
                                         <img  class="Description"src="/media/{{traitement.image.path_image}}" alt="image" class="rounded">
@@ -106,11 +106,18 @@
                                         {% endif %}
                                     </div>
                                     <p>{{traitement.titre_traitement}}</p>  
-                                    {% comment %} <div class='border'> {% endcomment %}
+                                     <!-- <div class='border'> -->
                                         {% comment %} <div>/media/{{traitement.image.path_image}}</div> {% endcomment %}
-                                        <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Modifier</a>
-                                        <a id="delete_object"href="{% url 'delete_traitement' traitement.id %}"class="btn btn-primary">Supprimer</a>
-                                    {% comment %} </div> {% endcomment %}
+                                        <!-- <div class="col col-4 mt-4">
+                                            <a href="{% url 'chapitre_details' chapitre.id %}" class="tooltip_update" title="Modifier le modèle"><i class="fa fa-pen" style="color:#e5bf41"></i></a>
+                                        </div> -->
+                                        <div class="col col-12 mt-4 text-center">
+                                            <a href="{% url 'delete_traitement' traitement.id %}" class="tooltip_delete" style="color:#e14848" id="delete_object" title="Supprimer le modèle"><i class="fa fa-trash"></i></a>
+                                        </div>
+
+                                        <!-- <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Modifier</a>
+                                        <a id="delete_object"href="{% url 'delete_traitement' traitement.id %}"class="btn btn-primary">Supprimer</a> -->
+                                    <!-- </div> -->
                                 </div>
                                 {% endfor %}
                             </div>
@@ -133,8 +140,8 @@
     {% endblock style%}
 
 
-    <!-- <style>
-    </style> -->
+    <style>
+    </style>
 
     <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script>
@@ -150,6 +157,18 @@
 
         $(document).ready(function(){
             $("#tooltip_add").tooltip({
+                placement:"auto"
+            });              
+        });
+
+        $(document).ready(function(){
+            $(".tooltip_update").tooltip({
+                placement:"auto"
+            });              
+        });
+        
+        $(document).ready(function(){
+            $(".tooltip_delete").tooltip({
                 placement:"auto"
             });              
         });

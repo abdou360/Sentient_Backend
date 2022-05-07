@@ -52,9 +52,24 @@
 }
 
 .Description {
-  height: 90px;
-  width: 90px;
+  height: 210px;
+  width: 100%;
 }
 .page_separator {
   margin-right: 90%;
+}
+
+.card-border {
+  /* display: flex; */
+  /* justify-content: center; */
+  margin: 25px;
+  padding: 15px 3px;
+  border-width: 3px;
+  /* text-align: center; */
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
