@@ -51,14 +51,16 @@ def add_element_module_level(request,name_):
     niveau = Niveau.objects.get(nom_niveau=name_)
     semestre = Semestre.objects.filter(niveau=niveau) 
     modules = Module.objects.filter(semestre__in=semestre)
+    elements_module = ElementModule.objects.values('responsable')
+    responsables = Professeur.objects.exclude(id__in=elements_module)
     profs = Professeur.objects.all()
     prerequis = ElementModule.objects.all()
-    
+    # return HttpResponse(profs)
     if modules.exists() :
-        return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere})
+        return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere,"responsables":responsables})
     else :
         messages.error(request, "Ajoutez au moins un module ")
-        return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere})
+        return render(request, "modules/add_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere,"responsables":responsables})
         
         
      
@@ -476,8 +478,10 @@ def edit_element_module_level(request,name_,id_):
     prerequis = ElementModule.objects.all()
     prerequis_ = Perequis.objects.filter(element_module_id=id_)
     element_module = ElementModule.objects.get(id=id_)
+    elements_module = ElementModule.objects.exclude(id=id_).values('responsable')
+    responsables = Professeur.objects.exclude(id__in=elements_module)
     
     #return HttpResponse(element_module)
-    return render(request, "modules/edit_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere,"element":element_module , "prerequis":prerequis_})
+    return render(request, "modules/edit_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere,"element":element_module , "prerequis":prerequis_,"responsables":responsables})
         
         

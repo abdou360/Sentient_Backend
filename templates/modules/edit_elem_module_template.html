@@ -43,7 +43,7 @@
         <div class="container-fluid mt-5">
             <div class="card card-dark">
                 <div class="card-header">
-                    <h3 class="card-title">Modifier l'�l�ment</h3>
+                    <h3 class="card-title">Modifier l'Element</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -124,14 +124,14 @@
       <div class="form-group">
           <label>Responsable</label>
           <select class="form-control" name="responsable">
-              {% for prof in profs %}
+              {% for prof in responsables %}
                   {% if element.responsable == prof %}
                       <option value="{{ prof.id }}" selected>
-                          {{ prof.admin.last_name }} {{ prof.admin.first_name }}
+                          {{ prof.admin.last_name }} {{ prof.admin.first_name }}  / [{{ prof.specialite }}]
                       </option>
                   {% else %}
                       <option value="{{ prof.id }}">
-                          {{ prof.admin.last_name }} {{ prof.admin.first_name }}
+                          {{ prof.admin.last_name }} {{ prof.admin.first_name }}   / [{{ prof.specialite }}]
                       </option>
                   {% endif %}
               {% endfor %}
@@ -185,11 +185,11 @@
                     {% for prof_ in element.prof_id.all %}
                         {% if prof_ == prof %}
                             <option value="{{ prof.id }}" selected>
-                                {{ prof.admin.last_name }} {{ prof.admin.first_name }}
+                                {{ prof.admin.last_name }} {{ prof.admin.first_name }}  / [{{ prof.specialite }}]
                             </option>
                         {% else %}
                             <option value="{{ prof.id }}">
-                                {{ prof.admin.last_name }} {{ prof.admin.first_name }}
+                                {{ prof.admin.last_name }} {{ prof.admin.first_name }}  / [{{ prof.specialite }}]
                             </option>
                         {% endif %}
                     {% endfor %}
@@ -200,23 +200,17 @@
     </div>
 </div>
 <div class="col mt-5">
-
-  <div class="row d-flex" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
-    <div class="col ">
-  <a href="javascript:;"
-  class="text-decoration-none "
-  onclick="document.getElementById('myform').submit()">
-  <img src="https://img.icons8.com/ios-glyphs/50/4a90e2/upload--v1.png"/>
-  </a>
+    <div class="row d-flex" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
+        <div class="col ">
+            <a href="javascript:;"
+            class="text-decoration-none "
+            onclick="document.getElementById('myform').submit()">
+            <img src="https://img.icons8.com/ios-glyphs/50/4a90e2/upload--v1.png"/>
+        </a>
+        </div>
+    </div>
 </div>
-</div>
-</div>
-
-</div>
-
-                       
-                            
-               
+                        </div>
                     </div>
                     <!-- /.card-body -->
                 </form>
