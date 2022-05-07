@@ -8,6 +8,8 @@ var image_name="";
 var image_path="";
 var text_label="";
 
+var next_error=""
+
 // var qr_name="";
 // var qr_path="";
 
@@ -39,6 +41,12 @@ $("input[type='file']").change(function() {
 $(".next-to-2").click(function(){
 
     if(traitement_name != "" && selectedValue != "") {
+
+        next_error=$("#next-error")
+        if (next_error!="") {
+            $("#next-error").remove()
+            next_error=""
+        }
 
         if(animating) return false;
         animating = true;
@@ -82,6 +90,14 @@ $(".next-to-2").click(function(){
             easing: 'easeInOutBack'
         });
     }
+    else {
+        next_error=$("#next-error")
+        if (next_error!="") {
+            $("#next-error").remove()
+            next_error=""
+        }
+        $('<div class="alert alert-danger" id="next-error" role="alert">Vous devez remplir tous les champs avant de pouvoir continuer</div>').insertBefore( "#row-content" );
+    }
 });
 
 $(".previous-to-1").click(function(){
@@ -109,34 +125,34 @@ $(".previous-to-1").click(function(){
 });
 
 
-var next_to_3 = function(){
+// var next_to_3 = function(){
 
-    if(animating) return false;
-    animating = true;
+//     if(animating) return false;
+//     animating = true;
     
-    current_fs = $(this).parent();
-    next_fs = $("#fs-3");
-    $("#li-third").addClass("active");
-    next_fs.show();
-    current_fs.animate({opacity: 0}, {
-        step: function(now, mx) {
-            scale = 1 - (1 - now) * 0.2;
-            left = (now * 50)+"%";
-            opacity = 1 - now;
-            current_fs.css({
-                'transform': 'scale('+scale+')',
-                'position': 'absolute'
-            });
-            next_fs.css({'left': left, 'opacity': opacity});
-        }, 
-        duration: 800, 
-        complete: function(){
-            current_fs.hide();
-            animating = false;
-        },
-        easing: 'easeInOutBack'
-    });
-}
+//     current_fs = $(this).parent();
+//     next_fs = $("#fs-3");
+//     $("#li-third").addClass("active");
+//     next_fs.show();
+//     current_fs.animate({opacity: 0}, {
+//         step: function(now, mx) {
+//             scale = 1 - (1 - now) * 0.2;
+//             left = (now * 50)+"%";
+//             opacity = 1 - now;
+//             current_fs.css({
+//                 'transform': 'scale('+scale+')',
+//                 'position': 'absolute'
+//             });
+//             next_fs.css({'left': left, 'opacity': opacity});
+//         }, 
+//         duration: 800, 
+//         complete: function(){
+//             current_fs.hide();
+//             animating = false;
+//         },
+//         easing: 'easeInOutBack'
+//     });
+// }
 
 
 $(".next-to-3").click(function(){
@@ -145,6 +161,13 @@ $(".next-to-3").click(function(){
         case "Image":
             // alert(image_name);
             if(image_name != "" && image_path != "") {
+
+                next_error=$("#next-error")
+                if (next_error!="") {
+                    $("#next-error").remove()
+                    next_error=""
+                }
+
                 // alert(image_path);
                 if(animating) return false;
                 animating = true;
@@ -172,9 +195,24 @@ $(".next-to-3").click(function(){
                     easing: 'easeInOutBack'
                 });
             }
+            else {
+                next_error=$("#next-error")
+                if (next_error!="") {
+                    $("#next-error").remove()
+                    next_error=""
+                }
+                $('<div class="alert alert-danger" id="next-error" role="alert">Vous devez remplir tous les champs avant de pouvoir continuer</div>').insertBefore( "#row-content" );
+            }
             break;
         case "QR-Code":
             if(image_name != "" && image_path != "") {
+
+                next_error=$("#next-error")
+                if (next_error!="") {
+                    $("#next-error").remove()
+                    next_error=""
+                }
+                
                 // alert(image_name);
                 if(animating) return false;
                 animating = true;
@@ -202,10 +240,25 @@ $(".next-to-3").click(function(){
                     easing: 'easeInOutBack'
                 });
             }
+            else {
+                next_error=$("#next-error")
+                if (next_error!="") {
+                    $("#next-error").remove()
+                    next_error=""
+                }
+                $('<div class="alert alert-danger" id="next-error" role="alert">Vous devez remplir tous les champs avant de pouvoir continuer</div>').insertBefore( "#row-content" );
+            }
             break;
         case "Texte":
             // alert(text_label);
             if(text_label != "") {
+
+                next_error=$("#next-error")
+                if (next_error!="") {
+                    $("#next-error").remove()
+                    next_error=""
+                }
+                
                 // alert(text_label);
                 if(animating) return false;
                 animating = true;
@@ -232,6 +285,14 @@ $(".next-to-3").click(function(){
                     },
                     easing: 'easeInOutBack'
                 });
+            }
+            else {
+                next_error=$("#next-error")
+                if (next_error!="") {
+                    $("#next-error").remove()
+                    next_error=""
+                }
+                $('<div class="alert alert-danger" id="next-error" role="alert">Vous devez remplir tous les champs avant de pouvoir continuer</div>').insertBefore( "#row-content" );
             }
             break;
         default:
