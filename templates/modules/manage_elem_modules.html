@@ -19,7 +19,7 @@
                             <li class="breadcrumb-item">
                                 <a href="{% url 'display_majors' %}" class="text-decoration-none">
                                     <img src="https://img.icons8.com/color/24/000000/arrow-pointing-left--v2.png"/>
-                                Back</a>
+                                    Retour</a>
                             </li>
                         </ol>
                     </div>
@@ -196,7 +196,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <h5 class="font-weight-bold text-info">Enseignants</h5>
-                                            <hr>
+                                           
                                             {% for prof in elem_module.prof_id.all %}
                                                 <img src="https://img.icons8.com/ios-glyphs/30/4a90e2/person-male.png"/>
                                                 <a href="#" class="text-dark text-decoration-none">{{ prof.admin.last_name }} {{ prof.admin.first_name }}</a>
@@ -204,16 +204,16 @@
                                             {% endfor %}
                                             <hr>
                                             <h5 class="font-weight-bold text-info">Prerequis</h5>
-                                            <hr>
+                                            
                                             {% for pq in prerequis %}
                                             
                                                 {% if pq.element_module_id == elem_module %}
                                                     <img src="https://img.icons8.com/glyph-neue/30/4a90e2/bookmark.png"/>
                                                     <a href="#" class="text-dark text-decoration-none">{{ pq.prerequis_id.libelle_element_module }}</a>
+                                                    <br>
                                                 {% endif %}
-                                                <br>
-                                                {% empty %}
-                                                Pas de prérequis
+                                                
+                                                
                                             {% endfor %}
                                             <hr>
                                             <h5 class="font-weight-bold text-info">L'objectif</h5>

@@ -112,39 +112,52 @@ def edit_element_module_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method is Not Allowed</h2>")
     else:
+        elem_module_id = request.POST.get("elem_module_id")
         libelle_element_module = request.POST.get("libelle_element_module")
         module_id = request.POST.get("module_id")
-        element_id = request.POST.get("element_id")
-        prerequis_id = request.POST.getList("prerequis_id")
+        prerequis_id = request.POST.getlist("prerequis_id")
         volumeHoraire = request.POST.get("volumeHoraire")
         objectif = request.POST.get("objectif")
-        prof_id = request.POST.get("prof")
+        prof_id = request.POST.getlist("prof")
+        module = Module.objects.get(id=module_id)
+        responsable = request.POST.get("responsable")
+        niveau = request.POST.get("niveau")
 
-        try:
-            module = Module.objects.get(id=module_id)
-            prerequis = ElementModule.objects.get(id=prerequis_id)
-            prof = Professeur.objects.get(id=prof_id)
-            element_module = ElementModule.objects.get(id=element_id)
-
-            element_module.libelle_element_module = libelle_element_module
-            element_module.volumeHoraire = volumeHoraire
-            element_module.objectif = objectif
-            element_module.module_id = module
-            element_module.prof_id = prof
-
-            prerequis_ = Perequis.objects.get(id=prerequis)
-            prerequis_.element_module_id = element_module
-            prerequis_.prerequis_id = prerequis
-            element_module.save()
-            prerequis_.save()
+        try :
+            respo = Professeur.objects.get(id=responsable)
+            element_module = ElementModule.objects.filter(id=elem_module_id).update(libelle_element_module=libelle_element_module, volumeHoraire=volumeHoraire,
+                                                            objectif=objectif,
+                                                            module=module, responsable=respo)
+            elem = ElementModule.objects.get(id=elem_module_id)
+            elem.prof_id.clear()
+            
+            for pr in prof_id:
+                prof = Professeur.objects.get(id=pr)
+                elem.prof_id.add(prof)
+                elem.save()
+            
+            Perequis.objects.filter(element_module_id=elem).delete()
+            
+            for preq in prerequis_id:
+                preqd = ElementModule.objects.get(id=int(preq))
+                d = Perequis.objects.create(
+                    element_module_id=elem, prerequis_id=preqd)
+                d.save()
+                
+                
 
             messages.success(
                 request, "L'élément de module est modifié avec succès")
-            return HttpResponse(reverse("edit_module", kwargs={"element_id": element_id}))
-        except:
+            return HttpResponseRedirect(reverse("manage_elem_modules"))
+        
+        except :
+            
             messages.error(
-                request, "Echec au niveau de modifier l'element de module ! ")
-            return HttpResponseRedirect(reverse(add_element_module))
+                request, "Echecc de mise à jour")
+            return HttpResponseRedirect(reverse("manage_elem_modules"))
+            
+            
+
 
 
 @login_required
@@ -165,7 +178,7 @@ def edit_module_save(request):
             return HttpResponseRedirect(reverse(manage_modules))
 
         except:
-            messages.error(request, "Echec de la modification !")
+            messages.error(request, "Echecc de mise à jour !")
             return HttpResponseRedirect(reverse(manage_modules))
 
 

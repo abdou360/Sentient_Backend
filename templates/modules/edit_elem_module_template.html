@@ -19,7 +19,7 @@
                                 <a href="{% url 'manage_elem_modules'  %}"
                                    class="text-decoration-none">
                                     <img src="https://img.icons8.com/color/24/000000/arrow-pointing-left--v2.png"/>
-                                Back</a>
+                                    Retour</a>
                             </li>
                             {% comment %} <li class="breadcrumb-item active"> <a href="{% url 'manage_modules' %}">Modules/Getion_Modules</a></li> {% endcomment %}
                         </ol>
@@ -83,6 +83,8 @@
     <div class="col-12">
         <div class="form-group">
             <input type="hidden" value={{ niveau.nom_niveau }} name="niveau">
+            <input type="hidden" value={{ element.id }} name="elem_module_id">
+
             <label for="example">Libelle Element</label>
             <input type="text" class="form-control" id="example" placeholder="Analyse 1" name="libelle_element_module" value={{ element.libelle_element_module }}>
        
@@ -163,6 +165,10 @@
                                 {{ elem_module.libelle_element_module }}
                             </option>
                         {% endif %}
+                        {% empty %}
+                        <option value="{{ elem_module.id }}">
+                          {{ elem_module.libelle_element_module }}
+                      </option>
                     {% endfor %}
                 {% endfor %}
             </select>
@@ -200,7 +206,7 @@
   <a href="javascript:;"
   class="text-decoration-none "
   onclick="document.getElementById('myform').submit()">
-   <img src="https://img.icons8.com/ios-filled/50/4a90e2/plus-2-math.png"/>
+  <img src="https://img.icons8.com/ios-glyphs/50/4a90e2/upload--v1.png"/>
   </a>
 </div>
 </div>
