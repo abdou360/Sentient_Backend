@@ -4,6 +4,7 @@ from users import views, PermissionsView, rolesView
 from users.views import home
 from django.contrib.auth.views import LoginView, LogoutView
 from . import AdminViews, TeacherViews, StudentViews
+from emploie import views as EmploieViews
 from django.conf import settings
 from django.conf.urls.static import static
 from users.StudentViews import *
@@ -84,5 +85,8 @@ urlpatterns = [
                   path('delete_role/<int:id>', rolesView.deleteRole, name="delete_role"),
                   path('delete_role_permission/<int:id1>/<int:id2>', rolesView.deleteRolePermission,
                        name="delete_role_permission"),
+                  # Schedules
+                  # CodeVerse:responsable : FIROUD Reda & OUSSAHI Salma
+                  path('emploie-admin',EmploieViews.EmploieAdmin, name="emploie_admin"),
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
