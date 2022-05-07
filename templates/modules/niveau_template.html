@@ -37,14 +37,7 @@
     
 
     </style>
-    {% if messages %}
-    <div class="login-box-msg mb-4 ml-4 col-12">
-        {% for message in messages %}
-            {% if message.tags == "error" %}<span class="alert alert-danger">{{ message }}</span>{% endif %}
-            {% if message.tags == "success" %}<span class="alert alert-success">{{ message }}</span>{% endif %}
-        {% endfor %}
-    </div>
-{% endif %}
+   
     <div class="container-fluid">
         <div class="row  mt-5">
             <div class="col-sm-6">
@@ -62,7 +55,14 @@
       
        
     </div>
-
+    {% if messages %}
+    <div class="login-box-msg mb-4 ml-4 col-12 mt-5">
+        {% for message in messages %}
+            {% if message.tags == "error" %}<span class="alert alert-danger">{{ message }}</span>{% endif %}
+            {% if message.tags == "success" %}<span class="alert alert-success">{{ message }}</span>{% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
     <div class="container mt-5">
    
         {% for niveau in niveaux %}
