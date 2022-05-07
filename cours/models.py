@@ -49,7 +49,6 @@ class Chapitre(models.Model):
         ElementModule, null=True,  on_delete=models.SET_NULL)
     professeur = models.ForeignKey(
         Professeur, null=False, on_delete=models.CASCADE)
-    # enseignant_responsable
     # visibilite
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
