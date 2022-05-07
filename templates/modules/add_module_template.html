@@ -79,11 +79,17 @@
                                 </div>
                             </div>
                             <div class="col mt-4">
-                                <a href="javascript:;"
-                                   class="text-decoration-none"
-                                   onclick="document.getElementById('myform').submit()">
-                                    <img src="https://img.icons8.com/ios-filled/50/4a90e2/plus-2-math.png"/>
-                                </a>
+                                {% if messages %}
+                                    <a href="javascript:;" class="text-decoration-none">
+                                        <img src="https://img.icons8.com/ios-filled/50/4a90e2/plus-2-math.png"/>
+                                    </a>
+                                {% else %}
+                                    <a href="javascript:;"
+                                       class="text-decoration-none"
+                                       onclick="document.getElementById('myform').submit()">
+                                        <img src="https://img.icons8.com/ios-filled/50/4a90e2/plus-2-math.png"/>
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

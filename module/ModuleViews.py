@@ -22,8 +22,11 @@ def add_module(request):
 def add_module_level(request,name_):
     niveau = Niveau.objects.get(nom_niveau=name_.replace('_',' '))
     semestres = Semestre.objects.filter(niveau=niveau)
-    
-    return render(request, "modules/add_module_template.html", {"semestres": semestres , "filiere" : niveau.filiere , "niveau" : niveau})
+    if semestres :
+        return render(request, "modules/add_module_template.html", {"semestres": semestres , "filiere" : niveau.filiere , "niveau" : niveau})
+    else:
+        messages.error(request, "Ajouter au moins un semestre !")
+        return render(request, "modules/add_module_template.html", {"semestres": semestres , "filiere" : niveau.filiere , "niveau" : niveau})
 
 
 @login_required
@@ -35,15 +38,18 @@ def add_module_save(request):
         semestre_id = request.POST.get("semestre_id")
         semestre = Semestre.objects.get(id=semestre_id)
         try:
-            course = Module.objects.create(
-                libelle_module=module_libelle, semestre=semestre)
-            course.save()
-            messages.success(request, "Le module est ajouté avec succès !")
+            
+            if  module_libelle!="" and  isinstance(module_libelle, str) and NotcontainsNumber(module_libelle):
+                course = Module.objects.create(
+                    libelle_module=module_libelle, semestre=semestre)
+                course.save()
+                messages.success(request, "Le module est ajouté avec succès !")
+            else :
+                messages.error(request, "Nom de module n'est pas valide , doit être comme : 'Analyse'")
             return HttpResponseRedirect(reverse(add_module_level,  kwargs={'name_':semestre.niveau.nom_niveau}))
-
         except:
             messages.error(request, "Echec d'ajout du module !")
-            return HttpResponseRedirect(reverse(add_module_level))
+            return HttpResponseRedirect(reverse(add_module_level,  kwargs={'name_':semestre.niveau.nom_niveau}))
 
 
 @login_required
@@ -172,16 +178,19 @@ def edit_module_save(request):
         module_id = request.POST.get("module_id")
         semestre = Semestre.objects.get(id=semestre_id)
         try:
-            course = Module.objects.get(id=module_id)
-            course.libelle_module = module_libelle
-            course.semestre = semestre
-            course.save()
-            messages.success(request, "Le module est modifié avec succès !")
-            return HttpResponseRedirect(reverse(manage_modules))
-
+            if module_libelle!="" and  isinstance(module_libelle, str) and NotcontainsNumber(module_libelle):
+                course = Module.objects.get(id=module_id)
+                course.libelle_module = module_libelle
+                course.semestre = semestre
+                course.save()
+                messages.success(request, "Le module est modifié avec succès !")
+                return HttpResponseRedirect(reverse(manage_modules))
+            else :
+                messages.error(request, "Nom de module n'est pas valide , doit être comme : 'Analyse'")
+                return HttpResponseRedirect(reverse(edit_module,  kwargs={'name_':semestre.niveau.nom_niveau,'id_':module_id}))
         except:
             messages.error(request, "Echecc de mise à jour !")
-            return HttpResponseRedirect(reverse(manage_modules))
+            return HttpResponseRedirect(reverse(edit_module,  kwargs={'name_':semestre.niveau.nom_niveau,'id_':module_id}))
 
 
 @login_required
@@ -466,8 +475,13 @@ def display_majors(request):
 def display_levels(request,name_):
     filiere = Filiere.objects.get(nom_filiere=name_)
     niveaux = Niveau.objects.filter(filiere=filiere)
-
-    return render(request, "modules/niveau_template.html", {"filiere": filiere , "niveaux" : niveaux})
+    if niveaux :
+        return render(request, "modules/niveau_template.html", {"filiere": filiere , "niveaux" : niveaux})
+    else :
+        messages.error(request, "Ajouter au moins un niveau")
+        return render(request, "modules/niveau_template.html", {"filiere": filiere , "niveaux" : niveaux})
+        
+        
 
 @login_required
 def edit_element_module_level(request,name_,id_):
@@ -484,4 +498,8 @@ def edit_element_module_level(request,name_,id_):
     #return HttpResponse(element_module)
     return render(request, "modules/edit_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere,"element":element_module , "prerequis":prerequis_,"responsables":responsables})
         
-        
+def NotcontainsNumber(value):
+    for character in value:
+        if character.isdigit():
+            return False
+    return True

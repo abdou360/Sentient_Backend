@@ -1,7 +1,7 @@
 {% extends 'admin/base-home.html' %}
 {% load module_extras %}
 {% block title %}
-    Modilfier Module #{{ module.id }}
+    Niveaux de {{filiere.nom_filiere}}
 {% endblock title %}
 {% block content %}
     <style>
@@ -37,6 +37,14 @@
     
 
     </style>
+    {% if messages %}
+    <div class="login-box-msg mb-4 ml-4 col-12">
+        {% for message in messages %}
+            {% if message.tags == "error" %}<span class="alert alert-danger">{{ message }}</span>{% endif %}
+            {% if message.tags == "success" %}<span class="alert alert-success">{{ message }}</span>{% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
     <div class="container-fluid">
         <div class="row  mt-5">
             <div class="col-sm-6">
@@ -87,6 +95,16 @@
 
             
         </div>
+        {% empty %}
+        <div class="col-12">
+            <div class=" text-center">
+        <img src="https://maxst.icons8.com/vue-static/icon/error.png" width="320px"/>
+          
+        <div class=" mt-2" >
+            <h4>Veuillez ajouter au moins un niveau !</h4>
+        </div>
+    </div>
+</div>
         {% endfor %}
       
     </div>
