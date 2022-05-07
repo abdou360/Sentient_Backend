@@ -20,7 +20,7 @@ def add_module(request):
     return render(request, "modules/add_module_template_no_tree.html", {"semestres": semestres})
 @login_required
 def add_module_level(request,name_):
-    niveau = Niveau.objects.get(nom_niveau=name_)
+    niveau = Niveau.objects.get(nom_niveau=name_.replace('_',' '))
     semestres = Semestre.objects.filter(niveau=niveau)
     
     return render(request, "modules/add_module_template.html", {"semestres": semestres , "filiere" : niveau.filiere , "niveau" : niveau})
@@ -48,7 +48,7 @@ def add_module_save(request):
 
 @login_required
 def add_element_module_level(request,name_):
-    niveau = Niveau.objects.get(nom_niveau=name_)
+    niveau = Niveau.objects.get(nom_niveau=name_.replace('_',' '))
     semestre = Semestre.objects.filter(niveau=niveau) 
     modules = Module.objects.filter(semestre__in=semestre)
     elements_module = ElementModule.objects.values('responsable')
