@@ -3,22 +3,34 @@ from pyexpat import model
 from django import forms
 
 from cours.models import Chapitre, Document, Image, Modele3D, Traitement, File
+from module.models import ElementModule
+from users.models import Professeur
+
+
+def get_prof_id(request):
+    professeur = Professeur.objects.filter(
+        admin_id=request.user.id).first()
+    return professeur
 
 
 class ChapitreForm(forms.ModelForm):
+
+    # element_module = forms.ModelChoiceField(
+    #     queryset=ElementModule.objects.filter(prof_id=get_prof_id(request)))
+
     class Meta:
         model = Chapitre
         fields = (
             'libelle',
             'description',
             'image',
-            # 'element_module',
+            'element_module',
         )
         labels = {
             'libelle': 'Nom du chapitre',
             'description': 'Description du chapitre',
             'image': 'Image',
-            # 'element_module': 'Element de module'
+            'element_module': 'Element de module'
         }
         widgets = {
             'libelle': forms.TextInput(attrs={'placeholder': 'Nom du chapitre',
@@ -28,14 +40,20 @@ class ChapitreForm(forms.ModelForm):
                                                  'class': 'form-control',
                                                  'cols': 80, 'rows': 5
                                                  }),
+            # 'element_module': forms.ChoiceField(choices="hi")
         }
 
     def __init__(self, *args, **kwargs):
+        # if kwargs.__contains__("request"):
+        self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['libelle'].label = ''
         self.fields['description'].label = ''
         self.fields['image'].label = ''
-        # self.fields['element_module'].label = ''
+        self.fields['element_module'].label = ''
+        self.fields['element_module'].required = False
+        self.fields["element_module"].queryset = ElementModule.objects.filter(
+            prof_id=get_prof_id(self.request))
 
 
 class DocumentForm(forms.ModelForm):

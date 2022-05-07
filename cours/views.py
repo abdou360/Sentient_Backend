@@ -32,9 +32,17 @@ def chapitres_list(request):
     search_by = NoneType
     professeur = Professeur.objects.filter(admin_id=request.user.id).first()
     # professeur = Professeur.objects.filter(admin_id = 1).first()
-    filieres = Filiere.objects.all()
-    niveaux = Niveau.objects.all()
-    element_modules = ElementModule.objects.all()
+    # filieres = Filiere.objects.all()
+    # niveaux = Niveau.objects.all()
+    element_modules = ElementModule.objects.filter(prof_id=professeur)
+    modules = Module.objects.filter(
+        id__in=element_modules.values_list('module_id'))
+    semestres = Semestre.objects.filter(
+        id__in=modules.values_list('semestre_id'))
+    niveaux = Niveau.objects.filter(
+        id__in=semestres.values_list('niveau_id'))
+    filieres = Filiere.objects.filter(id__in=niveaux.values_list('filiere_id'))
+
     # annees = Chapitre.objects.filter(
     #     professeur=professeur.id).dates('created_at', 'year')
 
@@ -227,9 +235,10 @@ def add_chapitre(request):
     professeur = Professeur.objects.filter(admin_id=request.user.id).first()
     # professeur = Professeur.objects.filter(admin_id=1).first()
     if request.method == "GET":
-        new_chapitre = ChapitreForm()
+        new_chapitre = ChapitreForm(request=request)
     elif request.method == "POST":
-        new_chapitre = ChapitreForm(request.POST, request.FILES)
+        new_chapitre = ChapitreForm(
+            request.POST, request.FILES, request=request)
         if new_chapitre.is_valid():
             chapitre = new_chapitre.save(commit=False)
             chapitre.professeur = professeur
@@ -256,10 +265,10 @@ def delete_chapitre(request, id):
 def update_chapitre(request, id):
     chapitre = Chapitre.objects.get(id=id)
     if request.method == "GET":
-        updated_chapitre = ChapitreForm(instance=chapitre)
+        updated_chapitre = ChapitreForm(instance=chapitre, request=request)
     elif request.method == "POST":
         updated_chapitre = ChapitreForm(
-            request.POST, request.FILES, instance=chapitre)
+            request.POST, request.FILES, instance=chapitre, request=request)
         if updated_chapitre.is_valid():
             updated_chapitre.save()
             messages.success(
