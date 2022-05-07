@@ -1,194 +1,10 @@
-{% extends 'users/base-home.html' %}
+{% extends 'admin/base-home.html' %}
+{% load static %}
 {% block title %}
     Gestion Modules
 {% endblock title %}
 {% block content %}
-    <style>
-
-.table-responsive {
-    margin: 30px 0;
-}
-.table-wrapper {
-    min-width: 1000px;
-	background: #fff;
-	padding: 20px 25px;
-	border-radius: 3px;
-	box-shadow: 0 1px 1px rgba(0,0,0,.05);
-}
-.table-wrapper .btn {
-	float: right;
-	color: #333;
-	background-color: #fff;
-	border-radius: 3px;
-	border: none;
-	outline: none !important;
-	margin-left: 10px;
-}
-.table-wrapper .btn:hover {
-	color: #333;
-	background: #f2f2f2;
-}
-.table-wrapper .btn.btn-primary {
-	color: #fff;
-	background: #03A9F4;
-}
-.table-wrapper .btn.btn-primary:hover {
-	background: #03a3e7;
-}
-.table-title .btn {		
-	font-size: 13px;
-	border: none;
-}
-.table-title .btn i {
-	float: left;
-	font-size: 21px;
-	margin-right: 5px;
-}
-.table-title .btn span {
-	float: left;
-	margin-top: 2px;
-}
-.table-title {
-	color: #fff;
-	background: #4b5366;		
-	padding: 16px 25px;
-	margin: -20px -25px 10px;
-	border-radius: 3px 3px 0 0;
-}
-.table-title h2 {
-	margin: 5px 0 0;
-	font-size: 24px;
-}
-.show-entries select.form-control {        
-	width: 60px;
-	margin: 0 5px;
-}
-.table-filter .filter-group {
-	float: right;
-	margin-left: 15px;
-}
-.table-filter input, .table-filter select {
-	height: 34px;
-	border-radius: 3px;
-	border-color: #ddd;
-	box-shadow: none;
-}
-.table-filter {
-	padding: 5px 0 15px;
-	border-bottom: 1px solid #e9e9e9;
-	margin-bottom: 5px;
-}
-.table-filter .btn {
-	height: 34px;
-}
-.table-filter label {
-	font-weight: normal;
-	margin-left: 10px;
-}
-.table-filter select, .table-filter input {
-	display: inline-block;
-	margin-left: 5px;
-}
-.table-filter input {
-	width: 200px;
-	display: inline-block;
-}
-.filter-group select.form-control {
-	width: 110px;
-}
-.filter-icon {
-	float: right;
-	margin-top: 7px;
-}
-.filter-icon i {
-	font-size: 18px;
-	opacity: 0.7;
-}	
-table.table tr th, table.table tr td {
-	border-color: #e9e9e9;
-	padding: 12px 15px;
-	vertical-align: middle;
-}
-table.table tr th:first-child {
-	width: 60px;
-}
-table.table tr th:last-child {
-	width: 80px;
-}
-table.table-striped tbody tr:nth-of-type(odd) {
-	background-color: #fcfcfc;
-}
-table.table-striped.table-hover tbody tr:hover {
-	background: #f5f5f5;
-}
-table.table th i {
-	font-size: 13px;
-	margin: 0 5px;
-	cursor: pointer;
-}	
-table.table td a {
-	font-weight: bold;
-	color: #566787;
-	display: inline-block;
-	text-decoration: none;
-}
-table.table td a:hover {
-	color: #2196F3;
-}
-table.table td a.view {        
-	width: 30px;
-	height: 30px;
-	color: #2196F3;
-	border: 2px solid;
-	border-radius: 30px;
-	text-align: center;
-}
-table.table td a.view i {
-	font-size: 22px;
-	margin: 2px 0 0 1px;
-}   
-table.table .avatar {
-	border-radius: 50%;
-	vertical-align: middle;
-	margin-right: 10px;
-}
-.status {
-	font-size: 30px;
-	margin: 2px 2px 0 0;
-	display: inline-block;
-	vertical-align: middle;
-	line-height: 10px;
-}
-.text-success {
-	color: #10c469;
-}
-.text-info {
-	color: #62c9e8;
-}
-.text-warning {
-	color: #FFC107;
-}
-.text-danger {
-	color: #ff5b5b;
-}
-.pagination {
-	float: right;
-	margin: 0 0 5px;
-}
-
-.pagination li.disabled i {
-	color: #ccc;
-}
-.pagination li i {
-	font-size: 16px;
-	padding-top: 6px
-}
-.hint-text {
-	float: left;
-	margin-top: 10px;
-	font-size: 13px;
-}    
-    </style>
+    <link href="{% static 'css/module.css' %}" rel="stylesheet" />
     <div class="content-wrapper mt-5">
         <div class="content-header">
             <div class="container-fluid">
@@ -226,56 +42,54 @@ table.table .avatar {
             <div class="table-wrapper">
                 <div class="table-filter">
                     <div class="row">
-                        
                         <div class="col">
-                            <button type="button" class="btn btn-primary">
+                            <form action="{% url 'search_module' %}" method="get">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-search"></i>
                             </button>
                             <div class="filter-group">
                                 <label>Module</label>
-                                <input type="text" class="form-control">
+                                <input type="search" name="q" class="form-control" placeholder="Recherche par module">
                             </div>
-                            <div class="filter-group" >
+                            </form>
+                            <div class="filter-group">
                                 <label>Filière</label>
                                 <select class="form-control" id="dynamic_select_">
-                                    <option value="{% url 'manage_modules' %}">Tous</option>
+                                    <option value="{% url 'manage_modules' %}">
+                                        Tous
+                                    </option>
                                     {% for filiere in filieres %}
-                                   
-                                    <option value="{% url 'search_modules_filiere' name_=filiere.nom_filiere %}">
-
-                                          {{ filiere.nom_filiere }}
-                                      </option>
-                                  {% endfor %}
+                                        <option value="{% url 'search_modules_filiere' name_=filiere.nom_filiere %}">
+                                            {{ filiere.nom_filiere }}
+                                        </option>
+                                    {% endfor %}
                                 </select>
                             </div>
-                           
                             <div class="filter-group">
                                 <label>Niveau</label>
                                 <select class="form-control" id="dynamic_select1">
-                                    <option value="{% url 'manage_modules' %}">Tous</option>
-                                    {% for niveau in niveaux %}
-                                    <option value="{% url 'search_modules_niveau' name_=niveau.nom_niveau  %}">
-                                       
-                                        {{ niveau.nom_niveau }}
-
+                                    <option value="{% url 'manage_modules' %}">
+                                        Tous
                                     </option>
-                                {% endfor %}
-
+                                    {% for niveau in niveaux %}
+                                        <option value="{% url 'search_modules_niveau' name_=niveau.nom_niveau  %}">
+                                            {{ niveau.nom_niveau }}
+                                        </option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="filter-group">
                                 <label>Semestre</label>
                                 <select class="form-control" id="dynamic_select">
-                                    <option value="{% url 'manage_modules' %}">Tous</option>
-                                    {% for semestre in semestres %}
-                                    <option value="{% url 'search_modules_semestres' name_=semestre.libelle_semestre %}">
-                                       
-                                        {{ semestre.libelle_semestre }}
-
+                                    <option value="{% url 'manage_modules' %}">
+                                        Tous
                                     </option>
-                                {% endfor %}
+                                    {% for semestre in semestres %}
+                                        <option value="{% url 'search_modules_semestres' name_=semestre.libelle_semestre %}">
+                                            {{ semestre.libelle_semestre }}
+                                        </option>
+                                    {% endfor %}
                                 </select>
-           
                             </div>
                             <span class="filter-icon"><i class="fa fa-filter"></i></span>
                         </div>
@@ -362,8 +176,8 @@ table.table .avatar {
                                 <td class="font-weight-bold">{{ module.id }}</td>
                                 <td class="font-weight-bold " style="color:black;">{{ module.libelle_module  }}</td>
                                 <td class="sorting_1" style="color:blue;">{{  module.semestre.libelle_semestre }}</td>
-                                <td class="font-weight-bold text-info" >{{ module.semestre.niveau.filliere.nom_filiere  }}</td>
-                                <td class="text-success" >{{ module.semestre.niveau.nom_niveau  }}</td>
+                                <td class="font-weight-bold text-info">{{ module.semestre.niveau.filiere.nom_filiere  }}</td>
+                                <td class="text-success">{{ module.semestre.niveau.nom_niveau  }}</td>
                                 <td >{{ module.created_at |timesince }}</td>
                                 {% if module.created_at < module.updated_at|timesince %}
                                     <td "style="background-color: #80ffff">{{ module.updated_at |timesince }}
@@ -372,7 +186,7 @@ table.table .avatar {
                                     <td >{{ module.updated_at |timesince }}</td>
                                 {% endif %}
                                 <td class="text-center">
-                                    <a href="/edit_module/{{ module.id }}">
+                                    <a href="/edit_module/{{ module.semestre.niveau.nom_niveau }}/{{ module.id }}">
                                         <img src="https://img.icons8.com/external-becris-lineal-becris/24/4a90e2/external-edit-mintab-for-ios-becris-lineal-becris.png"/>
                                     </a>
                                     <a href="/delete_module/{{ module.id }}">
@@ -386,18 +200,27 @@ table.table .avatar {
                                 <th rowspan="1" colspan="1">ID</th>
                                 <th rowspan="1" colspan="1">Libelle module</th>
                                 <th rowspan="1" colspan="1">Semestre</th>
-                                <th rowspan="1" colspan="1">Filière</th>
-                                <th rowspan="1" colspan="1">Niveau</th>
-                                <th rowspan="1" colspan="1">crée le</th>
-                                <th rowspan="1" colspan="1">modifié le</th>
-                                <th rowspan="1" colspan="1">Action</th>
+                                <th rowspan="1" colspan="1">Filiére</th>
+                                <th rowspan="1" colspan="1">
+                                    Niveau
+                                </th>
+                                <th rowspan="1" colspan="1">
+                                    crée le
+                                </th>
+                                <th rowspan="1" colspan="1">
+                                    modifié le
+                                </th>
+                                <th rowspan="1" colspan="1">
+                                    Action
+                                </th>
                             </tr>
                         </tfoot>
                     </tbody>
                 </table>
                 <div class="clearfix">
                     <div class="hint-text">
-                    Showing <b>5</b> out of <b>25</b> entries
+                    {% comment %} Showing <b>5</b> out of <b>25</b> entries {% endcomment %}
+                    Montrant <b>{{ modules.start_index }}-{{ modules.end_index }}</b> de <b>{{ modules.paginator.count }}</b>
                 </div>
                 {% if modules.has_other_pages %}
                     <ul class="pagination">
@@ -436,40 +259,37 @@ table.table .avatar {
         </div>
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
-        ></script>
-                                <script>
-                                    $(function(){
-                                     
-                                      $('#dynamic_select').on('change', function () {
-                                          var url = $(this).val(); // get selected value
-                                          if (url) { // require a URL
-                                              window.location = url; // redirect
-                                          }
-                                          return false;
-                                      });
-                                    });
-                                    $(function(){
-                                     
-                                        $('#dynamic_select_').on('change', function () {
-                                            var url = $(this).val(); // get selected value
-                                            if (url) { // require a URL
-                                                window.location = url; // redirect
-                                            }
-                                            return false;
-                                        });
-                                      });
-                                      $(function(){
-                                     
-                                        $('#dynamic_select1').on('change', function () {
-                                            var url = $(this).val(); // get selected value
-                                            if (url) { // require a URL
-                                                window.location = url; // redirect
-                                            }
-                                            return false;
-                                        });
-                                      });
-                                </script>
-
-                               
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    $(function(){
+        
+        $('#dynamic_select').on('change', function () {
+            var url = $(this).val(); // get selected value
+            if (url) { // require a URL
+                window.location = url; // redirect
+            }
+            return false;
+        });
+    });
+    $(function(){
+        
+        $('#dynamic_select_').on('change', function () {
+            var url = $(this).val(); // get selected value
+            if (url) { // require a URL
+                window.location = url; // redirect
+            }
+            return false;
+        });
+        });
+        $(function(){
+        
+        $('#dynamic_select1').on('change', function () {
+            var url = $(this).val(); // get selected value
+            if (url) { // require a URL
+                window.location = url; // redirect
+            }
+            return false;
+        });
+        });
+</script>
 {% endblock content %}
