@@ -22,8 +22,11 @@ def add_module(request):
 def add_module_level(request,name_):
     niveau = Niveau.objects.get(nom_niveau=name_.replace('_',' '))
     semestres = Semestre.objects.filter(niveau=niveau)
-    
-    return render(request, "modules/add_module_template.html", {"semestres": semestres , "filiere" : niveau.filiere , "niveau" : niveau})
+    if semestres :
+        return render(request, "modules/add_module_template.html", {"semestres": semestres , "filiere" : niveau.filiere , "niveau" : niveau})
+    else:
+        messages.error(request, "Ajouter au moins un semestre !")
+        return render(request, "modules/add_module_template.html", {"semestres": semestres , "filiere" : niveau.filiere , "niveau" : niveau})
 
 
 @login_required
@@ -33,17 +36,24 @@ def add_module_save(request):
     else:
         module_libelle = request.POST.get("module")
         semestre_id = request.POST.get("semestre_id")
-        semestre = Semestre.objects.get(id=semestre_id)
+       
         try:
-            course = Module.objects.create(
-                libelle_module=module_libelle, semestre=semestre)
-            course.save()
-            messages.success(request, "Le module est ajouté avec succès !")
-            return HttpResponseRedirect(reverse(add_module_level,  kwargs={'name_':semestre.niveau.nom_niveau}))
-
+            if semestre_id!="" and isinstance(semestre_id,str):
+                semestre = Semestre.objects.get(id=semestre_id)
+                if  module_libelle!="" and  isinstance(module_libelle, str) and NotcontainsNumber(module_libelle) :
+                    course = Module.objects.create(
+                        libelle_module=module_libelle, semestre=semestre)
+                    course.save()
+                    messages.success(request, "Le module est ajouté avec succès !")
+                else :
+                    messages.error(request, "Nom de module n'est pas valide , doit être comme : 'Analyse'")
+                return HttpResponseRedirect(reverse(add_module_level,  kwargs={'name_':semestre.niveau.nom_niveau}))
+            else :
+                messages.error(request, "Veuillez avoir au moins un semestre")
+                return HttpResponseRedirect(reverse(display_levels,  kwargs={'name_':request.POST.get('filiere_')}))
         except:
             messages.error(request, "Echec d'ajout du module !")
-            return HttpResponseRedirect(reverse(add_module_level))
+            return HttpResponseRedirect(reverse(display_levels,  kwargs={'name_':request.POST.get('filiere_')}))
 
 
 @login_required
@@ -77,31 +87,36 @@ def add_element_module_save(request):
         volumeHoraire = request.POST.get("volumeHoraire")
         objectif = request.POST.get("objectif")
         prof_id = request.POST.getlist("prof")
-        module = Module.objects.get(id=module_id)
         responsable = request.POST.get("responsable")
         niveau = request.POST.get("niveau")
         try:
+            
+            if libelle_element_module!="" and isinstance(libelle_element_module,str) and volumeHoraire!="" and objectif!="" and prof_id!=[] and responsable!="":
+                module = Module.objects.get(id=module_id)
+                respo = Professeur.objects.get(id=responsable)
+                element_module = ElementModule.objects.create(libelle_element_module=libelle_element_module, volumeHoraire=volumeHoraire,
+                                                            objectif=objectif,
+                                                            module=module, responsable=respo)
 
-            respo = Professeur.objects.get(id=responsable)
-            element_module = ElementModule.objects.create(libelle_element_module=libelle_element_module, volumeHoraire=volumeHoraire,
-                                                          objectif=objectif,
-                                                          module=module, responsable=respo)
+                for pr in prof_id:
+                    prof = Professeur.objects.get(id=pr)
+                    element_module.prof_id.add(prof)
+                    element_module.save()
+            
+                for preq in prerequis_id:
+                    preqd = ElementModule.objects.get(id=int(preq))
+                    d = Perequis.objects.create(
+                        element_module_id=element_module, prerequis_id=preqd)
+                    d.save()
 
-            for pr in prof_id:
-                prof = Professeur.objects.get(id=pr)
-                element_module.prof_id.add(prof)
-                element_module.save()
-         
-            for preq in prerequis_id:
-                preqd = ElementModule.objects.get(id=int(preq))
-                d = Perequis.objects.create(
-                    element_module_id=element_module, prerequis_id=preqd)
-                d.save()
-
-            messages.success(
-                request, "L'élément de module est ajouté avec succès !")
+                messages.success(
+                    request, "L'élément de module est ajouté avec succès !")
+                
+            else :
+                messages.error(
+                request, "Veuillez remplir toutes les champs !") 
+                
             return HttpResponseRedirect(reverse(add_element_module_level,  kwargs={'name_':niveau}))
-
         except:
 
             messages.error(
@@ -126,37 +141,42 @@ def edit_element_module_save(request):
         niveau = request.POST.get("niveau")
 
         try :
-            respo = Professeur.objects.get(id=responsable)
-            element_module = ElementModule.objects.filter(id=elem_module_id).update(libelle_element_module=libelle_element_module, volumeHoraire=volumeHoraire,
-                                                            objectif=objectif,
-                                                            module=module, responsable=respo)
-            elem = ElementModule.objects.get(id=elem_module_id)
-            elem.prof_id.clear()
-            
-            for pr in prof_id:
-                prof = Professeur.objects.get(id=pr)
-                elem.prof_id.add(prof)
-                elem.save()
-            
-            Perequis.objects.filter(element_module_id=elem).delete()
-            
-            for preq in prerequis_id:
-                preqd = ElementModule.objects.get(id=int(preq))
-                d = Perequis.objects.create(
-                    element_module_id=elem, prerequis_id=preqd)
-                d.save()
+            if libelle_element_module!="" and isinstance(libelle_element_module,str) and volumeHoraire!="" and objectif!="" and prof_id!=[]  and responsable!="":
+                respo = Professeur.objects.get(id=responsable)
+                element_module = ElementModule.objects.filter(id=elem_module_id).update(libelle_element_module=libelle_element_module, volumeHoraire=volumeHoraire,
+                                                                objectif=objectif,
+                                                                module=module, responsable=respo)
+                elem = ElementModule.objects.get(id=elem_module_id)
+                elem.prof_id.clear()
                 
+                for pr in prof_id:
+                    prof = Professeur.objects.get(id=pr)
+                    elem.prof_id.add(prof)
+                    elem.save()
                 
+                Perequis.objects.filter(element_module_id=elem).delete()
+                
+                for preq in prerequis_id:
+                    preqd = ElementModule.objects.get(id=int(preq))
+                    d = Perequis.objects.create(
+                        element_module_id=elem, prerequis_id=preqd)
+                    d.save()
+                    
+                    
 
-            messages.success(
-                request, "L'élément de module est modifié avec succès")
-            return HttpResponseRedirect(reverse("manage_elem_modules"))
+                messages.success(
+                    request, "L'élément de module est modifié avec succès")
+                return HttpResponseRedirect(reverse(manage_elem_modules))
+            else :
+                messages.error(
+                request, "Veuillez remplir toutes les champs !")
+                return HttpResponseRedirect(reverse(edit_element_module_level, kwargs={'name_':module.semestre.niveau.nom_niveau,"id_":elem_module_id}))
         
         except :
             
             messages.error(
                 request, "Echecc de mise à jour")
-            return HttpResponseRedirect(reverse("manage_elem_modules"))
+            return HttpResponseRedirect(reverse(edit_element_module_level, kwargs={'name_':module.semestre.niveau.nom_niveau,"id_":elem_module_id}))
             
             
 
@@ -172,16 +192,19 @@ def edit_module_save(request):
         module_id = request.POST.get("module_id")
         semestre = Semestre.objects.get(id=semestre_id)
         try:
-            course = Module.objects.get(id=module_id)
-            course.libelle_module = module_libelle
-            course.semestre = semestre
-            course.save()
-            messages.success(request, "Le module est modifié avec succès !")
-            return HttpResponseRedirect(reverse(manage_modules))
-
+            if module_libelle!="" and  isinstance(module_libelle, str) and NotcontainsNumber(module_libelle):
+                course = Module.objects.get(id=module_id)
+                course.libelle_module = module_libelle
+                course.semestre = semestre
+                course.save()
+                messages.success(request, "Le module est modifié avec succès !")
+                return HttpResponseRedirect(reverse(manage_modules))
+            else :
+                messages.error(request, "Nom de module n'est pas valide , doit être comme : 'Analyse'")
+                return HttpResponseRedirect(reverse(edit_module,  kwargs={'name_':semestre.niveau.nom_niveau,'id_':module_id}))
         except:
             messages.error(request, "Echecc de mise à jour !")
-            return HttpResponseRedirect(reverse(manage_modules))
+            return HttpResponseRedirect(reverse(edit_module,  kwargs={'name_':semestre.niveau.nom_niveau,'id_':module_id}))
 
 
 @login_required
@@ -466,8 +489,13 @@ def display_majors(request):
 def display_levels(request,name_):
     filiere = Filiere.objects.get(nom_filiere=name_)
     niveaux = Niveau.objects.filter(filiere=filiere)
-
-    return render(request, "modules/niveau_template.html", {"filiere": filiere , "niveaux" : niveaux})
+    if niveaux :
+        return render(request, "modules/niveau_template.html", {"filiere": filiere , "niveaux" : niveaux})
+    else :
+        messages.error(request, "Ajouter au moins un niveau")
+        return render(request, "modules/niveau_template.html", {"filiere": filiere , "niveaux" : niveaux})
+        
+        
 
 @login_required
 def edit_element_module_level(request,name_,id_):
@@ -484,4 +512,8 @@ def edit_element_module_level(request,name_,id_):
     #return HttpResponse(element_module)
     return render(request, "modules/edit_elem_module_template.html", {"profs": profs, "modules": modules, "element_modules": prerequis,"niveau": niveau,"filiere":niveau.filiere,"element":element_module , "prerequis":prerequis_,"responsables":responsables})
         
-        
+def NotcontainsNumber(value):
+    for character in value:
+        if character.isdigit():
+            return False
+    return True
