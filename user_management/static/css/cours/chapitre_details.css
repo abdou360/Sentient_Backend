@@ -73,3 +73,50 @@
   flex-direction: row;
   justify-content: center;
 }
+
+.project-info-box {
+  margin: 15px 0;
+  background-color: #f1f1f1;
+  padding: 30px 40px;
+  border-radius: 5px;
+  border: 1px solid rgba(177, 177, 177, 0.5);
+}
+
+.project-info-box p {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #d5dadb;
+}
+
+.project-info-box img {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #d5dadb;
+}
+
+.project-info-box p:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.modal {
+  transition: all ease 10s;
+}
+
+.modal-content {
+  width: 125%;
+  background-color: #fff;
+}
+
+@media only screen and (min-width: 1000px) {
+  .modal-content {
+    width: 200%;
+  }
+}
+
+.view-delete-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

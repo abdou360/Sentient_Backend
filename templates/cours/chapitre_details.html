@@ -8,29 +8,15 @@
 
 
     <div class="modal" id="traitement-details-modal">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                  <h4 class="modal-title">Modal Heading</h4>
-                  <button type="button" class="close-modal-btn" data-bs-dismiss="modal"></button>
+                <div class="modal-header text-center">
+                  <h4 class="modal-title ml-3" id="traitement-details-modal-title"></h4>
+                  <a href="" class="tooltip_delete close-modal-btn" style="color:#e14848"><i style="font-size:24px" class="fa">&#xf00d;</i></a>
                 </div>
-          
-                <!-- Modal body -->
                 <div class="modal-body" id="traitement-details-modal-body">
                     ...
-                    <!-- <div class="row">
-                        <div class="col">{{t_title}}</div>
-                        <div class="col">{{t_label}}</div>
-                    </div> -->
                 </div>
-          
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger close-modal-btn" data-bs-dismiss="traitement-details-modal">Close</button>
-                </div>
-          
               </div>            
         </div>
     </div>
@@ -131,7 +117,7 @@
                                         {% comment %} <img  class="Description"src="https://fr.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market/generator/dist/generator/assets/images/websiteQRCode_noFrame.png" alt="image" class="rounded"> {% endcomment %}
                                         {% endif %}
                                         {% if traitement.type_traitement == "Texte" %}
-                                        <img  class="Description"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcN-sb-i-ZpzD-w2JVRWNzn5q0bslc-MOQs2WcsFF80xkniCNphQuNHpVGrjQ1tWPBIro&usqp=CAU" alt="image" class="rounded">
+                                        <img  class="Description"src="/media/img/cours/document_images/txt.png" alt="image" class="rounded">
                                         {% endif %}
                                     </div>
                                     <div class="col col-12 my-3">
@@ -143,13 +129,17 @@
                                         <!-- <div class="col col-4 mt-4">
                                             <a href="{% url 'chapitre_details' chapitre.id %}" class="tooltip_update" title="Modifier le modèle"><i class="fa fa-pen" style="color:#e5bf41"></i></a>
                                         </div> -->
-                                        <div class="col col-12 mt-4 text-center">
+                                    <div class="col col-12 my-3 view-delete-buttons">
+
+                                        <div class="col col-6 mt-4 text-center">
+                                            <a href="" id="{{traitement.id}}" class=" view-traitement tooltip_show" title="Voir plus d'informations"><i class="fa fa-2x fa-eye"></i></a>
+                                        </div>
+
+                                        <div class="col col-6 mt-4 text-center">
                                             <a href="{% url 'delete_traitement' traitement.id %}" class="tooltip_delete" style="color:#e14848" id="delete_object" title="Supprimer le modèle"><i class="fa fa-2x fa-trash"></i></a>
                                         </div>
 
-                                        <div class="col col-4 mt-4">
-                                            <a href="" id="{{traitement.id}}" class=" view-traitement tooltip_show" title="Voir le chapitre"><i class="fa fa-eye"></i></a>
-                                        </div>
+                                    </div>
 
                                         <!-- <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Modifier</a>
                                         <a id="delete_object"href="{% url 'delete_traitement' traitement.id %}"class="btn btn-primary">Supprimer</a> -->
@@ -178,6 +168,8 @@
 
 
     <style>
+
+        
     </style>
 
     <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
@@ -192,11 +184,11 @@
         // return new bootstrap.Tooltip(tooltipTriggerEl)
         // })
 
-        $(document).ready(function(){
-            $("#tooltip_add").tooltip({
-                placement:"auto"
-            });              
-        });
+        // $(document).ready(function(){
+        //     $("#tooltip_add").tooltip({
+        //         placement: 'auto',
+        //     });              
+        // });
 
         $(document).ready(function(){
             $(".tooltip_update").tooltip({
@@ -206,6 +198,12 @@
         
         $(document).ready(function(){
             $(".tooltip_delete").tooltip({
+                placement:"auto"
+            });              
+        });
+        
+        $(document).ready(function(){
+            $(".tooltip_show").tooltip({
                 placement:"auto"
             });              
         });
@@ -260,24 +258,54 @@
                         //         <div class="col">{{t_label}}</div>
                         //     </div>
                         // `)
+                        document.getElementById("traitement-details-modal-title").innerHTML = t_title
                         if (t_type=="Texte") {
-                            document.getElementById("traitement-details-modal-body").innerHTML = "<div class='row'>"
-                            + "<div class='col col-12'>"+t_title+"</div>"
-                            + "<div class='col col-12'>"+t_label+"</div>"
-                            + "<div class='col col-12'>"+t_type+"</div>"
-                            + "<div class='col col-12'>"+model_titre+"</div>"
-                            + "<div class='col col-12'>"+nbr_files+"</div>"
-                            + "</div>";
+                            // document.getElementById("traitement-details-modal-title").innerHTML = t_title
+                            document.getElementById("traitement-details-modal-body").innerHTML = `<div class="row">
+                                <div class="col-md-6">
+                                    <div class="project-info-box">
+                                        <p style="width:100%; text-align:center"><b>Informations sur le traitement</b></p>
+                                        <p><b>Titre du Traitement :</b> ${t_title}</p>
+                                        <p><b>Type du Traitement :</b> ${t_type}</p>
+                                    </div>
+                                    <div class="project-info-box">
+                                        <p style="width:100%; text-align:center"><b>Informations sur le modèle</b></p>
+                                        <p><b>Titre du modèle :</b> ${model_titre}</p>
+                                        <p><b>Nombre de fichiers :</b> ${nbr_files}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                    <div class="project-info-box">
+                                        <img src="/media/img/cours/document_images/txt.png" alt="project-image" class="rounded" width="75%">
+                                        <p><b>Texte :</b> ${t_label}</p>
+                                    </div>
+                                </div>
+                            </div>`;
                         } else {
-                            document.getElementById("traitement-details-modal-body").innerHTML = "<div class='row'>"
-                            + "<div class='col col-12'>"+t_title+"</div>"
-                            + "<div class='col col-12'>"+t_type+"</div>"
-                            + "<div class='col col-12'>"+img_name+"</div>"
-                            + "<div class='col col-12'>"+img_path+"</div>"
-                            + "<div class='col col-12'>"+model_titre+"</div>"
-                            + "<div class='col col-12'>"+nbr_files+"</div>"
-                            + "</div>";
+                            // document.getElementById("traitement-details-modal-title").innerHTML = t_title
+                            document.getElementById("traitement-details-modal-body").innerHTML = `<div class="row">
+                                <div class="col-md-6">
+                                    <div class="project-info-box">
+                                        <p style="width:100%; text-align:center"><b>Informations sur le traitement</b></p>
+                                        <p><b>Titre du Traitement :</b> ${t_title}</p>
+                                        <p><b>Type du Traitement :</b> ${t_type}</p>
+                                    </div>
+                                    <div class="project-info-box">
+                                        <p style="width:100%; text-align:center"><b>Informations sur le modèle</b></p>
+                                        <p><b>Titre du modèle :</b> ${model_titre}</p>
+                                        <p><b>Nombre de fichiers :</b> ${nbr_files}</p>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                    <div class="project-info-box">
+                                        <img src="/media/${img_path}" alt="project-image" class="rounded" width="100%">
+                                        <p><b>Nom de l'image :</b> ${img_name}</p>
+                                    </div>
+                                </div>
+                            </div>`;
                         }
+                        // <p class="mb-0"><b>Budget:</b> ${t_title}</p>
                         
                         if(t_title!="") {
                             $("#traitement-details-modal").show();
@@ -296,7 +324,8 @@
             });
         });
 
-        $(".close-modal-btn").click(function() {
+        $(".close-modal-btn").click(function(e) {
+            e.preventDefault();
             $("#traitement-details-modal").hide();
         })
 
