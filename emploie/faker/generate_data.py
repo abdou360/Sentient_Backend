@@ -1,19 +1,26 @@
-from faker import Faker
-from datetime import date
-from emploie.models import TypeSalle, Salle
-from filiere.models import Etablissement, Filiere
-from semestre.models import Groupe, Niveau, Semestre
-from module.models import Module
-from users.models import CustomUser, Students, Professeur
-
 
 """ EQUIPE : CodeVerse
     @author : KANNOUFA FATIMA EZZAHRA
 """
 
+from faker import Faker
+from datetime import date
+from emploie.models import Planning, Presence, Seance, TypeSalle, Salle
+from filiere.models import Etablissement, Filiere
+from semestre.models import Groupe, Niveau, Semestre
+from module.models import ElementModule, Module
+from users.models import Admin, CustomUser, Students, Professeur
 
-Faker.seed(3)
+  
+  
+#   Générer des données alétoire à l'aide de faker
+#   Tables remplies : Salle, TypeSalle, Etablissement, Filiere, Niveau, Groupe, Semestre, Module, ElementModule, 
+#                     CustomUser, Student, Professeur, Admin, Seance, Presence, Planning.
+
+
+Faker.seed(321)
 fake = Faker('FR_fr')
+
 
 ########### typesalle (amphi et salle)
 type_salle_amphi = TypeSalle(1, 500, "Amphi")
@@ -134,64 +141,83 @@ for i in range(13):
     module.save()
 print("insertion de 13 modules")
 
-################################################################################################
-################################################################################################
-################################################################################################
 ########### users_customuser (820 users : 20 profs + 800 students)
-users_prof = []
-users_students = []
 # users_students
+users_students = []
 for i in range(800):
     first_name = fake.first_name()
     last_name = fake.last_name()
-    user = CustomUser(i+4 , "pbkdf2_sha256$260000$tgju8L06fP2IOwmmF9D7X7$89SE3SCUcjNN8PFKmOsvDOP7xt+o4dfwWeF5CPgMnMs=",
-                      date.today(), 0, first_name + " " + last_name, first_name, last_name, fake.email(), 
-                      0, 1, date.today(), 3)
+    user = CustomUser(username=first_name + " " + last_name + "_" + str(i), password="pbkdf2_sha256$260000$tgju8L06fP2IOwmmF9D7X7$89SE3SCUcjNN8PFKmOsvDOP7xt+o4dfwWeF5CPgMnMs=", email=last_name + "." + first_name + "@edu.uca.ma",  first_name=first_name, last_name=last_name, last_login = date.today(), user_type=3)
     user.save()
+    users_students += [user]
     
 # users_prof
-for i in range(20):
+users_prof = []
+for i in range(20):   
     first_name = fake.first_name()
     last_name = fake.last_name()
-    # mdp = irisifstg@22
-    user = CustomUser(i+3 , "pbkdf2_sha256$260000$tgju8L06fP2IOwmmF9D7X7$89SE3SCUcjNN8PFKmOsvDOP7xt+o4dfwWeF5CPgMnMs=",
-                      date.today(), 0, first_name + " " + last_name, first_name, last_name, fake.email(), 
-                      0, 1, date.today(), 2)
+    user = CustomUser(username=first_name + " " + last_name + "_" + str(i), password="pbkdf2_sha256$260000$tgju8L06fP2IOwmmF9D7X7$89SE3SCUcjNN8PFKmOsvDOP7xt+o4dfwWeF5CPgMnMs=", email=last_name + "." + first_name + "@edu.uca.ma", first_name=first_name, last_name=last_name, last_login = date.today(), user_type=2)
     user.save()
+    users_prof += [user]
 print("insertion de 820 users")
 
-# student : id	cne	adresse	path_photos	telephone	code_apogee	admin_id	user_id	
+
+########### ADMIN 	
+admin = Admin(created_at=fake.date(), updated_at=date.today(), admin_id=1)
+admin.save()
+
 ########### STUDENTS (800 students)
 for i in range(800):
-    student = Students(i+1, fake.numerify('EE######'), fake.address(), "/path_photos/",	fake.numerify('+212 6########'), fake.numerify('18#####'),	1,	1)
+    student = Students(cne=fake.numerify('EE######'), adresse=fake.address(), path_photos="/path_photos/",	telephone=fake.numerify('06########'), code_apogee=fake.numerify('18#####'), admin_id=1,	user_id=users_students[i].id)
     student.save()
 print("insertion de 800 students")
 
-# prof : id	matricule	address	specialite	phone	profile_pic	created_at	updated_at	admin_id	
-########### STUDENTS (800 students)
+
+############ PROFESSEUR (20 profs)
 for i in range(20):
-    prof = Professeur(matricule=fake.numerify('########'), address=fake.address(), specialite="Professeur", phone=fake.numerify('+212 6########'), profile_pic="profile", created_at=fake.date(), updated_at=date.today(), admin_id=1)
+    prof = Professeur(matricule=fake.numerify('########'), specialite="Informatique", telephone=fake.numerify('06########'), created_at=fake.date(), updated_at=date.today(), admin_id=users_prof[i].id)
     prof.save()
 print("insertion de 20 profs")
 
 
+############ Element de module (1 element / module)
+modules = Module.objects.all()
+profs = Professeur.objects.all()
+for i in range(13):
+    elt_module = ElementModule(i+1, modules[i].libelle_module, volumeHoraire=fake.random.randint(20,30), objectif=fake.text(), created_at=fake.date(), updated_at=date.today(), module_id=modules[i].id, responsable_id=profs[i].id)
+    elt_module.save()
 
 
+############ Planning
+elts_mod = ElementModule.objects.all()	
+for i in range(20):
+    elt_mod = elts_mod[fake.random.randint(0,12)]
+    planning = Planning(liblle=elt_mod.libelle_element_module,
+                        groupe_id=fake.random.randint(1,6),
+                        professeur_id=profs[i].id,
+                        salle_id=fake.random.randint(1,4),
+                        element_module_id=elt_mod.id
+                        )
+    planning.save()
 
 
+############ Seance (8~15 séances / planning)
+plannings = Planning.objects.all()	
+for planning in plannings:
+    for i in range(fake.random.randint(8,15)):
+        day = fake.date_this_month()
+        seance = Seance(date_debut=day,
+                        date_fin=day,
+                        planning_id=planning.id
+                        )
+        seance.save()
 
+############ Presence (enregistrer des présences pour chaque séance)
 
+seances = Seance.objects.all()
+etudiants = Students.objects.all()
 
-
-
-
-
-
-
-
-
-desc = ''
-for paragraph in fake.paragraphs(10):
-    desc += '\n' + paragraph
-    
-i+1, fake.name(),fake.sentence(2), fake.sentence(10), fake.date()
+for seance in seances:
+        for i in range(fake.random.randint(20,100)):
+            presence = Presence(libelle="Séance : " + str(seance.date_debut), etudiant_id=etudiants[fake.random.randint(1,800)].id, is_present=fake.boolean(), seance_id=seance.id)
+            presence.save()

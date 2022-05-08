@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 urlpatterns = [
-    path('admin', admin.site.urls),
+    #path('admin', admin.site.urls),
     
     path('', include('users.urls')),
     path('filiere_etab/', include('filiere.urls')),

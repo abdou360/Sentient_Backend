@@ -32,7 +32,7 @@
   <div class="sidebar-heading">Interfaces</div>
   
   <li class="nav-item">
-    <a href="{{ emploiProfesseur }}" class="nav-link {% if request.path == emploiProfesseur %} active {% endif %}">
+    <a href="{% url 'emploiProfesseur' %}" class="nav-link {% if request.path == emploiProfesseur %} active {% endif %}">
       <i class="nav-icon fas fa-calendar-day"></i>
       <span>Mon emploi du temps</span>
     </a>
