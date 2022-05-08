@@ -6,6 +6,35 @@
 {% block content %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+
+    <div class="modal" id="traitement-details-modal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Modal Heading</h4>
+                  <button type="button" class="close-modal-btn" data-bs-dismiss="modal"></button>
+                </div>
+          
+                <!-- Modal body -->
+                <div class="modal-body" id="traitement-details-modal-body">
+                    ...
+                    <!-- <div class="row">
+                        <div class="col">{{t_title}}</div>
+                        <div class="col">{{t_label}}</div>
+                    </div> -->
+                </div>
+          
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger close-modal-btn" data-bs-dismiss="traitement-details-modal">Close</button>
+                </div>
+          
+              </div>            
+        </div>
+    </div>
+
     {% if messages %}
         {% for message in messages %}
             {% if message.tags == "error" %}
@@ -23,29 +52,29 @@
     {% endif %}
 
     {% comment %} <div class="alert alert-error" role="alert">
-        iihdjkh
+
     </div> {% endcomment %}
 
     <div class="card o-hidden border-0 shadow-lg my-3">
         <div class="card-body p-0">
             <div class="row">
                 <div class="col-12 d-none d-block text-center">
-                    <p class="m-3">
+                    <h3 class="m-3">
                         {{chapitre.libelle}} 
-                    </p>
+                    </h3>
                     <hr class="mb-6">
                 </div>
             </div>
             <div class="row">
                 <div class="maincontainer">
                     <ul class="nav justify-content-center nav-pills"> 
-                        <li class="active customized-nav"><a data-toggle="tab" href="#description">Description</a></li>  
-                        <li class="customized-nav" ><a data-toggle="tab" href="#document">Documents</a></li>  
-                        <li class="customized-nav" ><a data-toggle="tab" href="#ar">Modele AR</a></li>  
+                        <li class="active customized-nav"><a class="nav-link" data-toggle="tab" href="#description">Description</a></li>  
+                        <li class="customized-nav" ><a class="nav-link" data-toggle="tab" href="#document">Documents</a></li>  
+                        <li class="customized-nav" ><a class="nav-link" data-toggle="tab" href="#ar">Modele AR</a></li>  
                     </ul> 
                     <hr>
                     <div class="tab-content scroll">  
-                        <div id="description" class="tab-pane fade in active">  
+                        <div id="description" class="tab-pane fade in show active">  
                             <div class='row'>
                                 <div class='col col-md-5 col-sm-6 col-12 '>
                                     {% comment %} {% if  %} {% endcomment %}
@@ -105,14 +134,21 @@
                                         <img  class="Description"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcN-sb-i-ZpzD-w2JVRWNzn5q0bslc-MOQs2WcsFF80xkniCNphQuNHpVGrjQ1tWPBIro&usqp=CAU" alt="image" class="rounded">
                                         {% endif %}
                                     </div>
-                                    <p>{{traitement.titre_traitement}}</p>  
+                                    <div class="col col-12 my-3">
+                                        <h5>{{traitement.titre_traitement}}</h5>  
+                                        <h5>{{traitement.id}}</h5>  
+                                    </div>
                                      <!-- <div class='border'> -->
                                         {% comment %} <div>/media/{{traitement.image.path_image}}</div> {% endcomment %}
                                         <!-- <div class="col col-4 mt-4">
                                             <a href="{% url 'chapitre_details' chapitre.id %}" class="tooltip_update" title="Modifier le modèle"><i class="fa fa-pen" style="color:#e5bf41"></i></a>
                                         </div> -->
                                         <div class="col col-12 mt-4 text-center">
-                                            <a href="{% url 'delete_traitement' traitement.id %}" class="tooltip_delete" style="color:#e14848" id="delete_object" title="Supprimer le modèle"><i class="fa fa-trash"></i></a>
+                                            <a href="{% url 'delete_traitement' traitement.id %}" class="tooltip_delete" style="color:#e14848" id="delete_object" title="Supprimer le modèle"><i class="fa fa-2x fa-trash"></i></a>
+                                        </div>
+
+                                        <div class="col col-4 mt-4">
+                                            <a href="" id="{{traitement.id}}" class=" view-traitement tooltip_show" title="Voir le chapitre"><i class="fa fa-eye"></i></a>
                                         </div>
 
                                         <!-- <a href="{% url 'chapitre_details' chapitre.id %}" class="btn btn-primary">Modifier</a>
@@ -120,9 +156,10 @@
                                     <!-- </div> -->
                                 </div>
                                 {% endfor %}
+                                <!-- <div id="test"></div> -->
                             </div>
                             <br>  
-                            <a  href="{% url 'add_traitement' chapitre.id%}"class="float" id="tooltip_add" title="Ajouter un nouveau modèle" >
+                            <a  href="{% url 'add_traitement' chapitre.id%}" class="float" id="tooltip_add" title="Ajouter un nouveau modèle" >
                                 <i class="fa fa-plus my-float"></i>
                             </a>
                         </div>  
@@ -172,6 +209,96 @@
                 placement:"auto"
             });              
         });
+
+        $(document).ready(function(){
+            $(".view-traitement").click(function(e){
+
+                e.preventDefault();
+
+                var traitement_id = $(this).attr("id");
+
+                var t_title = ""
+                var t_label = ""
+                var t_type = ""
+                var img_name = ""
+                var img_path = ""
+                var model_titre = ""
+                var nbr_files = 0
+
+                $.ajax({
+
+                    type: 'GET',
+
+                    url: "{% url 'traitement_details' %}",
+
+                    data: {"traitement_id": traitement_id},
+                    
+                    success: function(response) {
+                        var res = response;
+                        // document.getElementById("test").innerHTML = Object.keys(response.traitement) + Object.keys(response.traitement["fields"]) + "---" + response.traitement["fields"]["titre_traitement"];
+                        t_title = response.traitement["fields"]["titre_traitement"];
+                        t_label = response.traitement["fields"]["label_traitement"];
+                        t_type = response.traitement["fields"]["type_traitement"];
+                        model_titre = response.modele3d["fields"]["titre_modele3d"];
+                        if (t_type != "Texte") {
+                            img_name = response.image["fields"]["name_image"];
+                            img_path = response.image["fields"]["path_image"];
+                        }
+                        // nbr_files = Object.keys(response.files);
+                        var files = jQuery.parseJSON(response.files)
+                        var nbr_files = files.length;
+                        // for (const file in files) {
+                        //     nbr_files+=1;
+                        //     // if (Object.hasOwnProperty.call(files, key)) {
+                        //     //     const element = object[key];
+                        //     // }
+                        // }
+
+                        // $("#traitement-details-modal-body").html(`
+                        //     <div class="row">
+                        //         <div class="col">{{t_title}}</div>
+                        //         <div class="col">{{t_label}}</div>
+                        //     </div>
+                        // `)
+                        if (t_type=="Texte") {
+                            document.getElementById("traitement-details-modal-body").innerHTML = "<div class='row'>"
+                            + "<div class='col col-12'>"+t_title+"</div>"
+                            + "<div class='col col-12'>"+t_label+"</div>"
+                            + "<div class='col col-12'>"+t_type+"</div>"
+                            + "<div class='col col-12'>"+model_titre+"</div>"
+                            + "<div class='col col-12'>"+nbr_files+"</div>"
+                            + "</div>";
+                        } else {
+                            document.getElementById("traitement-details-modal-body").innerHTML = "<div class='row'>"
+                            + "<div class='col col-12'>"+t_title+"</div>"
+                            + "<div class='col col-12'>"+t_type+"</div>"
+                            + "<div class='col col-12'>"+img_name+"</div>"
+                            + "<div class='col col-12'>"+img_path+"</div>"
+                            + "<div class='col col-12'>"+model_titre+"</div>"
+                            + "<div class='col col-12'>"+nbr_files+"</div>"
+                            + "</div>";
+                        }
+                        
+                        if(t_title!="") {
+                            $("#traitement-details-modal").show();
+                        }
+                    },
+
+                    error: function(res) {
+
+                        alert('Got an error dude'+res);
+                        console.log(response)
+
+
+
+                    }
+                });
+            });
+        });
+
+        $(".close-modal-btn").click(function() {
+            $("#traitement-details-modal").hide();
+        })
 
     </script>
 {% endblock content %}

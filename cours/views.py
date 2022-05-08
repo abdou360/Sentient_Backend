@@ -1,8 +1,11 @@
+import json
+from django.core.serializers import serialize
 from distutils.command import check
 import sys
 from tkinter import Image
 from types import NoneType
 from django.contrib import messages
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from pymysql import NULL
 from cours.forms import *
@@ -430,6 +433,46 @@ def add_traitement(request, id):
     return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file
                                                                  #  , 'trait': trait
                                                                  })
+
+
+@login_required
+def traitement_details(request):
+    # if request.is_ajax and request.method == "GET":
+    traitement_id = request.GET.get("traitement_id", None)
+    professeur = Professeur.objects.filter(
+        admin_id=request.user.id).first()
+
+    traitement = Traitement.objects.filter(id=traitement_id).first()
+    modele3d = Modele3D.objects.filter(id=traitement.modele3D_id).first()
+    files = File.objects.filter(modele3D=modele3d).all()
+    # fileCount = {"count": files}
+    if(traitement.type_traitement != "Texte"):
+        image = Image.objects.filter(id=traitement.image_id).first()
+        context = {
+            "traitement": json.loads(serialize('json', [traitement]))[0],
+            "professeur": json.loads(serialize('json', [professeur]))[0],
+            "modele3d": json.loads(serialize('json', [modele3d]))[0],
+            "files": serialize('json', files),
+            "image": json.loads(serialize('json', [image]))[0]
+        }
+    else:
+        context = {
+            "traitement": json.loads(serialize('json', [traitement]))[0],
+            "professeur": json.loads(serialize('json', [professeur]))[0],
+            "modele3d": json.loads(serialize('json', [modele3d]))[0],
+            # "files": files
+            "files": serialize('json', files),
+            # "professeur": json.dumps(professeur),
+            # "modele3d": json.dumps(modele3d),
+            # "image": image,
+            # "traitement": serialize('json', [traitement, ]),
+            # "professeur": serialize('json', [professeur, ]),
+            # "modele3d": serialize('json', [modele3d]),
+        }
+    return JsonResponse(context, status=200)
+    # return JsonResponse({}, status=400)
+    # return HttpResponse(context)
+    # return render(request, 'cours/chapitre_details.html', context)
 
 
 def file_upload_location(modele3d, filename):

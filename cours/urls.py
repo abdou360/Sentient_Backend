@@ -27,5 +27,10 @@ urlpatterns = [
          delete_Traitement, name='delete_traitement'),
     path('add_traitement/<int:id>', add_traitement, name='add_traitement'),
 
+
+    path('traitement_details',
+         traitement_details, name='traitement_details'),
+
+
     path('delete_document/<int:id>', delete_document, name='delete_document'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
