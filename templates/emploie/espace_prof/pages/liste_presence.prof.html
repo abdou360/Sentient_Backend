@@ -2,6 +2,9 @@
   EQUIPE  : CodeVerse
   @author : KANNOUFA FATIMA EZZAHRA
 -->
+<!-- En cours de développement : 
+    1- filtrage selon : filière/groupe ...
+ -->
 
 {% extends '../base.html' %}
 
@@ -11,6 +14,7 @@
 {% block title %} Liste de présence {% endblock %}
 
 {% block content %}
+
   <div class="row">
     <div class="col-xl-6 col-md-6 mb-3">
         <div class="card border-left-primary shadow h-100 py-0">
@@ -22,38 +26,46 @@
               </div>
 
               <div class="col ml-4">
-                <div class="h5 font-weight-bold text-primary text-uppercase mb-1"> Liste de présence : IRISI 2 </div>
-                <div class="text-sm mb-0 text-gray-600">Liste des étudiants de IRISI 2 pour la séance 03/05/2022</div>
-              </div>
-              
+                <div class="h5 font-weight-bold text-primary text-uppercase mb-1"> Liste de présence </div>
+                <div class="text-sm mb-0 text-gray-600">Liste des étudiants de 
+                  <span class="text-gray-900">
+                    {{ seance.planning.groupe.niveau.filiere.nom_filiere }} / {{ seance.planning.groupe.niveau.nom_niveau }} / {{ seance.planning.groupe.nom_group }}
+                  </span>
+                  pour la séance de 
+                  <span class="text-gray-900">
+                    {{ seance.date_debut }}
+                  </span>
+                </div>
+              </div>           
             </div> 
           </div>
         </div>
     </div>
   </div>
+  
   <!-- Table -->
   <div class="card shadow mb-4">
       <div class="card-header py-3">
           
-          <div class="row flatpickr flex">
+          <div class="row flatpickr flex align-items-center">
             <div class="col-3 ">
               <span class="badge badge-pill badge-light border border-secondary">
-                <h6 class="m-0 font-weight-bold text-gray-600 px-4">
-                  Mardi 03 Mai 2022
+                <h6 class="m-0 font-weight-bold text-gray-700 px-4">
+                  {{ seance.date_debut }}
                 </h6>
               </span>
             </div>
             <div class="col-3">
               <span class="badge badge-pill badge-light border border-secondary">
-                <h6 class="m-0 font-weight-bold text-gray-600 px-4">
-                  IRISI 2
+                <h6 class="m-0 font-weight-bold text-gray-700 px-4">
+                  {{ seance.planning.groupe.niveau.filiere.nom_filiere }} / {{ seance.planning.groupe.niveau.nom_niveau }} / {{ seance.planning.groupe.nom_group }}
                 </h6>
               </span>
             </div>
             <div class="col-3">
               <span class="badge badge-pill badge-light border border-secondary">
-                <h6 class="m-0 font-weight-bold text-gray-600 px-4">
-                  Analyse de données
+                <h6 class="m-0 font-weight-bold text-gray-700 px-4">
+                  {{ seance.planning.element_module.libelle_element_module }}
                 </h6>
               </span>
             </div>
@@ -78,40 +90,30 @@
                       </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>avatar
-                        <!--img
-                        class="rounded-circle"
-                        src="{% static 'img/undraw_profile_1.svg'%}"
-                        width="10%" height="20%"
-                      /-->
-                      </td>
-                      <td>OUSSAHI SALMA</td>
-                      <td>1811993</td>
-                      <td><span class="badge badge-pill badge-success">Présent(e)</span></td>
-                  </tr>
-                    {% for x in data %}
+                      {% for presence in presences %}
+                        <tr data-toggle="modal" data-target="#changePresenceModal" data-id_seance="{{seance.id}}" data-id_etudiant="{{presence.etudiant.id}}" data-nom_etudiant="{{ presence.etudiant.user.last_name }} {{ presence.etudiant.user.first_name }}">
+                            <td>avatar</td>
+                            <td> {{ presence.etudiant.user.last_name }} {{ presence.etudiant.user.first_name }} </td>
+                            <td> {{ presence.etudiant.code_apogee }} </td>
+                            <td>
+                              
+                              <a id="changePresenceBtn">
+                                {% if presence.is_present %}
+                                  <span class="badge badge-pill badge-success center"> Présent(e)</span>
+                                {% else %}
+                                  <span class="badge badge-pill badge-danger center"> Absent(e)</span>
+                                {% endif %}
+                              </a>
 
-                      <tr>
-                          <td>avatar
-                            <!--img
-                            class="rounded-circle"
-                            src="{% static 'img/undraw_profile_1.svg'%}"
-                            width="10%" height="20%"
-                          /-->
-                          </td>
-                          <td>KANNOUFA Fatima Ezzahra</td>
-                          <td>1811993</td>
-                          <td><span class="badge badge-pill badge-danger center">Absent(e)</span></td>
-                      </tr>
-                    {% endfor %}
-
-
+                            </td>
+                        </tr>
+                      {% endfor %}
                   </tbody>
               </table>
           </div>
       </div>
   </div> 
 
+  {% include '../includes/modals/_change_presence_modal.html' %}
 
 {% endblock %}

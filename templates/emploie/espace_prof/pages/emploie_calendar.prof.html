@@ -34,12 +34,10 @@
   </div>
 
 
-
-
-
   <div class="card shadow mb-4">
+    
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Mardi 03/05/2022</h6>
+        <h6 class="m-0 font-weight-bold text-primary"> {% now "l d F Y, H:i" %} </h6>
     </div>
     <div class="card-body">
 
@@ -47,59 +45,5 @@
     </div>
 
   </div>
-
-  <script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          timeZone: 'local', 
-          locale: 'fr',
-          
-          
-          headerToolbar: {
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay'
-          },
-          
-
-          buttonText: {
-              today:    'Aujourd\'hui',
-              month:    'Mois',
-              week:     'Semaines',
-              day:      'Jour',
-            },
-
-            events: [
-              {
-                title: "Analyse de données",
-                start: "2022-05-12",
-                url: "http://localhost:8000/emploie/liste-presence/irisi/2/",
-                color: "#FFE2E0",
-                textColor: "#D90E00"
-              },
-              {
-                title: "Intelligence artificielle",
-                start: "2022-05-03",
-                url: "http://localhost:8000/emploie/liste-presence/irisi/2/",
-                color: "#FFF0D2",
-                textColor: "#8D5D00"
-              },
-              {
-                title: "Analyse de données",
-                start: "2022-05-09",
-                url: "http://localhost:8000/emploie/liste-presence/irisi/2/",
-                color: "#D2FCFF",
-                textColor: "#2400FF"
-              }
-            ]
-        });
-      calendar.render();
-    });
-  
-  </script>
-
 
 {% endblock %}
