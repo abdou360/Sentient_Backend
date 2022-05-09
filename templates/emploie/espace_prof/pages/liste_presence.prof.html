@@ -3,7 +3,8 @@
   @author : KANNOUFA FATIMA EZZAHRA
 -->
 <!-- En cours de développement : 
-    1- filtrage selon : filière/groupe ...
+    1- personnaliser les filtres
+    2- filtrage selon : filière/groupe ...
  -->
 
 {% extends '../base.html' %}
@@ -14,6 +15,34 @@
 {% block title %} Liste de présence {% endblock %}
 
 {% block content %}
+  <div class="row">
+    <div class="col-xl-6 col-md-6 mb-3">
+        <div class="card border-left-primary shadow h-100 py-0">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              
+              <div class="col-auto">
+                <i class="fas fa-list fa-2x text-primary"></i>
+              </div>
+
+              <div class="col ml-4">
+                <div class="h5 font-weight-bold text-primary text-uppercase mb-1"> Liste de présence </div>
+                <div class="text-sm mb-0 text-gray-600">Liste des étudiants de 
+                  <span class="text-gray-900">
+                    {{ seance.planning.groupe.niveau.filiere.nom_filiere }} / {{ seance.planning.groupe.niveau.nom_niveau }} / {{ seance.planning.groupe.nom_group }}
+                  </span>
+                  pour la séance de 
+                  <span class="text-gray-900">
+                    {{ seance.date_debut }}
+                  </span>
+                </div>
+              </div>
+              
+            </div> 
+          </div>
+        </div>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-xl-6 col-md-6 mb-3">
@@ -36,7 +65,8 @@
                     {{ seance.date_debut }}
                   </span>
                 </div>
-              </div>           
+              </div>
+              
             </div> 
           </div>
         </div>
@@ -96,7 +126,7 @@
                             <td> {{ presence.etudiant.user.last_name }} {{ presence.etudiant.user.first_name }} </td>
                             <td> {{ presence.etudiant.code_apogee }} </td>
                             <td>
-                              
+                             
                               <a id="changePresenceBtn">
                                 {% if presence.is_present %}
                                   <span class="badge badge-pill badge-success center"> Présent(e)</span>

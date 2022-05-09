@@ -16,7 +16,8 @@ class SessionYearModel(models.Model):
 
 class CustomUser(AbstractUser):
     user_type_data = ((1, "Admin"), (2, "Professeur"), (3, "Etudiant"))
-    user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
+    user_type = models.CharField(
+        default=1, choices=user_type_data, max_length=10)
 
 
 class Admin(models.Model):
@@ -25,22 +26,21 @@ class Admin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
+
     def __str__(self):
         return self.admin.username
 
+
 class Professeur(models.Model):
     id = models.AutoField(primary_key=True)
-    matricule = models.CharField(max_length=20)
-    admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
-    address = models.TextField()
-    specialite = models.CharField(max_length=20)
-    phone = models.CharField(max_length=12)
-    profile_pic = models.FileField()
+    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
 # UnivIt responsable : ismail errouk
+
+
 class Students(models.Model):
     cne = models.CharField(max_length=10, default="")
     adresse = models.CharField(max_length=100, default="")
@@ -86,6 +86,8 @@ def save_user_profile(sender, instance, **kwargs):
 
 # ---------------------------
 # UnivIt responsable : ismail errouk
+
+
 class Permission(models.Model):
     libelle = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
@@ -94,6 +96,8 @@ class Permission(models.Model):
         return self.libelle
 
 # UnivIt responsable : ismail errouk
+
+
 class Role(models.Model):
     libelle = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
