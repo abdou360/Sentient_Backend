@@ -15,7 +15,7 @@ from django.db.models.functions import ExtractYear
 
 from django.db.models import Count
 
-from cours.models import Chapitre, Document, Modele3D, Traitement, File
+from cours.models import Chapitre, Document, Modele3D, Traitement, File, VisibiliteModele
 from filiere.models import Filiere
 from module.models import ElementModule, Module
 from semestre.models import Niveau, Semestre
@@ -338,7 +338,8 @@ EXTENSIONS = ['jpg', 'png', 'bin', 'gltf']
 
 @login_required
 def add_traitement(request, id):
-
+    professeur = Professeur.objects.filter(
+        admin_id=request.user.id).first()
     chapitre = Chapitre.objects.filter(id=id).first()
     if request.method == "GET":
         new_traitement = TraitementForm()
@@ -425,6 +426,8 @@ def add_traitement(request, id):
                     # print('<Texte ??>', traitement.type_traitement, file=sys.stderr)
                     traitement.modele3D = new_modele
                     traitement.save()
+                    visibilite = VisibiliteModele.objects.create(
+                        modele3D=new_modele, professeur=professeur)
                     messages.success(request, ('Le modele AR a été ajouté !'))
                 # else:
                 #     return redirect('add_traitement')
