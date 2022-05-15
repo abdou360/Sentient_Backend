@@ -1,3 +1,4 @@
+
 import json
 from django.core.serializers import serialize
 from distutils.command import check
@@ -11,6 +12,8 @@ from pymysql import NULL
 from cours.forms import *
 from django.contrib.auth.decorators import login_required
 from django.db.models.functions import ExtractYear
+
+from django.db.models import Count
 
 from cours.models import Chapitre, Document, Modele3D, Traitement, File
 from filiere.models import Filiere
@@ -428,7 +431,9 @@ def add_traitement(request, id):
             else:
                 messages.error(
                     request, 'Erreur : Le modèle ne peut pas être enregistré !')
-        return redirect("chapitres_list")
+        # return redirect("chapitres_list")
+        return redirect('chapitre_details', id)
+        # return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
     return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file
                                                                  #  , 'trait': trait
@@ -500,3 +505,65 @@ def makedirs(path):
     except OSError as e:
         if e.errno == 17:
             pass
+
+
+@login_required
+def update_traitement(request, id):
+    traitement = Traitement.objects.filter(id=id).first()
+    q = Traitement.objects.filter(id=id).annotate(Count('id'))
+    type_traitement = q[0].type_traitement
+    chapitre_id = q[0].chapitre_id
+    modele3d = Modele3D.objects.filter(id=traitement.modele3D_id).first()
+    files = File.objects.filter(modele3D=modele3d).all()
+    if type_traitement != 'Texte':
+        image = Image.objects.filter(id=traitement.image_id).first()
+    updated_image = None
+
+    if request.method == "GET":
+        updated_traitement = TraitementForm(
+            instance=traitement, request=request)
+        updated_modele3d = Modele3DForm(instance=modele3d, request=request)
+        if type_traitement != 'Texte':
+            updated_image = ImageForm(instance=image, request=request)
+
+    elif request.method == "POST":
+        updated_traitement = TraitementForm(
+            request.POST, request.FILES, instance=traitement, request=request)
+        updated_modele3d = Modele3DForm(
+            request.POST, request.FILES, instance=modele3d, request=request)
+        if type_traitement != 'Texte':
+            updated_image = ImageForm(
+                request.POST, request.FILES, instance=image, request=request)
+
+        if updated_traitement.is_valid():
+            traitement = updated_traitement.save(commit=False)
+            traitement.type_traitement = type_traitement
+            if updated_modele3d.is_valid():
+                updated_modele3d = updated_modele3d.save()
+
+                if traitement.type_traitement != "Texte":
+                    if updated_image.is_valid():
+                        updated_image = updated_image.save()
+                        traitement.image = updated_image
+                    else:
+                        messages.error(
+                            request, 'Erreur : L\'image que vous avez entré ne peut pas être acceptée !')
+                traitement.modele3D = updated_modele3d
+                traitement.save()
+                messages.success(request, ('Le modele AR a été modifié !'))
+            else:
+                messages.error(
+                    request, 'Erreur : Le modèle ne peut pas être enregistré !')
+        else:
+            messages.error(
+                request, 'Erreur : Le modèle ne peut pas être enregistré !' + traitement.type_traitement)
+            # request, 'Erreur : Le modèle ne peut pas être enregistré !'+new_traitement.data.get('type_traitement'))
+            # messages.error(
+            #     request, 'Erreur : Le modèle ne peut pas être enregistré !'+new_traitement.data.get('titre_traitement'))
+        # return redirect("chapitres_list")
+        return redirect('chapitre_details', chapitre_id)
+
+    return render(request, 'cours/update_traitement.html', context={'updated_traitement': updated_traitement, 'updated_modele3d': updated_modele3d, 'updated_image': updated_image                                                                    # , 'new_file': new_file
+                                                                    , 'updated_files': files
+                                                                    #  , 'trait': trait
+                                                                    })

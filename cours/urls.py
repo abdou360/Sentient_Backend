@@ -26,6 +26,8 @@ urlpatterns = [
     path('delete_traitement/<int:id>',
          delete_Traitement, name='delete_traitement'),
     path('add_traitement/<int:id>', add_traitement, name='add_traitement'),
+    path('update_traitement/<int:id>',
+         update_traitement, name='update_traitement'),
 
 
     path('traitement_details',

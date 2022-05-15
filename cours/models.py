@@ -107,3 +107,12 @@ class File(models.Model):
         upload_to=file_upload_location, null=False, max_length=255)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class VisibiliteModele(models.Model):
+    modele3D = models.ForeignKey(
+        Modele3D, null=False,  on_delete=models.CASCADE)
+    professeur = models.ForeignKey(
+        Professeur, null=False, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True)

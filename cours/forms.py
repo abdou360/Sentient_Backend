@@ -27,16 +27,16 @@ class ChapitreForm(forms.ModelForm):
             'element_module',
         )
         labels = {
-            'libelle': 'Nom du chapitre',
-            'description': 'Description du chapitre',
+            'libelle': 'Nom du cours',
+            'description': 'Description du cours',
             'image': 'Image',
             'element_module': 'Element de module'
         }
         widgets = {
-            'libelle': forms.TextInput(attrs={'placeholder': 'Nom du chapitre',
+            'libelle': forms.TextInput(attrs={'placeholder': 'Nom du cours',
                                               'class': 'form-control',
                                               }),
-            'description': forms.Textarea(attrs={'placeholder': 'Description du chapitre',
+            'description': forms.Textarea(attrs={'placeholder': 'Description du cours',
                                                  'class': 'form-control',
                                                  'cols': 80, 'rows': 5
                                                  }),
@@ -97,6 +97,8 @@ class Modele3DForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        if kwargs.keys().__contains__("request"):
+            self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['titre_modele3d'].label = ''
 
@@ -132,9 +134,13 @@ class TraitementForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        if kwargs.keys().__contains__("request"):
+            self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['titre_traitement'].label = ''
         self.fields['label_traitement'].label = ''
+        self.fields['type_traitement'].required = False
+        self.fields['label_traitement'].required = False
 
 
 class ImageForm(forms.ModelForm):
@@ -153,6 +159,8 @@ class ImageForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        if kwargs.keys().__contains__("request"):
+            self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['name_image'].label = ''
         self.fields['path_image'].label = ''
