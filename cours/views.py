@@ -3,7 +3,7 @@ from django.core.serializers import serialize
 from distutils.command import check
 import sys
 from tkinter import Image
-from types import NoneType
+NoneType = type(None)
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
