@@ -1,19 +1,21 @@
-{% extends 'users/base-home.html' %}
+{% extends 'admin/base-home.html' %}
 {% block title %}
-    Modilfier Module #{{module.id}}
+Modilfier Module #{{module.id}}
 {% endblock title %}
 {% block content %}
 <div class="content-wrapper">
     <div class="content-header">
-        <div class="container-fluid">
+        <div class="container-fluid mt-5">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark"> Modifier Module</h1>
+              <h1 class="m-0 text-dark"> <span style="color: #0080c0;" >{{niveau.nom_niveau}}</span> <span>| Modifier Module</span></h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item active"> <a href="{% url 'manage_modules' %}">Modules/Getion_Modules</a></li>
+                <li class="breadcrumb-item">
+                  <a href="{% url 'display_levels' name_=filiere.nom_filiere %}" class="text-decoration-none"><img src="https://img.icons8.com/color/24/000000/arrow-pointing-left--v2.png"/> Retour</a>
+              </li>
+                {% comment %} <li class="breadcrumb-item active"> <a href="{% url 'manage_modules' %}">Modules/Getion_Modules</a></li> {% endcomment %}
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -21,7 +23,7 @@
       </div>
     </div>
       {% if messages %}
-      <div class="login-box-msg mb-4 ml-4 col-12">
+      <div class="login-box-msg mb-4 ml-4 col-12 mt-5">
         {% for message in messages %}
         {% if message.tags == "error" %}
         <span class="alert alert-danger">{{message}}</span>
@@ -33,30 +35,30 @@
       </div>
       {% endif %}
     <section class="content">
-        <div class="container-fluid">
+        <div class="container-fluid mt-5">
             <div class="card card-dark">
                 <div class="card-header">
                     <h3 class="card-title">Modifier Module</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form role="form" action="/edit_module_save" method="post">
+                <form role="form" action="/edit_module_save" method="post" name="formName" id="myform">
                     {% csrf_token %}
                     <div class="card-body">
                     <div class="row">
-                            <div class="col-8">
+                            <div class="col-7">
                                 <div class="form-group">
                                     <label for="example">Libelle module</label>
                                     <input type="text"
                                            class="form-control"
                                            id="example"
-                                           placeholder="Course Name"
+                                           placeholder="{{module.libelle_module}}"
                                            value="{{module.libelle_module}}"
                                            name="module">
                                 </div>
-                            </div>
-                            <input type="hidden" class="form-control" name="module_id" placeholder="Enter Subject" value="{{ module.id }}">
+                                <input type="hidden" class="form-control" name="module_id" placeholder="Enter Subject" value="{{ module.id }}">
 
+                            </div>
                             <div class="col-4">
                               <div class="form-group">
                                   <label>Semestre</label>
@@ -70,12 +72,16 @@
                                   </select>
                               </div>
                           </div>
+                          <div class="col mt-4">
+                    
+                            <a href="javascript:;" class="text-decoration-none" onclick="document.getElementById('myform').submit()"><img src="https://img.icons8.com/ios-glyphs/50/4a90e2/upload--v1.png"/> </a>
+                           
+
+                          </div>
                         </div>
                     </div>
                     <!-- /.card-body -->
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-dark btn-block">Enregister</button> 
-                    </div>
+                   
                 </form>
             </div>
         </div>

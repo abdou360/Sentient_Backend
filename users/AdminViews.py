@@ -39,57 +39,43 @@ def add_teacher_save(request):
         messages.error(request, "Invalid Method ")
         return redirect('add_teacher')
     else:
-        matricule = request.POST.get('matricule')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        address = request.POST.get('address')
         specialite = request.POST.get('specialite')
-        phone = request.POST.get('phone')
-        
-        # Getting Profile Pic first
-        # First Check whether the file is selected or not
-        # Upload only if file is selected
-        if len(request.FILES) != 0:
-            profile_pic = request.FILES['profile_pic']
-            fs = FileSystemStorage()
-            filename = fs.save(profile_pic.name, profile_pic)
-            profile_pic_url = fs.url(filename)
-        else:
-            profile_pic_url = None
+        matricule = request.POST.get('matricule')
+        telephone = request.POST.get('telephone')
 
         try:
-            user = CustomUser.objects.create_user(username=username, password=password, email=email,
-                                                  first_name=first_name, last_name=last_name, user_type=2)
-            user.professeur.matricule = matricule
-            user.professeur.specialite = specialite
-            user.professeur.address = address
-            user.professeur.phone = phone
-            user.professeur.profile_pic = profile_pic_url
+            user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=2)
+            user.teacher.specialite = specialite
+            user.teacher.matricule = matricule
+            user.teacher.telephone = telephone
             user.save()
-            messages.success(request, "Teacher Added Successfully!")
+            messages.success(request, "teacher Added Successfully!")
             return redirect('add_teacher')
         except:
-            messages.error(request, "Failed to Add Teacher!")
+            messages.error(request, "Failed to Add teacher!")
             return redirect('add_teacher')
+
 
 
 def manage_teacher(request):
-    professeurs = Professeur.objects.all()
+    teachers = Professeur.objects.all()
     context = {
-        "professeurs": professeurs
+        "teachers": teachers
     }
     return render(request, "admin/manage_teacher_template.html", context)
 
 
-def edit_teacher(request, professeur_id):
-    professeur = Teachers.objects.get(admin=professeur_id)
+def edit_teacher(request, teacher_id):
+    teacher = Professeur.objects.get(admin=teacher_id)
 
     context = {
-        "professeur": professeur,
-        "id": professeur_id
+        "teacher": teacher,
+        "id": teacher_id
     }
     return render(request, "admin/edit_teacher_template.html", context)
 
@@ -98,50 +84,134 @@ def edit_teacher_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
-        professeur_id = request.POST.get('professeur_id')
+        teacher_id = request.POST.get('teacher_id')
         username = request.POST.get('username')
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        address = request.POST.get('address')
         specialite = request.POST.get('specialite')
-        phone = request.POST.get('phone')
+        matricule = request.POST.get('matricule')
+        telephone = request.POST.get('telephone')
 
         try:
             # INSERTING into Customuser Model
-            user = CustomUser.objects.get(id=professeur_id)
+            user = CustomUser.objects.get(id=teacher_id)
             user.first_name = first_name
             user.last_name = last_name
             user.email = email
             user.username = username
             user.save()
-
+            
             # INSERTING into Professeur Model
-            professeur_model = Teachers.objects.get(admin=professeur_id)
-            professeur_model.address = address
-            professeur_model.specialite = specialite
-            professeur_model.phone = phone
-            professeur_model.save()
+            teacher_model = Professeur.objects.get(admin=teacher_id)
+            teacher_model.specialite = specialite
+            teacher_model.matricule = matricule
+            teacher_model.telephone = telephone
+            teacher_model.save()
 
-            messages.success(request, "Teacher Updated Successfully.")
-            return redirect('/edit_teacher/' + professeur_id)
+            messages.success(request, "Teacher Updated Successfully !")
+            return redirect('/edit_teacher/'+teacher_id)
 
         except:
-            messages.error(request, "Failed to Update Teacher.")
-            return redirect('/edit_teacher/' + professeur_id)
+            messages.error(request, "Failed to Update teacher !")
+            return redirect('/edit_teacher/'+teacher_id)
 
 
-def delete_teacher(request, professeur_id):
-    professeur = Professeur.objects.get(admin=professeur_id)
+
+def delete_teacher(request, teacher_id):
+    teacher = Professeur.objects.get(admin=teacher_id)
     try:
-        professeur.delete()
-        messages.success(request, "Teacher Deleted Successfully.")
+        teacher.delete()
+        messages.success(request, "teacher Deleted Successfully.")
         return redirect('manage_teacher')
     except:
-        messages.error(request, "Failed to Delete the Teacher.")
+        messages.error(request, "Failed to Delete teacher.")
         return redirect('manage_teacher')
 
 
+def add_user(request):
+    return render(request, "admin/add_user_template.html")
+
+
+def add_user_save(request):
+    if request.method != "POST":
+        messages.error(request, "Invalid Method ")
+        return redirect('add_teacher')
+    else:
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+
+        try:
+            user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
+            user.save()
+            messages.success(request, "User Added Successfully !")
+            return redirect('add_user')
+        except:
+            messages.error(request, "Failed to Add User !")
+            return redirect('add_user')
+
+
+
+def manage_user(request):
+    users = CustomUser.objects.all()
+    context = {
+        "users": users
+    }
+    return render(request, "admin/manage_user_template.html", context)
+
+
+def edit_user(request, user_id):
+    user = CustomUser.objects.get(admin=user_id)
+
+    context = {
+        "user": user,
+        "id": user_id
+    }
+    return render(request, "admin/edit_user_template.html", context)
+
+
+def edit_user_save(request):
+    if request.method != "POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        user_id = request.POST.get('teacher_id')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+
+        try:
+            # INSERTING into Customuser Model
+            user = CustomUser.objects.get(id=user_id)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.username = username
+            user.save()
+            
+            messages.success(request, "user Updated Successfully !")
+            return redirect('/edit_user/'+user_id)
+
+        except:
+            messages.error(request, "Failed to Update user !")
+            return redirect('/edit_user/'+user_id)
+
+
+
+def delete_user(request, user_id):
+    user = CustomUser.objects.get(admin=user_id)
+    try:
+        user.delete()
+        messages.success(request, "user Deleted Successfully.")
+        return redirect('manage_user')
+    except:
+        messages.error(request, "Failed to Delete user.")
+        return redirect('manage_user')
+    
 # def add_course(request):
 
 # def add_course_save(request):
@@ -238,7 +308,7 @@ def delete_teacher(request, professeur_id):
 #         username = form.cleaned_data['username']
 #         first_name = form.cleaned_data['first_name']
 #         last_name = form.cleaned_data['last_name']
-#         address = form.cleaned_data['address']
+#         specialite = form.cleaned_data['address']
 #
 #         cne = form.cleaned_data['cne']
 #         gender = form.cleaned_data['gender']
@@ -287,8 +357,6 @@ def delete_teacher(request, professeur_id):
 #     else:
 #         return redirect('/edit_student/' + student_id)
 
-
-
 def admin_profile(request):
     user = CustomUser.objects.get(id=request.user.id)
 
@@ -327,3 +395,4 @@ def teacher_profile(request):
 
 def student_profile(requtest):
     pass
+

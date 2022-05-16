@@ -113,17 +113,12 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-
-        'NAME': 'test6',
-
-        'USER': 'ismail',
-
-        'PASSWORD': '123456789',
-
-        'HOST': 'localhost',
-
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ar-crud-project',
+        'USER': 'root',
+        'PASSWORD': '',
+        'PORT': '3306',
+        'HOST': '127.0.0.1'
     }
 }
 
@@ -170,7 +165,8 @@ STATICFILES_DIRS = [
     'dashboard/static',
     os.path.join(BASE_DIR, 'static'),
     'filiere/static',
-    'cours/static'
+    'cours/static',
+    'emploie/static',
 ]
 
 MEDIA_URL = '/media/'
