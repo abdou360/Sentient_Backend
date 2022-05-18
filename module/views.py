@@ -1,10 +1,17 @@
 from django.shortcuts import render
-  
+from module.ReglageCounter import RecognizerMethod
+
+from semestre.models import Niveau
+from filiere.models import  Filiere
+
+from .serializers import *
 import numpy as np
 import cv2
 import os
 from module.classVideo import VideoCamera 
 from django.http.response import StreamingHttpResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from PIL import Image
 
  #*@author ABDELHADI MOUZAFIR END
@@ -101,5 +108,41 @@ def getImagesAndLabels(path):
 
 
 
-            
+@api_view(['GET'])
+def filiere_liste(request):
+    try:  
+        filieres = Filiere.objects.all()
+        serializer = FiliereSerializer(filieres,many=True)
+        return Response(serializer.data)
+    except Filiere.DoesNotExist:
+        return Response([])
  
+ 
+@api_view(['GET'])
+def Niveau_liste(request,id):
+    try:
+        filiere = Filiere.objects.get(id=id)
+        niveaus = Niveau.objects.filter(filiere=filiere)
+        serializer = NiveauSerializer(niveaus,many=True)
+        return Response(serializer.data)
+    except Niveau.DoesNotExist:
+        return Response([])
+    
+@api_view(['POST'])
+def post_niveau(request):
+    
+        if request.data:
+            RecognizerMethod()
+            return Response(
+                "xorked well",
+                status=200
+            )
+            
+            
+        return Response(
+            {
+                "error": True,
+                "error_msg": "not valid",
+            },
+            status=400
+        )

@@ -38,7 +38,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -113,18 +113,17 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.mysql',
 
-        'NAME': 'arcore_v3',
+        'NAME': 'ar-crud-project-1-4',
 
-        'USER': 'ismail',
+        'USER': 'root',
 
-
-        'PASSWORD': '123456789',
+        'PASSWORD': '',
 
         'HOST': 'localhost',
 
-        'PORT': '5432',
+  
     }
 }
 
