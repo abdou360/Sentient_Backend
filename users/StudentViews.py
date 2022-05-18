@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
@@ -9,6 +11,8 @@ from semestre.models import Groupe
 from users.forms import EditStudentForm, AddStudentForm
 from users.models import *
 from users.roleForm import GroupeListForm
+from rest_framework.decorators import api_view
+from django.http import JsonResponse
 
 
 def student_home(request):
@@ -56,37 +60,95 @@ def student_profile_update(request):
 
 
 # UnivIt responsable : ismail errouk
+# def add_student(request, id=0):
+#     users = CustomUser.objects.all()
+#     if request.method == 'GET':
+#         if id == 0:
+#             form = AddStudentForm()  # form vide
+#         else:
+#             student = Students.objects.get(pk=id)
+#             form = AddStudentForm(instance=student)  # form remplie par employee
+#
+#         # return render(request, 'users/etudiants/etudiant_form.html', {'form': form, 'users': users})
+#         return render(request, 'admin/add_student_template.html', {'form': form, 'users': users})
+# UnivIt responsable : ismail errouk
 def add_student(request, id=0):
-    users = CustomUser.objects.all()
+    admins = Admin.objects.all()
     if request.method == 'GET':
-        if id == 0:
-            form = AddStudentForm()  # form vide
-        else:
-            student = Students.objects.get(pk=id)
-            form = AddStudentForm(instance=student)  # form remplie par employee
-
+        # form remplie par employee
         # return render(request, 'users/etudiants/etudiant_form.html', {'form': form, 'users': users})
-        return render(request, 'admin/add_student_template.html', {'form': form, 'users': users})
+        return render(request, 'student/add_student_template.html', {'admins': admins})
 
 
 # UnivIt responsable : ismail errouk
+# def add_student_save(request):
+#     global student
+#     form = AddStudentForm(request.POST, request.FILES)
+#     if form.is_valid():
+#         adresse = form.cleaned_data['adresse']
+#         admin = form.cleaned_data['admin']
+#         user = form.cleaned_data['user']
+#         # print(admin.admin.admin)
+#         print(user.username)
+#         cne = form.cleaned_data['cne']
+#         code_apogee = form.cleaned_data['code_apogee']
+#         telephone = form.cleaned_data['telephone']
+#         path_photos = form.cleaned_data['path_photos']
+#         form.save()
+#         student = Students.objects.get(cne=cne)
+#
+#     return redirect(to='add_student_groups', id=student.id)
+# UnivIt responsable : ismail errouk
 def add_student_save(request):
     global student
-    form = AddStudentForm(request.POST, request.FILES)
-    if form.is_valid():
-        adresse = form.cleaned_data['adresse']
-        admin = form.cleaned_data['admin']
-        user = form.cleaned_data['user']
-        # print(admin.admin.admin)
-        print(user.username)
-        cne = form.cleaned_data['cne']
-        code_apogee = form.cleaned_data['code_apogee']
-        telephone = form.cleaned_data['telephone']
-        path_photos = form.cleaned_data['path_photos']
-        form.save()
-        student = Students.objects.get(cne=cne)
+    if request.method == 'POST':
+        admin = Admin.objects.get(id=request.POST['select_admin'])
 
+        user = CustomUser()
+        user.first_name = request.POST['first_name']
+        user.last_name = request.POST['last_name']
+        user.email = request.POST['email']
+        user.username = request.POST['first_name'] + '_' + request.POST['last_name']
+        user.user_type = 'STUDENT'
+        if request.POST['password'] == request.POST['confirm_password']:
+            user.password = request.POST['password']
+        user.save()
+        student = Students()
+        student.user = user
+        student.admin = admin
+        student.cne = request.POST['cne']
+        student.adresse = request.POST['adresse']
+        student.profile_pic = request.POST['profile_pic']
+        student.path_photos = request.POST['path_photos']
+        student.telephone = request.POST['telephone']
+        student.code_apogee = request.POST['code_apogee']
+        student.save()
     return redirect(to='add_student_groups', id=student.id)
+
+
+@api_view(['GET'])
+def getAllStudents(request):
+    all_students = Students.objects.all()
+    students = []
+    for student in all_students:
+        groupes = student.groupes.all()
+        student_groupes = []
+        for groupe in groupes:
+            student_groupes.append({'nom groupe': groupe.nom_group, 'niveau': groupe.niveau.nom_niveau})
+        students.append({
+            'first_name': student.user.first_name,
+            'last_name': student.user.last_name,
+            'username': student.user.username,
+            'email': student.user.email,
+            'cne': student.cne,
+            'adresse': student.adresse,
+            'telephone': student.telephone,
+            'code apogee': student.code_apogee,
+            'path photos': student.path_photos,
+            'groupes': student_groupes
+        })
+    return JsonResponse(students, safe=False)
+    # return JsonResponse(students)
 
 
 # UnivIt responsable : ismail errouk
@@ -94,7 +156,7 @@ def add_student_groups(request, id):
     context = {}
     context['form'] = GroupeListForm()
     context['id'] = id
-    return render(request, "admin/add_Studant_Groupe_template.html", context)
+    return render(request, "student/add_Student_Groupe_template.html", context)
 
 
 # UnivIt responsable : ismail errouk
@@ -124,7 +186,7 @@ def manage_student(request):
     context = {
         "students": students
     }
-    return render(request, 'admin/manage_student_template.html', context)
+    return render(request, 'student/manage_student_template.html', context)
 
 
 # UnivIt responsable : ismail errouk
@@ -148,20 +210,40 @@ def edit_student(request, student_id):
         "student": student,
         "form": form
     }
-    return render(request, "admin/edit_student_template.html", context)
+    return render(request, "student/edit_student_template.html", context)
 
 
 # UnivIt responsable : ismail errouk
 def edit_student_save(request, id):
-    print('------------')
-    student = Students.objects.get(id=id)
-    form = EditStudentForm(request.POST, request.FILES)
-    if form.is_valid():
-        student.cne = form.cleaned_data['cne']
-        student.adresse = form.cleaned_data['adresse']
-        student.path_photos = form.cleaned_data['path_photos']
-        student.telephone = form.cleaned_data['telephone']
-        student.code_apogee = form.cleaned_data['code_apogee']
+    # print('------------')
+    # student = Students.objects.get(id=id)
+    # form = EditStudentForm(request.POST, request.FILES)
+    # if form.is_valid():
+    #     student.cne = form.cleaned_data['cne']
+    #     student.adresse = form.cleaned_data['adresse']
+    #     student.path_photos = form.cleaned_data['path_photos']
+    #     student.telephone = form.cleaned_data['telephone']
+    #     student.code_apogee = form.cleaned_data['code_apogee']
+    #     student.save()
+    global student
+    if request.method == 'POST':
+
+        student = Students.objects.get(id=id)
+        user = student.user
+        user.first_name = request.POST['first_name']
+        user.last_name = request.POST['last_name']
+        user.email = request.POST['email']
+        user.username = request.POST['first_name'] + '_' + request.POST['last_name']
+        user.user_type = 'STUDENT'
+        user.password = request.POST['password']
+        user.save()
+        student.cne = request.POST['cne']
+        student.adresse = request.POST['adresse']
+        student.path_photos = request.POST['path_photos']
+        student.telephone = request.POST['telephone']
+        student.code_apogee = request.POST['code_apogee']
+        if request.POST['profile_pic'] != None:
+            student.profile_pic = request.POST['profile_pic']
         student.save()
     return redirect(to='manage_student')
 
@@ -202,7 +284,7 @@ def edit_groupe_groupes(request, id):
         "groupes": groupes,
         "id": id
     }
-    return render(request, "admin/edit_student_groupe_template.html", context)
+    return render(request, "student/edit_student_groupe_template.html", context)
 
 
 # UnivIt responsable : ismail errouk

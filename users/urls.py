@@ -35,6 +35,7 @@ urlpatterns = [
                #    path('edit_session_save/', AdminViews.edit_session_save, name="edit_session_save"),
                #    path('delete_session/<session_id>/', AdminViews.delete_session, name="delete_session"),
                   # UnivIt responsable : ismail errouk
+                  path('students/', StudentViews.getAllStudents, name="get_all_students"),
                   path('add_student/', StudentViews.add_student, name="add_student"),
                   path('add_student_save/', StudentViews.add_student_save, name="add_student_save"),
                   path('add_student_groups/<int:id>', StudentViews.add_student_groups, name="add_student_groups"),

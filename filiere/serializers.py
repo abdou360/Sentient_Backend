@@ -1,6 +1,6 @@
-from pyexpat import model
-from attr import fields
-from pyrsistent import field
+# from pyexpat import model
+# from attr import fields
+# from pyrsistent import field
 from rest_framework import serializers
 
 from filiere.models import Etablissement, Filiere

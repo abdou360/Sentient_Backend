@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/home/irisi/tamega/3D Object/backendAr/djangoEnv/bin/python3" "$0" "$@"
-' '''
+#!/home/ismail/Documents/conduite/conduite_de_projet/djangoEnv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

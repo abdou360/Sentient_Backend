@@ -1,5 +1,6 @@
 from django import template
-
+ #*@author ABDELHADI MOUZAFIR END
+ 
 register = template.Library()
 
 @register.filter
