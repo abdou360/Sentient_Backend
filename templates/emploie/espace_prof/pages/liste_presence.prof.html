@@ -44,37 +44,12 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-xl-6 col-md-6 mb-3">
-        <div class="card border-left-primary shadow h-100 py-0">
-          <div class="card-body">
-            <div class="row no-gutters align-items-center">
-              
-              <div class="col-auto">
-                <i class="fas fa-list fa-2x text-primary"></i>
-              </div>
 
-              <div class="col ml-4">
-                <div class="h5 font-weight-bold text-primary text-uppercase mb-1"> Liste de présence </div>
-                <div class="text-sm mb-0 text-gray-600">Liste des étudiants de 
-                  <span class="text-gray-900">
-                    {{ seance.planning.groupe.niveau.filiere.nom_filiere }} / {{ seance.planning.groupe.niveau.nom_niveau }} / {{ seance.planning.groupe.nom_group }}
-                  </span>
-                  pour la séance de 
-                  <span class="text-gray-900">
-                    {{ seance.date_debut }}
-                  </span>
-                </div>
-              </div>
-              
-            </div> 
-          </div>
-        </div>
-    </div>
-  </div>
-  
   <!-- Table -->
   <div class="card shadow mb-4">
+    <!--
+    {% include '../includes/_filter_seances.html'%}
+    -->
       <div class="card-header py-3">
           
           <div class="row flatpickr flex align-items-center">

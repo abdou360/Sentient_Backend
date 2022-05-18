@@ -19,6 +19,9 @@ urlpatterns = [
     
     ### API
     path('api/prof/<int:idProf>/seances', getSeances),
+    path('api/classes-json/<str:planning_id>', get_json_classe_data, name="jsonClasses"),
+    path('api/modules-json/', get_json_module_data, name="jsonModules"),
+    path('api/seances-json/<str:car>/', get_json_seance_data, name="jsonSeances"),
     
                  
 
