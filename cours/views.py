@@ -15,7 +15,8 @@ from django.db.models.functions import ExtractYear
 
 from django.db.models import Count
 
-from cours.models import Chapitre, Document, Modele3D, Traitement, File, VisibiliteModele
+from cours.models import Chapitre, Document, Modele3D, Traitement, File
+# , VisibiliteModele
 from filiere.models import Filiere
 from module.models import ElementModule, Module
 from semestre.models import Niveau, Semestre
@@ -426,8 +427,9 @@ def add_traitement(request, id):
                     # print('<Texte ??>', traitement.type_traitement, file=sys.stderr)
                     traitement.modele3D = new_modele
                     traitement.save()
-                    visibilite = VisibiliteModele.objects.create(
-                        modele3D=new_modele, professeur=professeur)
+                    traitement.visibilite.add(professeur)
+                    # visibilite = VisibiliteModele.objects.create(
+                    #     modele3D=new_modele, professeur=professeur)
                     messages.success(request, ('Le modele AR a été ajouté !'))
                 # else:
                 #     return redirect('add_traitement')
@@ -521,7 +523,7 @@ def update_traitement(request, id):
     if type_traitement != 'Texte':
         image = Image.objects.filter(id=traitement.image_id).first()
     updated_image = None
-
+    print('ggtemp')
     if request.method == "GET":
         updated_traitement = TraitementForm(
             instance=traitement, request=request)
@@ -539,6 +541,11 @@ def update_traitement(request, id):
                 request.POST, request.FILES, instance=image, request=request)
 
         if updated_traitement.is_valid():
+            visibilite_profs = updated_traitement.cleaned_data.get(
+                "visibilite")
+            print('visibilite')
+            print(visibilite_profs.count())
+            print(visibilite_profs[0].pk)
             traitement = updated_traitement.save(commit=False)
             traitement.type_traitement = type_traitement
             if updated_modele3d.is_valid():
@@ -553,6 +560,19 @@ def update_traitement(request, id):
                             request, 'Erreur : L\'image que vous avez entré ne peut pas être acceptée !')
                 traitement.modele3D = updated_modele3d
                 traitement.save()
+                print('traitement.visibilite[0].id')
+                print(traitement.visibilite.all()[0].pk)
+                # [val for val in Traitement.attribute_answers.all(
+                # ) if val in WishList.attribute_answers.all()]
+                for prof in visibilite_profs:
+                    prof_exist = 0
+                    for visible in traitement.visibilite.all():
+                        if(prof.pk == visible.pk):
+                            prof_exist += 1
+                            print('equal')
+                        if(prof_exist == 0):
+                            print('inexist')
+                            traitement.visibilite.add(prof)
                 messages.success(request, ('Le modele AR a été modifié !'))
             else:
                 messages.error(
@@ -560,10 +580,6 @@ def update_traitement(request, id):
         else:
             messages.error(
                 request, 'Erreur : Le modèle ne peut pas être enregistré !' + traitement.type_traitement)
-            # request, 'Erreur : Le modèle ne peut pas être enregistré !'+new_traitement.data.get('type_traitement'))
-            # messages.error(
-            #     request, 'Erreur : Le modèle ne peut pas être enregistré !'+new_traitement.data.get('titre_traitement'))
-        # return redirect("chapitres_list")
         return redirect('chapitre_details', chapitre_id)
 
     return render(request, 'cours/update_traitement.html', context={'updated_traitement': updated_traitement, 'updated_modele3d': updated_modele3d, 'updated_image': updated_image                                                                    # , 'new_file': new_file

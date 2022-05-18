@@ -28,24 +28,44 @@
             <form class="row g-3" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group col-12 mr-3">
+                    <div class="col-12 d-none d-block">
+                            Nom du traitement :
+                    </div>   
                     <div class="col-12 p-3"> {{updated_traitement.titre_traitement|as_crispy_field}}</div>
                 </div>
                 <div class="form-group col-12 mr-3">
+                    <div class="col-12 d-none d-block">
+                        Nom du modèle 3D :
+                    </div>
                     <div class="col-12 p-3"> {{updated_modele3d.titre_modele3d|as_crispy_field}}</div>
                 </div>
                 {% if updated_traitement.type_traitement == "Texte" %}
-                <div class="form-group col-12 mr-3">
-                    <div class="col-12 p-3"> {{updated_traitement.label_traitement|as_crispy_field}}</div>
-                </div>
+                    <div class="form-group col-12 mr-3">
+                        <div class="col-12 d-none d-block">
+                                Texte :
+                        </div>  
+                        <div class="col-12 p-3"> {{updated_traitement.label_traitement|as_crispy_field}}</div>
+                    </div>
                 {% endif %}
                 {% if updated_traitement.type_traitement != "Texte" %}
-                <div class="form-group col-12 mr-3">
-                    <div class="col-12 p-3"> {{updated_image.name_image|as_crispy_field}}</div>
-                </div>
-                <div class="form-group col-12 mr-3">
-                    <div class="col-12 p-3"> {{updated_image.path_image|as_crispy_field}}</div>
-                </div>
+                    <div class="form-group col-12 mr-3">
+                        <div class="col-12 d-none d-block">
+                                Nom de l'image :
+                        </div>  
+                        <div class="col-12 p-3"> {{updated_image.name_image|as_crispy_field}}</div>
+                    <!-- </div>
+                    <div class="form-group col-12 mr-3"> -->
+                        <div class="col-12 p-3"> {{updated_image.path_image|as_crispy_field}}</div>
+                    </div>
                 {% endif %}
+
+                <div class="form-group col-12 mr-3">
+                    <div class="col-12 d-none d-block">
+                            Visibilité du modèle :
+                    </div>
+                    <div class="col-12 p-3"> {{updated_traitement.visibilite|as_crispy_field}}</div>
+                </div>
+
                 <div class="form-group col-12 text-center mr-3">
                     <button type="submit" class="btn btn-primary">Confirmer</button>
                 </div>
