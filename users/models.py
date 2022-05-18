@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from PIL import Image
+# from PIL import Image
 from django.core.validators import RegexValidator
 from django.urls import reverse
 from django.dispatch import receiver
@@ -42,13 +42,14 @@ class Professeur(models.Model):
 
 
 class Students(models.Model):
-    cne = models.CharField(max_length=10, default="")
+    cne = models.CharField(max_length=100, default="")
     adresse = models.CharField(max_length=100, default="")
     path_photos = models.CharField(max_length=200, default="")
-    telephone = models.CharField(max_length=10, default="")
-    code_apogee = models.CharField(max_length=10, default="")
+    telephone = models.CharField(max_length=100, default="")
+    code_apogee = models.CharField(max_length=100, default="")
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     admin = models.ForeignKey(Admin, on_delete=models.CASCADE)
+    profile_pic = models.FileField(null=True)
     groupes = models.ManyToManyField('semestre.Groupe', null=True)
 
 

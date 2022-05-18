@@ -7,13 +7,13 @@ from users.roleForm import GeeksForm
 # UnivIt responsable : ismail errouk
 def manageRoles(request):
     roles = Role.objects.all()
-    return render(request, 'admin/manage_Role_template.html', {'roles': roles})
+    return render(request, 'roles_permissions/manage_Role_template.html', {'roles': roles})
 
 # UnivIt responsable : ismail errouk
 def addRole(request):
     context = {}
     context['form'] = GeeksForm()
-    return render(request, "admin/add_Role_template.html", context)
+    return render(request, "roles_permissions/add_Role_template.html", context)
 
 # UnivIt responsable : ismail errouk
 def addRoleSave(request):
@@ -57,7 +57,7 @@ def editRole(request, id):
         'role': role,
         'permissions': permissions
     }
-    return render(request, "admin/edit_role_template.html", context)
+    return render(request, "roles_permissions/edit_role_template.html", context)
 
 # UnivIt responsable : ismail errouk
 def editRoleSave(request, id):

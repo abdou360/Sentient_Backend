@@ -3,7 +3,7 @@ from django.core.serializers import serialize
 from distutils.command import check
 import sys
 from tkinter import Image
-#from types import NoneType
+NoneType = type(None)
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -32,7 +32,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def chapitres_list(request):
-    #search_by = NoneType
+    search_by = NoneType
     professeur = Professeur.objects.filter(admin_id=request.user.id).first()
     # professeur = Professeur.objects.filter(admin_id = 1).first()
     # filieres = Filiere.objects.all()
