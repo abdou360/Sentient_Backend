@@ -111,16 +111,11 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-
         'NAME': 'ar-crud-project',
-
         'USER': 'root',
-
         'PASSWORD': '',
-
-        'HOST': 'localhost',
-
-  
+        'PORT': '3306',
+        'HOST': '127.0.0.1'
     }
 }
 

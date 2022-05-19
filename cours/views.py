@@ -1,33 +1,33 @@
+
+import os
+import time
+import datetime
+from django.db.models import Q
+from users.models import Professeur
+from semestre.models import Niveau, Semestre
+from module.models import ElementModule, Module
+from filiere.models import Filiere
+from cours.models import Chapitre, Document, Modele3D, Traitement, File, Image
+from django.db.models import Count
+from django.db.models.functions import ExtractYear
+from django.contrib.auth.decorators import login_required
+from cours.forms import *
+from pymysql import NULL
+from django.shortcuts import redirect, render
+from django.http import HttpResponse, JsonResponse
+from django.contrib import messages
 import json
 from django.core.serializers import serialize
 from distutils.command import check
 import sys
-from tkinter import Image
+
 NoneType = type(None)
-from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
-from pymysql import NULL
-from cours.forms import *
-from django.contrib.auth.decorators import login_required
-from django.db.models.functions import ExtractYear
 
-from cours.models import Chapitre, Document, Modele3D, Traitement, File
-from filiere.models import Filiere
-from module.models import ElementModule, Module
-from semestre.models import Niveau, Semestre
-from users.models import Professeur
 
-from django.db.models import Q
+# , VisibiliteModele
 
-import datetime
-import time
-
-import os
 
 # Create your views here.
-
-from django.contrib.auth.decorators import login_required
 
 
 @login_required
@@ -335,10 +335,15 @@ EXTENSIONS = ['jpg', 'png', 'bin', 'gltf']
 
 @login_required
 def add_traitement(request, id):
-
+    professeur = Professeur.objects.filter(
+        admin_id=request.user.id).first()
     chapitre = Chapitre.objects.filter(id=id).first()
+
+    Traitements_visibles = Traitement.objects.filter(visibilite=professeur)
+    modeles_visibles = Modele3D.objects.filter(
+        id__in=[val.id for val in Traitements_visibles])
     if request.method == "GET":
-        new_traitement = TraitementForm()
+        new_traitement = TraitementForm(request=request)
         new_image = ImageForm()
         new_modele3d = Modele3DForm()
         new_file = FileForm()
@@ -346,7 +351,8 @@ def add_traitement(request, id):
     elif request.method == "POST":
         # print('<message>', file=sys.stderr)
 
-        new_traitement = TraitementForm(request.POST, request.FILES)
+        new_traitement = TraitementForm(
+            request.POST, request.FILES, request=request)
 
         # print('<titre_modele3d>'+request.POST.get("titre_modele3d"), file=sys.stderr)
         # print('<titre_traitement>' +
@@ -422,15 +428,20 @@ def add_traitement(request, id):
                     # print('<Texte ??>', traitement.type_traitement, file=sys.stderr)
                     traitement.modele3D = new_modele
                     traitement.save()
+                    traitement.visibilite.add(professeur)
+                    # visibilite = VisibiliteModele.objects.create(
+                    #     modele3D=new_modele, professeur=professeur)
                     messages.success(request, ('Le modele AR a été ajouté !'))
                 # else:
                 #     return redirect('add_traitement')
             else:
                 messages.error(
                     request, 'Erreur : Le modèle ne peut pas être enregistré !')
-        return redirect("chapitres_list")
+        # return redirect("chapitres_list")
+        return redirect('chapitre_details', id)
+        # return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
-    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file
+    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file, 'modeles_visibles': modeles_visibles
                                                                  #  , 'trait': trait
                                                                  })
 
@@ -500,3 +511,85 @@ def makedirs(path):
     except OSError as e:
         if e.errno == 17:
             pass
+
+
+@login_required
+def update_traitement(request, id):
+    professeur = Professeur.objects.filter(
+        admin_id=request.user.id).first()
+    traitement = Traitement.objects.filter(id=id).first()
+    q = Traitement.objects.filter(id=id).annotate(Count('id'))
+    type_traitement = q[0].type_traitement
+    chapitre_id = q[0].chapitre_id
+    modele3d = Modele3D.objects.filter(id=traitement.modele3D_id).first()
+    files = File.objects.filter(modele3D=modele3d).all()
+    if type_traitement != 'Texte':
+        image = Image.objects.filter(id=traitement.image_id).first()
+    updated_image = None
+    # print('ggtemp')
+    if request.method == "GET":
+        updated_traitement = TraitementForm(
+            instance=traitement, request=request)
+        updated_modele3d = Modele3DForm(instance=modele3d, request=request)
+        if type_traitement != 'Texte':
+            updated_image = ImageForm(instance=image, request=request)
+
+    elif request.method == "POST":
+        updated_traitement = TraitementForm(
+            request.POST, request.FILES, instance=traitement, request=request)
+        updated_modele3d = Modele3DForm(
+            request.POST, request.FILES, instance=modele3d, request=request)
+        if type_traitement != 'Texte':
+            updated_image = ImageForm(
+                request.POST, request.FILES, instance=image, request=request)
+
+        if updated_traitement.is_valid():
+            visibilite_profs = updated_traitement.cleaned_data.get(
+                "visibilite")
+            # print('visibilite')
+            # print(visibilite_profs.count())
+            # print(visibilite_profs[0].pk)
+            traitement = updated_traitement.save(commit=False)
+            traitement.type_traitement = type_traitement
+            if updated_modele3d.is_valid():
+                updated_modele3d = updated_modele3d.save()
+
+                if traitement.type_traitement != "Texte":
+                    if updated_image.is_valid():
+                        updated_image = updated_image.save()
+                        traitement.image = updated_image
+                    else:
+                        messages.error(
+                            request, 'Erreur : L\'image que vous avez entré ne peut pas être acceptée !')
+                traitement.modele3D = updated_modele3d
+                traitement.save()
+                # print('traitement.visibilite[0].id')
+                # print(traitement.visibilite.all()[0].pk)
+                # [val for val in Traitement.attribute_answers.all(
+                # ) if val in WishList.attribute_answers.all()]
+                for prof in Professeur.objects.all():
+                    # .exclude(id=professeur.id):
+                    traitement.visibilite.remove(prof)
+                traitement.visibilite.add(professeur)
+                for prof in visibilite_profs:
+                    prof_exist = 0
+                    for visible in traitement.visibilite.all():
+                        if(prof.pk == visible.pk):
+                            prof_exist += 1
+                            print('equal')
+                        if(prof_exist == 0):
+                            print('inexist')
+                            traitement.visibilite.add(prof)
+                messages.success(request, ('Le modele AR a été modifié !'))
+            else:
+                messages.error(
+                    request, 'Erreur : Le modèle ne peut pas être enregistré !')
+        else:
+            messages.error(
+                request, 'Erreur : Le modèle ne peut pas être enregistré !' + traitement.type_traitement)
+        return redirect('chapitre_details', chapitre_id)
+
+    return render(request, 'cours/update_traitement.html', context={'updated_traitement': updated_traitement, 'updated_modele3d': updated_modele3d, 'updated_image': updated_image                                                                    # , 'new_file': new_file
+                                                                    , 'updated_files': files
+                                                                    #  , 'trait': trait
+                                                                    })
