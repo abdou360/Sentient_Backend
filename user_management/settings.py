@@ -115,7 +115,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
 
-        'NAME': 'ar-crud-project-1-4',
+        'NAME': 'ar-crud-project',
 
         'USER': 'root',
 

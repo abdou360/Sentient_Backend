@@ -122,10 +122,10 @@ def filiere_liste(request):
 
 
 @api_view(['GET'])
-def Niveau_liste(request, id):
+def Niveau_liste(request, nom_filiere):
     try:
-        filiere = Filiere.objects.get(id=id)
-        niveaus = Niveau.objects.filter(filiere=filiere)
+        filiere = Filiere.objects.get(nom_filiere__exact=nom_filiere)
+        niveaus = Niveau.objects.filter(filiere_id__exact=filiere.id).all()
         serializer = NiveauSerializer(niveaus, many=True)
         return Response(serializer.data)
     except Niveau.DoesNotExist:
@@ -134,12 +134,11 @@ def Niveau_liste(request, id):
 
 @api_view(['POST'])
 def post_niveau(request):
-
     if request.data:
         label = RecognizerMethod()
         return Response(
             {
-                "detected faces": label, 
+                "detected faces": label,
              "success" : "success"
              
              },

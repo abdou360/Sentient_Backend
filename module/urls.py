@@ -38,7 +38,7 @@ urlpatterns = [
     path('training', views.training , name ='training'),
     # rest framework 
     path('mobile/filieres', views.filiere_liste, name='filiere_liste'),
-    path('mobile/niveau/<int:id>', views.Niveau_liste, name='niveau_liste'),
+    path('mobile/niveau/<str:nom_filiere>', views.Niveau_liste, name='niveau_liste'),
     path('mobile/niveau_Choisi', views.post_niveau, name='post_niveau'),
     
     
