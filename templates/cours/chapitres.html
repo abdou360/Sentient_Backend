@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %} Chapitres {% endblock title%}
+{% block title %} Cours {% endblock title%}
 {% block content %}
     {% if messages %}
         {% for message in messages %}
@@ -69,7 +69,7 @@
             <div class="row">
                 <div class="col-12 d-none d-block text-center">
                     <h3 class="m-3">
-                        Liste des Chapitres {{search_by|default_if_none:""}}
+                        Liste des Cours {{search_by|default_if_none:""}}
                     </h3>
                     <hr class="mb-6">
                 </div>
@@ -119,7 +119,7 @@
                                     <a href="{% url 'update_chapitre' chapitre.id %}" class="tooltip_update" title="Modifier le chapitre"><i class="fa fa-pen" style="color:#e5bf41"></i></a>
                                 </div>
                                 <div class="col col-4 mt-4">
-                                    <a href="{% url 'delete_chapitre' chapitre.id %}" class="tooltip_delete" style="color:#e14848" id="delete_object" title="Supprimer le chapitre"><i class="fa fa-trash"></i></a>
+                                    <a href="{% url 'delete_chapitre' chapitre.id %}" class="tooltip_delete delete_object" style="color:#e14848" id="delete_object" title="Supprimer le chapitre"><i class="fa fa-trash"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -147,8 +147,8 @@
 
     <script>
 
-        $('#delete_object').click(function(){
-            return confirm('Vous êtes sûr que vous voulez supprimer ce modèle ?');
+        $('.delete_object').click(function(){
+            return confirm('Vous êtes sûr que vous voulez supprimer ce chapitre ?');
         })
 
         // var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))

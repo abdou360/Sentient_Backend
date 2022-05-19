@@ -27,16 +27,16 @@ class ChapitreForm(forms.ModelForm):
             'element_module',
         )
         labels = {
-            'libelle': 'Nom du chapitre',
-            'description': 'Description du chapitre',
+            'libelle': 'Nom du cours',
+            'description': 'Description du cours',
             'image': 'Image',
             'element_module': 'Element de module'
         }
         widgets = {
-            'libelle': forms.TextInput(attrs={'placeholder': 'Nom du chapitre',
+            'libelle': forms.TextInput(attrs={'placeholder': 'Nom du cours',
                                               'class': 'form-control',
                                               }),
-            'description': forms.Textarea(attrs={'placeholder': 'Description du chapitre',
+            'description': forms.Textarea(attrs={'placeholder': 'Description du cours',
                                                  'class': 'form-control',
                                                  'cols': 80, 'rows': 5
                                                  }),
@@ -52,7 +52,7 @@ class ChapitreForm(forms.ModelForm):
         self.fields['image'].label = ''
         self.fields['element_module'].label = ''
         self.fields['element_module'].required = False
-        self.fields["element_module"].queryset = ElementModule.objects.filter(
+        self.fields['element_module'].queryset = ElementModule.objects.filter(
             prof_id=get_prof_id(self.request))
 
 
@@ -97,6 +97,8 @@ class Modele3DForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        if kwargs.keys().__contains__("request"):
+            self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['titre_modele3d'].label = ''
 
@@ -111,11 +113,13 @@ class TraitementForm(forms.ModelForm):
             'titre_traitement',
             'label_traitement',
             'type_traitement',
+            'visibilite'
         )
         labels = {
             'titre_traitement': 'Titre',
             'label_traitement': 'Type du generateur du modele',
-            'type_traitement': 'Label'
+            'type_traitement': 'Label',
+            'visibilite': 'Visibilité'
         }
         widgets = {
             'titre_traitement': forms.TextInput(attrs={'placeholder': 'Nom',
@@ -127,14 +131,29 @@ class TraitementForm(forms.ModelForm):
                                                       }),
             'type_traitement': forms.RadioSelect(choices=CHOICES
                                                  #   , attrs={'class': 'custom-control-input'}
-                                                 )
+                                                 ),
+            # 'visibilite': forms.MultipleChoiceField(initial=)
             # 'type_traitement': forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'class': 'custom-control-input'}))
         }
 
+    # members = forms.ModelMultipleChoiceField(
+    #     queryset=Member.objects.all(),
+    #     widget=forms.CheckboxSelectMultiple
+    # )
+
     def __init__(self, *args, **kwargs):
+        if kwargs.keys().__contains__("request"):
+            self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['titre_traitement'].label = ''
         self.fields['label_traitement'].label = ''
+        self.fields['visibilite'].label = ''
+        self.fields['type_traitement'].required = False
+        self.fields['label_traitement'].required = False
+        self.fields["visibilite"].queryset = Professeur.objects.all().exclude(
+            id=get_prof_id(self.request).id)
+        # self.fields["visibilite"].initial = Professeur.objects.get(
+        #     id=get_prof_id(self.request).id)
 
 
 class ImageForm(forms.ModelForm):
@@ -153,6 +172,8 @@ class ImageForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        if kwargs.keys().__contains__("request"):
+            self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['name_image'].label = ''
         self.fields['path_image'].label = ''

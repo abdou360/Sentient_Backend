@@ -96,10 +96,10 @@ def EmploieProf(request):
 #   permet de lister la liste des étudiants avec leur présence pour une séance donnée   #
 @login_required
 def ListePresence(request, slug, idSeance):
-
+    
     seance = Seance.objects.get(pk = idSeance)
     presences = Presence.objects.filter(seance_id = idSeance)
-
+    
     context = {
         "seance" : seance,
         "presences" : presences,
@@ -112,10 +112,10 @@ def ListePresence(request, slug, idSeance):
 def ModifierPresence(request, idSeance, idEtudiant):
     seance = Seance.objects.get(pk = idSeance)
     slug = slugify(seance.planning.liblle + '-' + str(seance.date_debut))
-
+    
     presence = Presence.objects.get(etudiant_id = idEtudiant, seance_id = idSeance)
     presence.is_present = not presence.is_present
     presence.save()
-
+    
     return redirect('ListePresence', slug=slug, idSeance=idSeance)
 
