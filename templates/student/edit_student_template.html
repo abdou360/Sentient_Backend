@@ -11,6 +11,39 @@
 
 <section class="content">
         <div class="container-fluid">
+            <div class="row">
+            <div class="card border-left-primary shadow h-100 py-0 mb-4 col-10">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    
+                    <div class="col-auto">
+                      <i class="fas fa-camera fa-2x text-primary"></i>
+                    </div>
+      
+                    <div class="col-8 ml-4">
+                      <div class="h5 font-weight-bold text-primary text-uppercase mb-1"> Prendre des photos de l'étudiant(e) </div>
+                      
+                    </div>
+
+                    <div class="col ml-4">
+                       <div class="text-lg mb-0 text-right btn btn-primary create-data" name="take">Lancer la caméra
+                        </div>
+                    </div>
+                  </div> 
+                </div>
+                <hr>
+                <!-- video_capt -->
+                <div class="card-body" id="video_capt">
+                </div>
+            </div>
+            <div class="col-2">
+                <form action="/training" method="post">
+                    {% csrf_token %}
+                    <button class="btn-lg btn-primary " name="train">Entrainer le modèle</button>
+                </form>
+            </div>
+        </div>
+        <a href="{% url 'testerModel' %}" class="btn btn-success">Tester le modèle</a>
 
             <div class="row">
                 <div class="col-md-12">
@@ -19,6 +52,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Edit Student</h3>
                     </div>
+
                     <!-- /.card-header -->
                     <!-- form start -->
                     {% comment %} Displaying the Django Form using forms.py EditStudentForm {% endcomment %}
@@ -119,16 +153,43 @@
                         </div>
                     </div>
                         <form action="{% url 'edit_groupe_groupes' student.id %}" method="get">
-                            <button class="btn btn-warning col-4" type="submit">Edit Groupes</button>
+                            <button class="btn btn-warning col-4 mb-4" type="submit">Edit Groupes</button>
                         </form>
 
                     </div>
                     <!-- /.card -->
 
                 </div>
-            </div>
+           
 
         </div><!-- /.container-fluid -->
       </section>
+      <input type="hidden" id="id_etud" value="{{id}}"/>
+
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+      <script type="text/javascript">
+        $(document).ready(function() {
+        
+            $(".create-data").click(function(e){
+                e.preventDefault();
+                var str = $('input#id_etud').val() // id de l'étudiant
+                console.log("id_etud " + str);
+                if (str!= "" && parseInt(str)>0)
+                {
+                    if ($('.video').length)
+                    {
+                        $('.video').replaceWith('<div class="row video"><img src="video_feed/'+parseInt(str)+'"></div>');
+                    }
+                    else {
+        
+                        $('#video_capt').append('<div class="row video"><img src="video_feed/'+parseInt(str)+'"></div>');
+                    }
+                }
+                });
+        
+        
+        });
+      </script>
 
   {% endblock content %}

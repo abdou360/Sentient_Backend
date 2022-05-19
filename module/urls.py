@@ -34,8 +34,13 @@ urlpatterns = [
     # machine learning : learning par web 
     path('create_dataset_submit', views.test_module_submit),
     path('create_dataset', views.test_module),
-    path('video_feed/<str:id>', views.video_feed, name='video_feed'),
+    path('edit_student/video_feed/<str:id>', views.video_feed, name='video_feed'),
     path('training', views.training , name ='training'),
+    path('testerModel', views.TesterModel , name ='testerModel'),
+    
+    
+    
+    
     # rest framework 
     path('mobile/filieres', views.filiere_liste, name='filiere_liste'),
     path('mobile/niveau/<int:id>', views.Niveau_liste, name='niveau_liste'),
