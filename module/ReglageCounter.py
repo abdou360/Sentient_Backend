@@ -40,7 +40,7 @@ def RecognizerMethod():
                    
                 if ret:
                       
-                        cv2.namedWindow('Camera',cv2.WINDOW_NORMAL)
+                        # cv2.namedWindow('Camera',cv2.WINDOW_NORMAL)
                         # cv2.imshow('Camera',frame)
                         cv2.imwrite("module/folder/frame"+str(i)+".jpg", frame)
                 else:
@@ -56,4 +56,4 @@ def RecognizerMethod():
         cap.release()
         cv2.destroyAllWindows()
 
-        facerecognition()
+        return facerecognition()
