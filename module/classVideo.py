@@ -18,7 +18,7 @@ face_detection_videocam = cv2.CascadeClassifier(cv2.data.haarcascades +'haarcasc
 class VideoCamera():
 	def __init__(self,id):
 		self.id=id
-		self.video = cv2.VideoCapture(0)
+		self.video = cv2.VideoCapture(1, cv2.CAP_DSHOW)
 		self.count = 0
   
   

@@ -37,7 +37,7 @@ def RecognizerMethod():
         drive = GoogleDrive(gauth)
         assure_path_exists("module/folder") 
         i=0
-        cap = cv2.VideoCapture(0)    
+        cap = cv2.VideoCapture(1)    
         ret, frame = cap.read()
         
         while(i <4):

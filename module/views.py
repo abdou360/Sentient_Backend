@@ -121,7 +121,7 @@ def getImagesAndLabels(path):
     return faceSamples,ids
 
 def TesterModel(request):
-    camera_port = 0
+    camera_port = 1
 
     recognizer = cv2.face.LBPHFaceRecognizer_create()
 
