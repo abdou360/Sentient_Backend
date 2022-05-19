@@ -9,13 +9,15 @@ from .serializers import *
 import numpy as np
 import cv2
 import os
-from module.classVideo import VideoCamera 
+from module.classVideo import VideoCamera
 from django.http.response import StreamingHttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from PIL import Image
 
- #*@author ABDELHADI MOUZAFIR END
+# *@author ABDELHADI MOUZAFIR END
+
+
 def assure_path_exists(path):
     dir = os.path.dirname(path)
     if not os.path.exists(dir):
@@ -23,46 +25,47 @@ def assure_path_exists(path):
 
 
 def test_module_submit(request):
-    
-    
+
     if request.method != "POST":
         return HttpResponse("<h2> Get or whatever method is not allowed here </h2>")
-    
+
     else:
-        
-        face_id=request.POST.get("id_etud")
+
+        face_id = request.POST.get("id_etud")
         print(face_id)
-        return render(request,"modules/test_module.html",{"face_id":face_id})
+        return render(request, "modules/test_module.html", {"face_id": face_id})
+
 
 def test_module(request):
-    return render(request,"modules/test_module.html")
+    return render(request, "modules/test_module.html")
 
- #*@author ABDELHADI MOUZAFIR END
+ # *@author ABDELHADI MOUZAFIR END
+
+
 def gen(camera):
     while True:
-        frame = camera.get_frame()	
+        frame = camera.get_frame()
         if cv2.waitKey(100) & 0xFF == ord('q'):
             break
-        elif camera.count>=20:
+        elif camera.count >= 20:
             print("Successfully Captured")
-            break	
+            break
         else:
             yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-    
-  
-            
-    
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
- #*@author ABDELHADI MOUZAFIR END
-def video_feed(request,id):
+ # *@author ABDELHADI MOUZAFIR END
+
+
+def video_feed(request, id):
     print(id)
     assure_path_exists("module/dataset/") 
     return StreamingHttpResponse(gen(VideoCamera(id)),
-                    content_type='multipart/x-mixed-replace; boundary=frame')
+                                 content_type='multipart/x-mixed-replace; boundary=frame')
+
 
 def training(request):
-    
+
     if request.method != "POST":
         return HttpResponse("<h2> Get or whatever method is not allowed here </h2>")
     
@@ -70,16 +73,16 @@ def training(request):
         recognizer = cv2.face.LBPHFaceRecognizer_create() 
         faces,ids = getImagesAndLabels('module/dataset/')
 
+        recognizer = cv2.face.LBPHFaceRecognizer_create()
+        faces, ids = getImagesAndLabels('module/dataset/')
 
         print("Training ...\nWAIT !")
         recognizer.train(faces, np.array(ids))
 
-    
         assure_path_exists('module/saved_model1/')
         recognizer.write('module/saved_model1/s_model.yml')
         return render(request,"student/manage_student_template.html")
 
- #*@author ABDELHADI MOUZAFIR END
 def getImagesAndLabels(path):
 
     detector = cv2.CascadeClassifier("module/face_detection.xml")
@@ -162,43 +165,49 @@ def TesterModel(request):
     
     return render(request,"student/manage_student_template.html")
 
+ # *@author ABDELHADI MOUZAFIR START
 
 
 @api_view(['GET'])
 def filiere_liste(request):
-    try:  
+    try:
         filieres = Filiere.objects.all()
-        serializer = FiliereSerializer(filieres,many=True)
+        serializer = FiliereSerializer(filieres, many=True)
         return Response(serializer.data)
     except Filiere.DoesNotExist:
         return Response([])
- 
- 
+
+
 @api_view(['GET'])
-def Niveau_liste(request,id):
+def Niveau_liste(request, nom_filiere):
     try:
-        filiere = Filiere.objects.get(id=id)
-        niveaus = Niveau.objects.filter(filiere=filiere)
-        serializer = NiveauSerializer(niveaus,many=True)
+        filiere = Filiere.objects.get(nom_filiere__exact=nom_filiere)
+        niveaus = Niveau.objects.filter(filiere_id__exact=filiere.id).all()
+        serializer = NiveauSerializer(niveaus, many=True)
         return Response(serializer.data)
     except Niveau.DoesNotExist:
         return Response([])
-    
+
+
 @api_view(['POST'])
 def post_niveau(request):
-    
-        if request.data:
-            RecognizerMethod()
-            return Response(
-                "xorked well",
-                status=200
-            )
-            
-            
+    if request.data:
+        label = RecognizerMethod()
         return Response(
             {
-                "error": True,
-                "error_msg": "not valid",
-            },
-            status=400
+                "detected faces": label,
+             "success" : "success"
+             
+             },
+
+            status=200
         )
+
+    return Response(
+        {
+            "error": True,
+            "error_msg": "not valid",
+        },
+        status=400
+    )
+ # *@author ABDELHADI MOUZAFIR END
