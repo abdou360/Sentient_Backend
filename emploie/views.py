@@ -1,6 +1,8 @@
 import http
 
 from django.shortcuts import render
+from emploie.forms import PlanningForm, SeanceForm
+from module.models import ElementModule
 from users.models import Professeur, CustomUser
 from semestre.models import Semestre, Groupe, Niveau
 from filiere.models import Filiere, Etablissement
@@ -8,7 +10,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from slugify import slugify
-from emploie.models import Presence, Seance
+from emploie.models import Planning, Presence, Salle, Seance
 
 """ RESPONSABLE : CODEVERSE
         + Espace admin : FIROUD Reda & OUSSAHI Salma
@@ -25,6 +27,32 @@ def EmploieAdmin(request):
     fillieres = Filiere.objects.all()
     semestres = Semestre.objects.all()
     return render(request, 'emploie/espace_admin/pages/emploie_calendar.admin.html', {"filliers": fillieres})
+
+def AddPlanning (request):
+    if request.method == "POST":  
+        form = PlanningForm(request.POST) 
+        formSession=SeanceForm(request.POST) 
+        if form.is_valid():  
+            try:  
+                form.save()  
+                return redirect('')  
+            except:  
+                pass  
+
+        if formSession.is_valid():
+            try:
+                formSession.save() 
+                return redirect('') 
+            except: pass
+
+    else:  
+        form = PlanningForm()
+        formSession = SeanceForm()
+    return render(request,'emploie/espace_admin/pages/emploie_calendar.addSchedule.html',{"form":form, "formSession":formSession})
+
+    
+
+
 
 
 def GetNiveaux(request):
@@ -49,8 +77,14 @@ def SendGroupes(request):
     if request.method == 'POST':
         global selectegroupe
         selectegroupe = Groupe.objects.filter(id=request.POST['groupeselection']).first()
+        plannings = Planning.objects.filter(groupe=selectegroupe)
+
         return render(request, 'emploie/espace_admin/pages/emploie_calendar.admin.html',
-                      {"fillier": selectefilliere, "niveau": selecteniveau, "groupe": selectegroupe})
+                      {"fillier": selectefilliere, "niveau": selecteniveau, "groupe": selectegroupe,"plannings":plannings})
+        
+
+
+
 
 
 #   permet d'afficher l'emploi du professeur connécté dans un calendrier    #

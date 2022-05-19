@@ -10,6 +10,7 @@ urlpatterns = [
                   path('emploi-prof/', EmploieProf, name='emploiProfesseur'),
                   path('liste-presence/<str:filiere>/<int:idSeance>/', ListePresence, name='ListePresence'),
                   path('emploie-admin/', EmploieAdmin, name='emploiAdmin'),
+                  path('AddPlanning/', AddPlanning, name='AddPlanning'),
                   path('GetGroupes/', GetGroupes, name='GetGroupes'),
                   path('GetNiveaux/', GetNiveaux, name='GetNiveaux'),
                   path('SendGroupes/', SendGroupes, name='SendGroupes'),
