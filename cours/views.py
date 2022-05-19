@@ -1,37 +1,33 @@
 
+import os
+import time
+import datetime
+from django.db.models import Q
+from users.models import Professeur
+from semestre.models import Niveau, Semestre
+from module.models import ElementModule, Module
+from filiere.models import Filiere
+from cours.models import Chapitre, Document, Modele3D, Traitement, File, Image
+from django.db.models import Count
+from django.db.models.functions import ExtractYear
+from django.contrib.auth.decorators import login_required
+from cours.forms import *
+from pymysql import NULL
+from django.shortcuts import redirect, render
+from django.http import HttpResponse, JsonResponse
+from django.contrib import messages
 import json
 from django.core.serializers import serialize
 from distutils.command import check
 import sys
-from tkinter import Image
+
 NoneType = type(None)
-from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
-from pymysql import NULL
-from cours.forms import *
-from django.contrib.auth.decorators import login_required
-from django.db.models.functions import ExtractYear
 
-from django.db.models import Count
 
-from cours.models import Chapitre, Document, Modele3D, Traitement, File
 # , VisibiliteModele
-from filiere.models import Filiere
-from module.models import ElementModule, Module
-from semestre.models import Niveau, Semestre
-from users.models import Professeur
 
-from django.db.models import Q
-
-import datetime
-import time
-
-import os
 
 # Create your views here.
-
-from django.contrib.auth.decorators import login_required
 
 
 @login_required
@@ -342,8 +338,12 @@ def add_traitement(request, id):
     professeur = Professeur.objects.filter(
         admin_id=request.user.id).first()
     chapitre = Chapitre.objects.filter(id=id).first()
+
+    Traitements_visibles = Traitement.objects.filter(visibilite=professeur)
+    modeles_visibles = Modele3D.objects.filter(
+        id__in=[val.id for val in Traitements_visibles])
     if request.method == "GET":
-        new_traitement = TraitementForm()
+        new_traitement = TraitementForm(request=request)
         new_image = ImageForm()
         new_modele3d = Modele3DForm()
         new_file = FileForm()
@@ -351,7 +351,8 @@ def add_traitement(request, id):
     elif request.method == "POST":
         # print('<message>', file=sys.stderr)
 
-        new_traitement = TraitementForm(request.POST, request.FILES)
+        new_traitement = TraitementForm(
+            request.POST, request.FILES, request=request)
 
         # print('<titre_modele3d>'+request.POST.get("titre_modele3d"), file=sys.stderr)
         # print('<titre_traitement>' +
@@ -440,7 +441,7 @@ def add_traitement(request, id):
         return redirect('chapitre_details', id)
         # return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
-    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file
+    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file, 'modeles_visibles': modeles_visibles
                                                                  #  , 'trait': trait
                                                                  })
 
@@ -514,6 +515,8 @@ def makedirs(path):
 
 @login_required
 def update_traitement(request, id):
+    professeur = Professeur.objects.filter(
+        admin_id=request.user.id).first()
     traitement = Traitement.objects.filter(id=id).first()
     q = Traitement.objects.filter(id=id).annotate(Count('id'))
     type_traitement = q[0].type_traitement
@@ -523,7 +526,7 @@ def update_traitement(request, id):
     if type_traitement != 'Texte':
         image = Image.objects.filter(id=traitement.image_id).first()
     updated_image = None
-    print('ggtemp')
+    # print('ggtemp')
     if request.method == "GET":
         updated_traitement = TraitementForm(
             instance=traitement, request=request)
@@ -543,9 +546,9 @@ def update_traitement(request, id):
         if updated_traitement.is_valid():
             visibilite_profs = updated_traitement.cleaned_data.get(
                 "visibilite")
-            print('visibilite')
-            print(visibilite_profs.count())
-            print(visibilite_profs[0].pk)
+            # print('visibilite')
+            # print(visibilite_profs.count())
+            # print(visibilite_profs[0].pk)
             traitement = updated_traitement.save(commit=False)
             traitement.type_traitement = type_traitement
             if updated_modele3d.is_valid():
@@ -560,10 +563,14 @@ def update_traitement(request, id):
                             request, 'Erreur : L\'image que vous avez entré ne peut pas être acceptée !')
                 traitement.modele3D = updated_modele3d
                 traitement.save()
-                print('traitement.visibilite[0].id')
-                print(traitement.visibilite.all()[0].pk)
+                # print('traitement.visibilite[0].id')
+                # print(traitement.visibilite.all()[0].pk)
                 # [val for val in Traitement.attribute_answers.all(
                 # ) if val in WishList.attribute_answers.all()]
+                for prof in Professeur.objects.all():
+                    # .exclude(id=professeur.id):
+                    traitement.visibilite.remove(prof)
+                traitement.visibilite.add(professeur)
                 for prof in visibilite_profs:
                     prof_exist = 0
                     for visible in traitement.visibilite.all():
