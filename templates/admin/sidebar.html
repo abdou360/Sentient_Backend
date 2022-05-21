@@ -32,6 +32,15 @@
     <!-- Heading -->
     <div class="sidebar-heading">Interfaces</div>
 
+    <!-- Entrainement du modèle-->
+    <li class="nav-item">
+        <a href="{% url 'EntrainementAdminDash' %}" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <span> Entrainement des modèles </span>
+        </a>
+    </li>
+
+
     <!-- Nav Item - Manage Teachers -->
     <li class="nav-item">
         {% url 'manage_teacher' as manage_teacher %}
