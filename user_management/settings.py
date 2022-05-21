@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'cours',
+    'face_recognition',
 ]
 
 REST_FRAMEWORK = {
@@ -166,6 +167,7 @@ STATICFILES_DIRS = [
     'filiere/static',
     'cours/static',
     'emploie/static',
+    'face_recognition/static',
 ]
 
 MEDIA_URL = '/media/'

@@ -122,7 +122,7 @@ def add_student_save(request):
         student.cne = request.POST['cne']
         student.adresse = request.POST['adresse']
         student.profile_pic = request.POST['profile_pic']
-        student.path_photos = "module/dataset1/Etudiant_"+ first_name + "_" + last_name + "/"
+        student.path_photos = "face_recognition/dataset/Etudiant_"+ first_name + "_" + last_name + "/"
         student.telephone = request.POST['telephone']
         student.code_apogee = request.POST['code_apogee']
         student.save()

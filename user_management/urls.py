@@ -18,5 +18,6 @@ urlpatterns = [
     path('cours/', include('cours.urls')),
     path('', include('module.urls')),
     path('semestre/',include('semestre.urls.index')),
+    path('face-recognition/',include('face_recognition.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
