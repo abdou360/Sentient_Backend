@@ -39,6 +39,8 @@ class Planning(models.Model):
     jour =  models.CharField(max_length=100, null=True) 
     groupe = models.ForeignKey(Groupe , null = True , on_delete= models.SET_NULL )
     salle = models.ForeignKey(Salle , null = True , on_delete= models.SET_NULL )
+    heure_debut = models.TimeField(null = True )
+    heure_fin = models.TimeField(null = True )
     professeur = models.ForeignKey(Professeur , null = True , on_delete= models.SET_NULL )
     element_module = models.ForeignKey(ElementModule , null = True , on_delete= models.SET_NULL )
     
@@ -47,8 +49,7 @@ class Planning(models.Model):
 
 
 class Seance(models.Model):
-    heure_debut = models.TimeField(null = True )
-    heure_fin = models.TimeField(null = True )
+    
     planning = models.ForeignKey(Planning , null = True , on_delete= models.SET_NULL )
 
 

@@ -1,7 +1,7 @@
 import http
 
 from django.shortcuts import render
-from emploie.forms import PlanningForm, SeanceForm
+from emploie.forms import PlanningForm
 from module.models import ElementModule
 from users.models import Professeur, CustomUser
 from semestre.models import Semestre, Groupe, Niveau
@@ -31,29 +31,41 @@ def EmploieAdmin(request):
 def AddPlanning (request):
     if request.method == "POST":  
         form = PlanningForm(request.POST) 
-        formSession=SeanceForm(request.POST) 
         if form.is_valid():  
             try:  
-                form.save()  
+                plan=form.save()  
                 return redirect('')  
             except:  
                 pass  
 
-        if formSession.is_valid():
-            try:
-                formSession.save() 
-                return redirect('') 
-            except: pass
 
-    else:  
+    else:   
         form = PlanningForm()
-        formSession = SeanceForm()
-    return render(request,'emploie/espace_admin/pages/emploie_calendar.addSchedule.html',{"form":form, "formSession":formSession})
+    return render(request,'emploie/espace_admin/pages/emploie_calendar.addSchedule.html',{"form":form})
 
     
 
+def all(request):  
+    plannings = Planning.objects.all()
+    return render(request, 'emploie/espace_admin/pages/emploie_calendar.all.html', {"plannings": plannings})
+
+def edit(request, id):  
+    plannings = Planning.objects.get(id=id) 
+    return render(request, 'emploie/espace_admin/pages/emploie_calendar.edit.html', {'plannings': plannings}) 
+
+def update(request, id):  
+    plannings = Planning.objects.get(id=id)  
+    form = PlanningForm(request.POST, instance = plannings)
+    if form.is_valid():  
+        form.save()  
+        return redirect("emploie/all")  
+    return render(request, 'emploie/espace_admin/pages/emploie_calendar.edit.html', {'plannings': plannings})  
 
 
+def destroy(request, id):  
+    planning = Planning.objects.get(id=id)  
+    planning.delete()  
+    return redirect("/emploie/all")
 
 def GetNiveaux(request):
     if request.method == 'POST':

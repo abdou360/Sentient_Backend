@@ -257,7 +257,7 @@
             <div class="card-body">
                     <div id="calendar"></div>
             </div>
-
+            
         </div>
     {% else %}
         <div class="card shadow mb-4">
@@ -322,51 +322,66 @@
            {% for planning in plannings %}
            {
             {% if planning.jour == "monday" %}
-               title: "{{ planning.element_module.libelle_element_module}} | {{planning.element_module.libelle_element_module}}",   
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
                end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
                daysOfWeek:[1]
             {% endif  %}
 
             {% if planning.jour == "tuesday" %}
-               title: "{{ planning.element_module.libelle_element_module}} | {{planning.element_module.libelle_element_module}}",   
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
                end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
                daysOfWeek:[2]
             {% endif  %}
 
             {% if planning.jour == "wednesday" %}
-               title: "{{ planning.element_module.libelle_element_module}} | {{planning.element_module.libelle_element_module}}",   
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
                end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
                daysOfWeek:[3]
             {% endif  %}
 
             {% if planning.jour == "thursday" %}
-               title: "{{ planning.element_module.libelle_element_module}} | {{planning.element_module.libelle_element_module}}",   
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
                end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
                daysOfWeek:[4]
             {% endif  %}
             {% if planning.jour == "friday" %}
-               title: "{{ planning.element_module.libelle_element_module}} | {{planning.element_module.libelle_element_module}}",   
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
                end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
                daysOfWeek:[5]
             {% endif  %}
             {% if planning.jour == "saturday" %}
-               title: "{{ planning.element_module.libelle_element_module}} | {{planning.element_module.libelle_element_module}}",   
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
                end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
                daysOfWeek:[6]
             {% endif  %}
             {% if planning.jour == "sunday" %}
-               title: "{{ planning.element_module.libelle_element_module}} | {{planning.element_module.libelle_element_module}}",   
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
                end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
                daysOfWeek:[7]
             {% endif  %}
 
+            
            },
            {% endfor %}
           ]

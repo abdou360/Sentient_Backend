@@ -14,6 +14,11 @@ urlpatterns = [
     path('GetGroupes/', GetGroupes, name='GetGroupes'),
     path('GetNiveaux/', GetNiveaux, name='GetNiveaux'),
     path('SendGroupes/', SendGroupes, name='SendGroupes'),
+    path('all/', all,name='all'),  
+    path('edit/<int:id>', edit),  
+    path('update/<int:id>', update),  
+    path('delete/<int:id>',destroy, name='destroy'),  
+
 
     path('liste-presence/<slug:slug>/<int:idSeance>/', ListePresence, name='ListePresence'),
     

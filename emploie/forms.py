@@ -1,6 +1,6 @@
 from django import forms
 
-from emploie.models import Planning,Seance
+from emploie.models import Planning
 
 JOURS =(
     ( " "," "),
@@ -16,14 +16,8 @@ JOURS =(
 class PlanningForm(forms.ModelForm):  
     class Meta:     
         model = Planning   
-        fields = ['jour','groupe','salle','professeur','element_module']
+        fields = ['jour','groupe','salle','professeur','element_module','heure_debut','heure_fin']
         widgets = {
                 "jour" : forms.Select(choices = JOURS) 
             } 
-
-class SeanceForm(forms.ModelForm):  
-    class Meta:     
-        model = Seance   
-        fields = ['heure_debut','heure_fin','planning']
-        
 
