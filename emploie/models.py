@@ -36,6 +36,7 @@ class Salle(models.Model):
 
 
 class Planning(models.Model):
+    libelle =  models.CharField(max_length=30, null=True)
     jour =  models.CharField(max_length=100, null=True) 
     groupe = models.ForeignKey(Groupe , null = True , on_delete= models.SET_NULL )
     salle = models.ForeignKey(Salle , null = True , on_delete= models.SET_NULL )
@@ -49,7 +50,7 @@ class Planning(models.Model):
 
 
 class Seance(models.Model):
-    
+    date = models.DateTimeField(auto_now=True)
     planning = models.ForeignKey(Planning , null = True , on_delete= models.SET_NULL )
 
 

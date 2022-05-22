@@ -5,21 +5,23 @@
  *  
  */
 
- window.onload = MyCalendar(1);
 
+// récupérer l'id du professeur connecté
+idProf= $("#idProf").val();
+
+window.onload = MyCalendar(idProf);
 
 async function MyCalendar(idProf) {
   let data = await getSeances(idProf);
   drawCalendar(data.map( seance => {
       random_color = getRandomColor()
       return {
-          title: seance.planning.liblle,
-          start: dateFormat(seance.date_debut),
+          title: seance.planning.libelle,
+          start: dateFormat(seance.date),
           description: seance.planning.groupe.niveau.nom_niveau,
-          url: "http://localhost:8000/emploie/liste-presence/" + string_to_slug(seance.planning.liblle + '-' +seance.date_debut) + "/" + seance.id,
+          url: "/emploie/liste-presence/" + string_to_slug(seance.planning.libelle + '-' +seance.date) + "/" + seance.id,
           color: random_color["color"],
           textColor: random_color["textColor"],
-          
       }
   }))
 }
@@ -46,7 +48,7 @@ function drawCalendar(data){
           day:      'Jour',
         },
                 
-        events: data, 
+        events: data
         
   });
 

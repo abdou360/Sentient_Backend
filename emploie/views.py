@@ -123,7 +123,7 @@ def ListePresence(request, slug, idSeance):
 @login_required
 def ModifierPresence(request, idSeance, idEtudiant):
     seance = Seance.objects.get(pk = idSeance)
-    slug = slugify(seance.planning.liblle + '-' + str(seance.date_debut))
+    slug = slugify(seance.planning.libelle + '-' + str(seance.date))
     
     presence = Presence.objects.get(etudiant_id = idEtudiant, seance_id = idSeance)
     presence.is_present = not presence.is_present
