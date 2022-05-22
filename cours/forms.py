@@ -101,6 +101,7 @@ class Modele3DForm(forms.ModelForm):
             self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['titre_modele3d'].label = ''
+        self.fields['titre_modele3d'].required = False
 
 
 CHOICES = [('image', 'Image'), ('texte', 'Texte'), ('qrcode', 'QR-Code')]
@@ -113,13 +114,15 @@ class TraitementForm(forms.ModelForm):
             'titre_traitement',
             'label_traitement',
             'type_traitement',
-            'visibilite'
+            'visibilite',
+            'modele3D'
         )
         labels = {
             'titre_traitement': 'Titre',
             'label_traitement': 'Type du generateur du modele',
             'type_traitement': 'Label',
-            'visibilite': 'Visibilité'
+            'visibilite': 'Visibilité',
+            'modele3D': 'modele3D'
         }
         widgets = {
             'titre_traitement': forms.TextInput(attrs={'placeholder': 'Nom',
@@ -132,6 +135,9 @@ class TraitementForm(forms.ModelForm):
             'type_traitement': forms.RadioSelect(choices=CHOICES
                                                  #   , attrs={'class': 'custom-control-input'}
                                                  ),
+            # 'modele3D': forms.RadioSelect(
+            #     #   , attrs={'class': 'custom-control-input'}
+            # ),
             # 'visibilite': forms.MultipleChoiceField(initial=)
             # 'type_traitement': forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'class': 'custom-control-input'}))
         }
@@ -148,10 +154,15 @@ class TraitementForm(forms.ModelForm):
         self.fields['titre_traitement'].label = ''
         self.fields['label_traitement'].label = ''
         self.fields['visibilite'].label = ''
+        self.fields['modele3D'].label = ''
         self.fields['type_traitement'].required = False
         self.fields['label_traitement'].required = False
+        self.fields['visibilite'].required = False
+        self.fields['modele3D'].required = False
         self.fields["visibilite"].queryset = Professeur.objects.all().exclude(
             id=get_prof_id(self.request).id)
+        self.fields["modele3D"].queryset = Modele3D.objects.filter(
+            id__in=[val.id for val in Traitement.objects.filter(visibilite=get_prof_id(self.request))])
         # self.fields["visibilite"].initial = Professeur.objects.get(
         #     id=get_prof_id(self.request).id)
 
@@ -192,4 +203,5 @@ class FileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['path_file'].label = ''
+        self.fields['path_file'].required = False
         # self.fields['path'].label = ''

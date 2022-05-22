@@ -350,6 +350,7 @@ def add_traitement(request, id):
 
     elif request.method == "POST":
         # print('<message>', file=sys.stderr)
+        print('post : ', request.POST)
 
         new_traitement = TraitementForm(
             request.POST, request.FILES, request=request)
@@ -365,6 +366,7 @@ def add_traitement(request, id):
         invalid_extension = 0
 
         if new_traitement.is_valid():
+            print('post : valid')
             # print('<traitement valid>', file=sys.stderr)
             traitement = new_traitement.save(commit=False)
             traitement.chapitre = chapitre
@@ -373,7 +375,53 @@ def add_traitement(request, id):
             new_modele3d = Modele3DForm(request.POST, request.FILES)
             # print('<new_modele3d["titre_modele3d"]>' +
             #       new_modele3d['titre_modele3d'].value(), file=sys.stderr)
-            if new_modele3d.is_valid():
+            if request.POST.get("modele3D") != '':
+
+                existant_modele3d = Modele3D.objects.get(
+                    id=request.POST.get("modele3D"))
+
+                # new_modele3d.titre_modele3d = request.POST.get(
+                #     "titre_modele3d")
+
+                # new_modele = new_modele3d.save(commit=False)
+                # new_modele.path_modele3d = model_location(
+                #     request.POST.get("titre_modele3d"))
+
+                # makedirs(new_modele.path_modele3d)
+
+                # new_modele.save()
+
+                # existant_files = File.objects.filter(
+                #     modele3D=existant_modele3d)
+                # for f in existant_files:
+                #     obj = File.objects.create(
+                #         modele3D=new_modele, path_file=f.path_file)
+
+                if traitement.type_traitement == "Texte":
+                    traitement.image = None
+                else:
+                    new_image = ImageForm(request.POST, request.FILES)
+                    if new_image.is_valid():
+                        image = new_image.save(commit=False)
+                        if traitement.type_traitement == "Image":
+                            image.is_qrcode = False
+                        elif traitement.type_traitement == "QR-Code":
+                            image.is_qrcode = True
+
+                        image.save()
+                        traitement.image = image
+                    else:
+                        messages.error(
+                            request, 'Erreur : L\'image que vous avez entrer ne peut pas être acceptée !')
+                # traitement.modele3D = new_modele
+                traitement.modele3D = existant_modele3d
+                # print(new_modele)
+                traitement.save()
+                traitement.visibilite.add(professeur)
+                messages.success(request, ('Le modele AR a été ajouté !'))
+            elif new_modele3d.is_valid():
+                print('post : modele 3d', request.POST.get("modele3D") != '')
+                # print('post : modele 3d', new_traitement.modele3D.length)
                 new_modele = new_modele3d.save(commit=False)
                 new_modele.path_modele3d = model_location(
                     new_modele3d['titre_modele3d'].value())
@@ -387,29 +435,19 @@ def add_traitement(request, id):
 
                 for f in files:
                     filebase, extension = f.name.split('.')
-                    # print('<file extension>'+extension, file=sys.stderr)
                     if EXTENSIONS.__contains__(extension):
-                        # print('<extension //>'+str(extension), file=sys.stderr)
-                        # print('<invalid_extension //>' +
-                        #       str(invalid_extension), file=sys.stderr)
                         ...
                     else:
-                        # print('<extension //>'+str(extension), file=sys.stderr)
-                        # print('<invalid_extension //>' +
-                        #       str(invalid_extension), file=sys.stderr)
                         invalid_extension += 1
                         messages.error(
                             request, 'Erreur : L\'extension n\'est pas autorisée !')
 
                 if invalid_extension == 0:
                     for f in files:
-                        # print('<file name>'+f.name, file=sys.stderr)
-                        # print('<file extension>'+f.name, file=sys.stderr)
                         obj = File.objects.create(
                             modele3D=new_modele, path_file=f)
 
                     if traitement.type_traitement == "Texte":
-                        # print('<Texte>', file=sys.stderr)
                         traitement.image = None
                     else:
                         new_image = ImageForm(request.POST, request.FILES)
@@ -425,7 +463,6 @@ def add_traitement(request, id):
                         else:
                             messages.error(
                                 request, 'Erreur : L\'image que vous avez entrer ne peut pas être acceptée !')
-                    # print('<Texte ??>', traitement.type_traitement, file=sys.stderr)
                     traitement.modele3D = new_modele
                     traitement.save()
                     traitement.visibilite.add(professeur)
@@ -438,6 +475,9 @@ def add_traitement(request, id):
                 messages.error(
                     request, 'Erreur : Le modèle ne peut pas être enregistré !')
         # return redirect("chapitres_list")
+        else:
+            messages.error(
+                request, 'Erreur : Le modèle ne peut pas être enregistré !')
         return redirect('chapitre_details', id)
         # return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
