@@ -28,10 +28,11 @@ def presenceFilter(presence):
 @register.filter(name='photo_filter')
 def photoFilter(profile_picture):
     if profile_picture :
-        str ='<img class="rounded-circle " width="50px" src="{% static \'img/selecting.png\' %}" />'
+        str =f'<img class="rounded-circle " width="50px" src="/media/{profile_picture}" />'
     
     else:
         str = '<img class="rounded-circle " width="50px" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" />'
+    
     return mark_safe(markdown.markdown(str))
 
 
