@@ -289,7 +289,7 @@ for i in range(818):
     user = users_students[i]
     student = Students(cne=fake.numerify('EE######'),
                        adresse=fake.address(),
-                       path_photos="/face_recognition/service_metier/dataset/Etudiant_"+ user.last_name + "_" + user.first_name  +'/',
+                       path_photos="face_recognition/service_metier/dataset/Etudiant_"+ user.last_name + "_" + user.first_name  +'/',
                        telephone=fake.numerify('06########'),
                        code_apogee=fake.numerify('18#####'),
                        admin_id=1,

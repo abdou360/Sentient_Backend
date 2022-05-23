@@ -9,6 +9,7 @@ from django.http.response import StreamingHttpResponse
 from .classVideo import VideoCamera
 from PIL import Image
 import numpy as np
+from semestre.models import Groupe, AnneUniversitaire
 
 def assure_path_exists(path):
     dir = os.path.dirname(path)
@@ -43,23 +44,35 @@ def video_feed(request, id):
                                  content_type='multipart/x-mixed-replace; boundary=frame')
     
     
-def getImagesAndLabels(path, filiere, niveau, groupe):
-    
-    # KANNOUFA
-    # Reste à faire : 
-    # Au lieu de parcourir tous les dossiers, je dois tenir compte que ceux qui concerne un grp donné
 
+# recupérer le chemin de dossier des images pour les étudiants d'un groupe donnée
+def getPaths(filiere, niveau, groupe):
+    paths = []
+    # récuperer l'id du groupe
+    groupe = Groupe.objects.get(nom_group=groupe, niveau__nom_niveau=niveau, niveau__filiere__nom_filiere=filiere)
+    groupe_id = groupe.id
+    print('groupe_id' + str(groupe_id))
+    # on cherche les étudiants associés à cet groupe dans la table AnneeUniversitaire
+    students_grp = AnneUniversitaire.objects.filter(group_id=groupe_id)
+    for student_grp in students_grp:
+        path = student_grp.etudiant.path_photos
+        assure_path_exists(path)
+        paths += [path]
+        
+    return paths
+    
+    
+def getImagesAndLabels(filiere, niveau, groupe):
     detector = getFaceDetectorXML()
     
     faceSamples=[]
     ids = []
   
-    list_dir = os.listdir(path)
+    list_dir = getPaths(filiere, niveau, groupe)
     print(list_dir)
 
-
     for i in range(len(list_dir)):  
-        path_imgs = path + list_dir[i]
+        path_imgs = list_dir[i]
         print(path_imgs) # dossier
         list_images = os.listdir(path_imgs)
         

@@ -8,8 +8,12 @@ import cv2
 from .utils import *
 from users.models import Students
 
+def assure_path_exists(path):
+    dir = os.path.dirname(path)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
 
-face_detection_videocam = cv2.CascadeClassifier(cv2.data.haarcascades +'face_recognition/service_metier/models/haarcascade_frontalface_default.xml')
+
 path_dataset = "face_recognition/service_metier/dataset/"
 
 class VideoCamera():
@@ -23,11 +27,13 @@ class VideoCamera():
   
 	def get_frame(self):
 		success, image = self.video.read()
+		faceCascade = cv2.CascadeClassifier("face_recognition/service_metier/models/haarcascade_frontalface_default.xml")
 		gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-		faces_detected = face_detection_videocam.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5,minSize= (30,30))
+		faces_detected = faceCascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5,minSize= (30,30))
 
 		# données de l'étudiant
 		etudiant = Students.objects.get(pk=self.id)
+		print ('faces found:', len(faces_detected))
   
 		for (x, y, w, h) in faces_detected:
 			cv2.rectangle(image, pt1=(x, y), pt2=(x + w, y + h), color=(255, 0, 0), thickness=2)
@@ -35,7 +41,7 @@ class VideoCamera():
 			# e.g folder name = dataset/Etudiant_oussahi_salma/
 			folder_name = path_dataset + "Etudiant_"+etudiant.user.last_name + "_" + etudiant.user.first_name  +'/'
 			assure_path_exists(folder_name)
-			cv2.imwrite(folder_name + "Etudiant." + str(self.id) + '.' + str(self.count) +".jpg", gray[y:y+h,x:x+w])
+			cv2.imwrite(folder_name + "Etudiant." + str(etudiant.id) + '.' + str(self.count) +".jpg", gray[y:y+h,x:x+w])
    
 		frame_flip = cv2.flip(image,1)
 		ret, jpeg = cv2.imencode('.jpg', frame_flip)

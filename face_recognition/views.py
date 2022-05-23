@@ -36,7 +36,7 @@ path_dataset = "face_recognition/service_metier/dataset/"
 
 def training(request, filiere, niveau, groupe):
     recognizer = cv2.face.LBPHFaceRecognizer_create() 
-    faces,ids = getImagesAndLabels(path_dataset, filiere, niveau, groupe)
+    faces,ids = getImagesAndLabels(filiere, niveau, groupe)
 
     print("Training ...\nWAIT !")
     recognizer.train(faces, np.array(ids))
@@ -55,7 +55,7 @@ def TesterModel(request):
 
     recognizer = cv2.face.LBPHFaceRecognizer_create()
 
-    recognizer.read('face_recognition/service_metier/saved_model/IRISI/IRISI_1/G1/s_model_IRISI_IRISI_1_G1.yml')
+    recognizer.read('face_recognition\service_metier\saved_model\IRISI\IRISI_2\G1\s_model_IRISI_IRISI_2_G1.yml')
 
     faceCascade = getFaceDetectorXML()
 

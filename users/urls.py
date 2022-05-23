@@ -8,6 +8,7 @@ from emploie import views as EmploieViews
 from django.conf import settings
 from django.conf.urls.static import static
 from users.StudentViews import *
+from face_recognition.views import video_feed
 
 urlpatterns = [
                   # UnivIt responsable : Ettafssaoui Youssef 
@@ -42,6 +43,8 @@ urlpatterns = [
                   path('add_student_groups_save/<int:id>', StudentViews.add_student_groups_save,
                        name="add_student_groups_save"),
                   path('edit_student/<student_id>', StudentViews.edit_student, name="edit_student"),
+                  
+                  path('edit_student/video_feed/<str:id>/', video_feed, name='video_feed'),
                   path('edit_student_save/<int:id>', StudentViews.edit_student_save, name="edit_student_save"),
                   path('edit_groupe_add_save/<int:id>', StudentViews.edit_groupe_add_save, name="edit_groupe_add_save"),
                   path('edit_groupe_groupes/<int:id>', StudentViews.edit_groupe_groupes, name="edit_groupe_groupes"),

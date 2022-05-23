@@ -14,7 +14,6 @@ from .api.views import *
 urlpatterns = [
     # machine learning : learning par web 
     path('create_dataset_submit/', test_module_submit),
-    path('edit_student/video_feed/<str:id>/', video_feed, name='video_feed'),
     path('training/<str:filiere>/<str:niveau>/<str:groupe>/', training , name ='training'),
     path('testerModel/', TesterModel , name ='testerModel'),
     
