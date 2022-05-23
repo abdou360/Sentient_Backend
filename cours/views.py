@@ -3,6 +3,7 @@ import os
 import time
 import datetime
 from django.db.models import Q
+from cours.serializers import *
 from users.models import Professeur
 from semestre.models import Niveau, Semestre
 from module.models import ElementModule, Module
@@ -20,6 +21,8 @@ import json
 from django.core.serializers import serialize
 from distutils.command import check
 import sys
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 NoneType = type(None)
 
@@ -633,3 +636,39 @@ def update_traitement(request, id):
                                                                     , 'updated_files': files
                                                                     #  , 'trait': trait
                                                                     })
+
+
+# API
+
+@api_view(['GET'])
+def chapitres_list_api(request):
+    chapitres = Chapitre.objects.all()
+    chapitre_serializer = ChapitreSerializer(chapitres, many=True)
+    return Response(chapitre_serializer.data)
+
+
+@api_view(['GET'])
+def chapitre_details_api(request, id_chapitre):
+    chapitre = Chapitre.objects.get(id=id_chapitre)
+    chapitre_serializer = ChapitreSerializer(chapitre, many=False)
+    return Response(chapitre_serializer.data)
+
+
+@api_view(['GET'])
+def traitements_list_api(request, id_chapitre):
+    # chapitre = Chapitre.objects.get(id=id_chapitre)
+    # chapitre_serializer = ChapitreSerializer(chapitre, many=False)
+    traitements = Traitement.objects.filter(chapitre_id=id_chapitre)
+    traitement_serializer = TraitementSerializer(traitements, many=True)
+    modele3d = Modele3D.objects.filter(id__in=traitements.modele3D)
+    modele3d_serializer = Modele3DSerializer(modele3d, many=False)
+    image_serializer = None
+    if(traitements.image != None):
+        image = Image.objects.filter(id__in=traitements.image)
+        image_serializer = ImageSerializer(image, many=False)
+    response = {
+        'traitement': traitement_serializer.data,
+        'modele': modele3d_serializer.data,
+        'image': image_serializer.data
+    }
+    return Response(response)

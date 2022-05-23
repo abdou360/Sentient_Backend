@@ -33,6 +33,12 @@ urlpatterns = [
     path('traitement_details',
          traitement_details, name='traitement_details'),
 
-
     path('delete_document/<int:id>', delete_document, name='delete_document'),
+
+
+    path('api/chapitres', chapitres_list_api, name='chapitres_list_api'),
+    path('api/chapitre/<int:id_chapitre>',
+         chapitre_details_api, name='chapitre_details_api'),
+    path('api/traitements/<int:id_chapitre>',
+         traitements_list_api, name='traitements_list_api'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
