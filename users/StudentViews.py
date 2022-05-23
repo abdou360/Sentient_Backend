@@ -103,6 +103,9 @@ def add_student_save(request):
     global student
     if request.method == 'POST':
         admin = Admin.objects.get(id=request.POST['select_admin'])
+        
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
 
         user = CustomUser()
         user.first_name = request.POST['first_name']
@@ -119,7 +122,7 @@ def add_student_save(request):
         student.cne = request.POST['cne']
         student.adresse = request.POST['adresse']
         student.profile_pic = request.POST['profile_pic']
-        student.path_photos = request.POST['path_photos']
+        student.path_photos = "face_recognition/dataset/Etudiant_"+ first_name + "_" + last_name + "/"
         student.telephone = request.POST['telephone']
         student.code_apogee = request.POST['code_apogee']
         student.save()

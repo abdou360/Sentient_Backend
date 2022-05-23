@@ -1,79 +1,67 @@
 <!-- Sidebar -->
 <ul
-  class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-  id="accordionSidebar"
+        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+        id="accordionSidebar"
 >
-  <!-- Sidebar - Brand -->
-  <a
-    class="sidebar-brand d-flex align-items-center justify-content-center"
-    href="/"
-  >
-    <div class="sidebar-brand-icon rotate-n-15">
-      <i class="fas fa-laugh-wink"></i>
-    </div>
-    <div class="sidebar-brand-text mx-3">Dashboard <sup>2</sup></div>
-  </a>
-
-  <!-- Divider -->
-  <hr class="sidebar-divider my-0" />
-
-  <!-- Nav Item - Dashboard -->
-  <li class="nav-item">
-    {% url 'admin_home' as admin_home %}
-    <a href="{{ admin_home }}" class="nav-link {% if request.path == admin_home %} active {% endif %}">
-      <i class="nav-icon fas fa-tachometer-alt"></i>
-      <span>Admin Home </span>
+    <!-- Sidebar - Brand -->
+    <a
+            class="sidebar-brand d-flex align-items-center justify-content-center"
+            href="/"
+    >
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Dashboard <sup>2</sup></div>
     </a>
-  </li>
 
-  <!-- Divider -->
-  <hr class="sidebar-divider" />
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0"/>
 
-  <!-- Heading -->
-  <div class="sidebar-heading">Interfaces</div>
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        {% url 'admin_home' as admin_home %}
+        <a href="{{ admin_home }}" class="nav-link {% if request.path == admin_home %} active {% endif %}">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <span>Admin Home </span>
+        </a>
+    </li>
 
-  <!-- Nav Item - Manage Teachers -->
-  <li class="nav-item">
-    {% url 'manage_teacher' as manage_teacher %}
-    {% url 'edit_teacher' teacher_id=id as edit_teacher %}
-    <a href="{{ manage_teacher }}" class="nav-link {% if request.path == manage_teacher %} active {% endif %} {% if request.path == edit_staff %} active {% endif %}">
-      <i class="nav-icon fas fa-chalkboard-teacher"></i>
-        <span>Manage Teacher</span>
-    </a>
-  </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider"/>
 
+    <!-- Heading -->
+    <div class="sidebar-heading">Interfaces</div>
 
-  <li class="nav-item">
-    {% url 'add_teacher' as add_teacher %}
-    <a href="{{ add_teacher }}" class="nav-link {% if request.path == add_teacher %} active {% endif %}">
-      <i class="nav-icon fas fa-th"></i>
-      <span>Add Teacher</span>
-    </a>
-  </li>
-
-  <!-- Nav Item - Students -->
-  <li class="nav-item">
-    {% url 'manage_student' as manage_student %}
-    {% url 'edit_student' student_id=id as edit_student %}
-    <a href="{{ manage_student }}" class="nav-link {% if request.path == manage_student %} active {% endif %} {% if request.path == edit_student %} active {% endif %}">
-      <i class="nav-icon fas fa-user-graduate"></i>
-      </span>
-        Manage Student
-      </span>
-    </a>
-  </li>
+    <!-- Entrainement du modèle-->
+    <li class="nav-item">
+        <a href="{% url 'EntrainementAdminDash' %}" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <span> Entrainement des modèles </span>
+        </a>
+    </li>
 
 
-  <li class="nav-item">
-    {% url 'add_student' as add_student %}
-    <a href="{{ add_student }}" class="nav-link {% if request.path == add_student %} active {% endif %}">
-      <i class="nav-icon fas fa-th"></i>
-      <span>
-        Add Student
-      </span>
-    </a>
-  </li>
- <!-- Nav Item - Manage Schedules -->
+    <!-- Nav Item - Manage Teachers -->
+    <li class="nav-item">
+        {% url 'manage_teacher' as manage_teacher %}
+        {% url 'edit_teacher' teacher_id=id as edit_teacher %}
+        <a href="{{ manage_teacher }}"
+           class="nav-link {% if request.path == manage_teacher %} active {% endif %} {% if request.path == edit_staff %} active {% endif %}">
+            <i class="nav-icon fas fa-chalkboard-teacher"></i>
+            <span>Manage Teacher</span>
+        </a>
+    </li>
+
+
+    <li class="nav-item">
+        {% url 'add_teacher' as add_teacher %}
+        <a href="{{ add_teacher }}" class="nav-link {% if request.path == add_teacher %} active {% endif %}">
+            <i class="nav-icon fas fa-th"></i>
+            <span>Add Teacher</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Manage Schedules -->
     <li class="nav-item">
         {% url 'emploie_admin' as emploie_admin %}
         <a href="{{ emploie_admin }}" class="nav-link ">
@@ -82,6 +70,72 @@
         </a>
     </li>
 
+    <!-- Nav Item - Students -->
+    <li class="nav-item">
+        {% url 'manage_student' as manage_student %}
+        {% url 'edit_student' student_id=id as edit_student %}
+        <a href="{{ manage_student }}"
+           class="nav-link {% if request.path == manage_student %} active {% endif %} {% if request.path == edit_student %} active {% endif %}">
+            <i class="nav-icon fas fa-user-graduate"></i>
+            </span>
+            Manage Student
+            </span>
+        </a>
+    </li>
+
+
+    <li class="nav-item">
+        {% url 'add_student' as add_student %}
+        <a href="{{ add_student }}" class="nav-link {% if request.path == add_student %} active {% endif %}">
+            <i class="nav-icon fas fa-th"></i>
+            <span>
+        Add Student
+      </span>
+    </a>
+  </li>
+ <!-- Nav Item - Manage Schedules -->
+    <!-- <li class="nav-item">
+        {% url 'emploie_admin' as emploie_admin %}
+        <a href="{{ emploie_admin }}" class="nav-link ">
+            <i class="nav-icon fas fa-calendar-day"></i>
+            <span>Manage Schedule</span>
+        </a>
+    </li> -->
+
+    <li class="nav-item active">
+
+      <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities1"
+          aria-expanded="true" aria-controls="collapseUtilities1">
+          <i class="fas fa-fw fa-book"></i>
+          <span>Manage Schedule</span>
+      </a>
+      <div id="collapseUtilities1" class="collapse show" aria-labelledby="headingUtilities"
+          data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+              <a class="collapse-item active" href="{% url 'AddPlanning' %}">
+              <i class="far fa-circle nav-icon fa-sm"></i> Add Schedule</a>
+                <hr>
+              <a class="collapse-item active" href="{% url 'all' %}">
+              <i class="far fa-circle nav-icon fa-sm"></i> All Schedule</a>
+                <hr>
+              <a class="collapse-item active" href="{% url 'emploiAdmin' %}">
+              <i class="far fa-circle nav-icon fa-sm"></i> Find Schedule</a>
+
+
+
+          </div>
+
+      </div>
+
+    </li>
+
+
+
+
+
+
+
+
   <li class="nav-item">
     {% url 'add_role' as add_role %}
     <a href="{{ add_role }}" class="nav-link {% if request.path == add_role %} active {% endif %}">
@@ -89,39 +143,37 @@
       <span>
         Add Role
       </span>
-    </a>
-  </li>
+        </a>
+    </li>
 
 
-
-  <li class="nav-item">
-    {% url 'manage_roles' as manage_roles %}
-    <a href="{{ manage_roles }}" class="nav-link {% if request.path == manage_roles %} active {% endif %}">
-      <i class="nav-icon fas fa-person-booth"></i>
-      <span>
+    <li class="nav-item">
+        {% url 'manage_roles' as manage_roles %}
+        <a href="{{ manage_roles }}" class="nav-link {% if request.path == manage_roles %} active {% endif %}">
+            <i class="nav-icon fas fa-person-booth"></i>
+            <span>
         Manage Roles
       </span>
-    </a>
-  </li>
+        </a>
+    </li>
 
 
-  <li class="nav-item">
-    {% url 'add_permission' as add_permission %}
-    <a href="{{ add_permission }}" class="nav-link {% if request.path == add_permission %} active {% endif %}">
-      <i class="nav-icon fas fa-th"></i>
-      <span>
+    <li class="nav-item">
+        {% url 'add_permission' as add_permission %}
+        <a href="{{ add_permission }}" class="nav-link {% if request.path == add_permission %} active {% endif %}">
+            <i class="nav-icon fas fa-th"></i>
+            <span>
         Add Permission
       </span>
-    </a>
-  </li>
+        </a>
+    </li>
 
 
-
-  <li class="nav-item">
-    {% url 'manage_permissions' as add_permission %}
-    <a href="{{ add_permission }}" class="nav-link {% if request.path == add_permission %} active {% endif %}">
-      <i class="nav-icon fas fa-lock-open"></i>
-      <span>
+    <li class="nav-item">
+        {% url 'manage_permissions' as add_permission %}
+        <a href="{{ add_permission }}" class="nav-link {% if request.path == add_permission %} active {% endif %}">
+            <i class="nav-icon fas fa-lock-open"></i>
+            <span>
         Manage Permissions
       </span>
     </a>
@@ -155,9 +207,9 @@
   <!-- Divider -->
   <hr class="sidebar-divider d-none d-md-block" />
 
-  <!-- Sidebar Toggler (Sidebar) -->
-  <div class="text-center d-none d-md-inline">
-    <button class="rounded-circle border-0" id="sidebarToggle"></button>
-  </div>
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
 </ul>
 <!-- End of Sidebar -->

@@ -14,7 +14,8 @@ class ChapitreSerializer(serializers.ModelSerializer):
 class TraitementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Traitement
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['titre_traitement', ]
 
 
 class Modele3DSerializer(serializers.ModelSerializer):

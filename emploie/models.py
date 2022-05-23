@@ -9,7 +9,15 @@ from users.models import Professeur, Students
 
 """ Responsable : CODEVERSE
 """
-
+JOURS =(
+    ("1", "MONDAY"),
+    ("2", "TUESDAY"),
+    ("3", "WEDNESDAY"),
+    ("4", "THURSDAY"),
+    ("5", "FRIDAY"),
+    ("6", "SATURDAY"),
+    ("7", "SUNDAY"),
+)
 class TypeSalle(models.Model):
     capacite =  models.IntegerField(validators=[MaxValueValidator(100)]) 
     libelle =   models.CharField(max_length=100, null=True) 
@@ -28,9 +36,11 @@ class Salle(models.Model):
 
 
 class Planning(models.Model):
-    liblle =  models.CharField(max_length=100, null=True) 
+    jour =  models.CharField(max_length=100, null=True) 
     groupe = models.ForeignKey(Groupe , null = True , on_delete= models.SET_NULL )
     salle = models.ForeignKey(Salle , null = True , on_delete= models.SET_NULL )
+    heure_debut = models.TimeField(null = True )
+    heure_fin = models.TimeField(null = True )
     professeur = models.ForeignKey(Professeur , null = True , on_delete= models.SET_NULL )
     element_module = models.ForeignKey(ElementModule , null = True , on_delete= models.SET_NULL )
     
@@ -39,8 +49,7 @@ class Planning(models.Model):
 
 
 class Seance(models.Model):
-    date_debut = models.DateTimeField(null = False )
-    date_fin = models.DateTimeField(null = False )
+    
     planning = models.ForeignKey(Planning , null = True , on_delete= models.SET_NULL )
 
 

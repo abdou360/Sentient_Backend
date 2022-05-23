@@ -660,12 +660,14 @@ def traitements_list_api(request, id_chapitre):
     # chapitre_serializer = ChapitreSerializer(chapitre, many=False)
     traitements = Traitement.objects.filter(chapitre_id=id_chapitre)
     traitement_serializer = TraitementSerializer(traitements, many=True)
-    modele3d = Modele3D.objects.filter(id__in=traitements.modele3D)
+    # print("query : ", traitements)
+    modele3d = Modele3D.objects.filter(
+        id__in=[t.modele3D_id for t in traitements])
     modele3d_serializer = Modele3DSerializer(modele3d, many=False)
     image_serializer = None
-    if(traitements.image != None):
-        image = Image.objects.filter(id__in=traitements.image)
-        image_serializer = ImageSerializer(image, many=False)
+    # if(traitements.image != None):
+    image = Image.objects.filter(id__in=[t.image_id for t in traitements])
+    image_serializer = ImageSerializer(image, many=False)
     response = {
         'traitement': traitement_serializer.data,
         'modele': modele3d_serializer.data,

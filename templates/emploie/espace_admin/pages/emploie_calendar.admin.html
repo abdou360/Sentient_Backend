@@ -255,10 +255,9 @@
                 <h6 class="m-0 font-weight-bold text-primary">Mardi 03/05/2022</h6>
             </div>
             <div class="card-body">
-
-                <div id='calendar'></div>
+                    <div id="calendar"></div>
             </div>
-
+            
         </div>
     {% else %}
         <div class="card shadow mb-4">
@@ -273,6 +272,8 @@
 
         </div>
     {% endif %}
+
+    
     <script>
         function sendGroupes() {
             document.getElementById('GroupeForm').submit()
@@ -287,58 +288,118 @@
             document.getElementById('FiliereForm').submit()
 
         }
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                timeZone: 'local',
-                locale: 'fr',
-
-
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-
-
-                buttonText: {
-                    today: 'Aujourd\'hui',
-                    month: 'Mois',
-                    week: 'Semaines',
-                    day: 'Jour',
-                },
-
-                events: [
-                    {
-                        title: "Analyse de données",
-                        start: "2022-05-12",
-                        url: "http://localhost:8000/emploie/liste-presence/irisi/2/",
-                        color: "#FFE2E0",
-                        textColor: "#D90E00"
-                    },
-                    {
-                        title: "Intelligence artificielle",
-                        start: "2022-05-03",
-                        url: "http://localhost:8000/emploie/liste-presence/irisi/2/",
-                        color: "#FFF0D2",
-                        textColor: "#8D5D00"
-                    },
-                    {
-                        title: "Analyse de données",
-                        start: "2022-05-09",
-                        url: "http://localhost:8000/emploie/liste-presence/irisi/2/",
-                        color: "#D2FCFF",
-                        textColor: "#2400FF"
-                    }
-                ]
-            });
-            calendar.render();
-        });
-
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var today = new Date();
+        
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,list'
+          },
+          initialDate: today,
+          navLinks: true, // can click day/week names to navigate views
+          selectable: true,
+          selectMirror: true,
+          select: function(arg) {
+            console.log('clicked')
+            var modal = document.getElementById('eventModal')
+            modal.style.display = 'block'
+            calendar.unselect()
+          },
+         
+         
+          editable: true,
+          dayMaxEvents: true, // allow "more" link when too many events
+         
+           events: [
+               
+               
+           {% for planning in plannings %}
+           {
+            {% if planning.jour == "monday" %}
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
+               start: '{{ planning.date_debut|date:"Y-m-d" }}',
+               end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
+               daysOfWeek:[1]
+            {% endif  %}
+
+            {% if planning.jour == "tuesday" %}
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
+               start: '{{ planning.date_debut|date:"Y-m-d" }}',
+               end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
+               daysOfWeek:[2]
+            {% endif  %}
+
+            {% if planning.jour == "wednesday" %}
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
+               start: '{{ planning.date_debut|date:"Y-m-d" }}',
+               end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
+               daysOfWeek:[3]
+            {% endif  %}
+
+            {% if planning.jour == "thursday" %}
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
+               start: '{{ planning.date_debut|date:"Y-m-d" }}',
+               end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
+               daysOfWeek:[4]
+            {% endif  %}
+            {% if planning.jour == "friday" %}
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
+               start: '{{ planning.date_debut|date:"Y-m-d" }}',
+               end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
+               daysOfWeek:[5]
+            {% endif  %}
+            {% if planning.jour == "saturday" %}
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
+               start: '{{ planning.date_debut|date:"Y-m-d" }}',
+               end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
+               daysOfWeek:[6]
+            {% endif  %}
+            {% if planning.jour == "sunday" %}
+               title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
+               startTime:"{{ planning.heure_debut}}",   
+               start: '{{ planning.date_debut|date:"Y-m-d" }}',
+               end: '{{ planning.date_fin|date:"Y-m-d" }}',
+               startTime:'{{ planning.heure_debut }}',
+               daysOfWeek:[7]
+            {% endif  %}
+
+            
+           },
+           {% endfor %}
+          ]
+        });
+        
+        calendar.render();
+        });
+        const closeBtn1 = document.getElementById('modalClose1');
+        const closeBtn2 = document.getElementById('modalClose2');
+        closeBtn1.addEventListener('click',()=>{
+        const eventModal = document.getElementById('eventModal')
+        eventModal.style.display = 'none';
+        });
+        closeBtn2.addEventListener('click',()=>{
+        const eventModal = document.getElementById('eventModal')
+        eventModal.style.display = 'none';
+        });
+        </script>
 
 
 {% endblock %}
