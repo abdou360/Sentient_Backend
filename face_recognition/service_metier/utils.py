@@ -43,7 +43,20 @@ def video_feed(request, id):
     return StreamingHttpResponse(gen(VideoCamera(id)),
                                  content_type='multipart/x-mixed-replace; boundary=frame')
     
-    
+
+def getStudentsByGrp(filiere, niveau, groupe):
+    students = []
+    # récuperer l'id du groupe
+    groupe = Groupe.objects.get(nom_group=groupe, niveau__nom_niveau=niveau, niveau__filiere__nom_filiere=filiere)
+    groupe_id = groupe.id
+    print('groupe_id' + str(groupe_id))
+    # on cherche les étudiants associés à cet groupe dans la table AnneeUniversitaire
+    students_grp = AnneUniversitaire.objects.filter(group_id=groupe_id)
+    for student_grp in students_grp:
+        student = student_grp.etudiant
+        students += [student]
+        
+    return students
 
 # recupérer le chemin de dossier des images pour les étudiants d'un groupe donnée
 def getPaths(filiere, niveau, groupe):

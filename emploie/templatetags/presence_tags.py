@@ -16,10 +16,10 @@ def connected_prof_id(user):
 # template filter
 @register.filter(name='presence_filter')
 def presenceFilter(presence):
-    if presence == 0:
+    if presence == 1:
         str = '<span class="badge badge-pill badge-success center"> Présent(e)</span>'
     
-    if presence == 1:
+    if presence == 0:
         str = '<span class="badge badge-pill badge-danger center"> Absent(e)</span>'
     
     return mark_safe(markdown.markdown(str))
