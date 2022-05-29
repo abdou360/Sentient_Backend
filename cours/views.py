@@ -647,7 +647,7 @@ def chapitres_list_api(request):
         chapitres, many=True)
     # chapitres = chapitre_serializer.data
 
-    return Response(chapitre_serializer.data.c)
+    return Response(chapitre_serializer.data)
 
 
 @api_view(['GET'])
@@ -751,6 +751,16 @@ def traitement_api(request, id):
     for val in file_serializer.data:
         files_set.append(val['path_file'])
 
+    file = None
+
+    for val in files_set:
+        ext = val.split('.')[-1]
+        print(ext)
+        if(ext == 'png'):
+            file = val
+        elif(ext == 'jpg'):
+            file = val
+
     image_serializer = None
     # if(traitements.image != None):
     image = Image.objects.filter(id=traitement.image_id).first()
@@ -759,7 +769,8 @@ def traitement_api(request, id):
         'traitement': traitement_serializer.data['titre_traitement'],
         # 'modele': modele3d_serializer.data,
         # 'files': file_serializer.data,
-        'files': files_set,
+        'file': file,
+        # 'files': files_set,
         'image': image_serializer.data['path_image']
     }
     return Response(response)
