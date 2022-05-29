@@ -41,4 +41,7 @@ urlpatterns = [
          chapitre_details_api, name='chapitre_details_api'),
     path('api/traitements/<int:id_chapitre>',
          traitements_list_api, name='traitements_list_api'),
+    path('api/traitement/<int:id>',
+         traitement_api, name='traitement_api'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

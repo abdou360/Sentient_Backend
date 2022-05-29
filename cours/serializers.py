@@ -11,26 +11,26 @@ class ChapitreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TraitementSerializer(serializers.ModelSerializer):
+class TraitementSerializerImage(serializers.ModelSerializer):
     class Meta:
         model = Traitement
         # fields = '__all__'
-        fields = ['titre_traitement', ]
+        fields = ['id', 'titre_traitement']
 
 
-class Modele3DSerializer(serializers.ModelSerializer):
+class Modele3DSerializerImage(serializers.ModelSerializer):
     class Meta:
         model = Modele3D
-        fields = '__all__'
+        fields = ['path_modele3d']
 
 
-class FileSerializer(serializers.ModelSerializer):
+class FileSerializerImage(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = '__all__'
+        fields = ['path_file']
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializerImage(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = '__all__'
+        fields = ['path_image']

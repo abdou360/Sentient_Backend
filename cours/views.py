@@ -643,7 +643,10 @@ def update_traitement(request, id):
 @api_view(['GET'])
 def chapitres_list_api(request):
     chapitres = Chapitre.objects.all()
-    chapitre_serializer = ChapitreSerializer(chapitres, many=True)
+    chapitre_serializer = ChapitreSerializer(
+        chapitres, many=True)
+    # chapitres = chapitre_serializer.data
+
     return Response(chapitre_serializer.data)
 
 
@@ -659,18 +662,104 @@ def traitements_list_api(request, id_chapitre):
     # chapitre = Chapitre.objects.get(id=id_chapitre)
     # chapitre_serializer = ChapitreSerializer(chapitre, many=False)
     traitements = Traitement.objects.filter(chapitre_id=id_chapitre)
-    traitement_serializer = TraitementSerializer(traitements, many=True)
+    traitement_serializer = TraitementSerializerImage(traitements, many=True)
     # print("query : ", traitements)
     modele3d = Modele3D.objects.filter(
         id__in=[t.modele3D_id for t in traitements])
-    modele3d_serializer = Modele3DSerializer(modele3d, many=False)
+    modele3d_serializer = Modele3DSerializerImage(modele3d, many=True)
+    image_serializer = []
+    # if(traitements.image != None):
+    # image = Image.objects.filter(id__in=[t.image_id for t in traitements])
+    # image_serializer = ImageSerializerImage(image, many=True)
+
+    files_set = []
+
+    files = File.objects.filter(modele3D=modele3d)
+    file_serializer = FileSerializerImage(files, many=True)
+
+    # for val in file_serializer.data:
+    #     files_set.append(val['path_file'])
+
+    res = []
+
+    # for i, j, k in traitement_serializer.data, modele3d_serializer.data, image_serializer.data:
+    for i in range(0, len(traitement_serializer.data)):
+        # image_serializer = None
+        # print(i)
+        print(traitements[i].modele3D_id)
+        # print(traitement_serializer.data[i]['id'])
+        # print(len(traitement_serializer.data))
+        # print(len(image_serializer.data))
+        # print(len(modele3d_serializer.data))
+        # image_serializer.data[i] = image_serializer.data[i] if image_serializer.data[i] != None else None
+        modele3d = Modele3D.objects.get(
+            id=traitements[i].modele3D_id)
+        modele3d_serializer = Modele3DSerializerImage(modele3d, many=False)
+        # if(traitements.image != None):
+        image = None
+        try:
+            image = Image.objects.get(id=traitements[i].image_id)
+            image_serializer = ImageSerializerImage(image, many=False)
+        except Image.DoesNotExist:
+            image = None
+            image_serializer = None
+        print(image)
+        if image != None:
+            path_image = image_serializer.data['path_image']
+        else:
+            path_image = None
+        res.append(
+            {'traitement': traitement_serializer.data[i],
+             'path_modele3d': modele3d_serializer.data['path_modele3d'],
+             'path_image': path_image
+             #  'image': image_serializer.data[i]
+             })
+        #  'image': image_serializer.data[i] if image_serializer.data[i] else None})
+        # res.append(
+        #     {'image': image_serializer.data[1] if image_serializer.data[1] else None})
+        # res.append({'modele3d': modele3d_serializer.data[1]})
+        # res.append({'files': files_set[i]})
+
+    # response = {
+    #     'traitements': traitement_serializer.data,
+    #     'modeles': modele3d_serializer.data,
+    #     'images': image_serializer.data
+    # }
+
+    response = {
+        'traitements': res
+    }
+
+    return Response(response)
+
+
+@api_view(['GET'])
+def traitement_api(request, id):
+    traitement = Traitement.objects.filter(id=id).first()
+
+    traitement_serializer = TraitementSerializerImage(traitement, many=False)
+
+    modele3d = Modele3D.objects.filter(
+        id=traitement.modele3D_id).first()
+    # modele3d_serializer = Modele3DSerializerImage(modele3d, many=False)
+
+    files_set = []
+
+    files = File.objects.filter(modele3D=modele3d)
+    file_serializer = FileSerializerImage(files, many=True)
+
+    for val in file_serializer.data:
+        files_set.append(val['path_file'])
+
     image_serializer = None
     # if(traitements.image != None):
-    image = Image.objects.filter(id__in=[t.image_id for t in traitements])
-    image_serializer = ImageSerializer(image, many=False)
+    image = Image.objects.filter(id=traitement.image_id).first()
+    image_serializer = ImageSerializerImage(image, many=False)
     response = {
-        'traitement': traitement_serializer.data,
-        'modele': modele3d_serializer.data,
-        'image': image_serializer.data
+        'traitement': traitement_serializer.data['titre_traitement'],
+        # 'modele': modele3d_serializer.data,
+        # 'files': file_serializer.data,
+        'files': files_set,
+        'image': image_serializer.data['path_image']
     }
     return Response(response)
