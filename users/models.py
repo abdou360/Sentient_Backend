@@ -38,6 +38,9 @@ class Professeur(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
+    def __str__(self):
+        return self.admin.username
+
 # UnivIt responsable : ismail errouk
 
 
@@ -70,7 +73,8 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == 3:
             Students.objects.create(admin=instance,
                                     # course_id=
-                                    session_year_id=SessionYearModel.objects.get(id=1),
+                                    session_year_id=SessionYearModel.objects.get(
+                                        id=1),
                                     address="",
                                     profile_pic="",
                                     gender="")
