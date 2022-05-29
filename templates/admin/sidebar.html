@@ -39,8 +39,29 @@
             <span> Entrainement des modèles </span>
         </a>
     </li>
+   <!-- Nav Item Etablissement -->
+   <li class="nav-item active">
+   
+    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+        aria-expanded="true" aria-controls="collapseUtilities">
+        <i class="fas fa-school"></i>
+        <span>Etablissements</span>
+    </a>
+    <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h2 class="collapse-header"> Gestion des établissements </h2>
+            <a class="collapse-item active" href="{% url 'etablissement' %}">
+              <i class="far fa-circle nav-icon fa-sm"></i> Etablissement</a>
 
+            <hr>
+            <h2 class="collapse-header py-2">Gestion des filières</h2>
+            <a class="collapse-item active" href="{% url 'filiere' %}"><i class="far fa-circle nav-icon fa-sm"></i> Filières</a>
+        </div>
+        
+    </div>
 
+  </li>
     <!-- Nav Item - Manage Teachers -->
     <li class="nav-item">
         {% url 'manage_teacher' as manage_teacher %}
@@ -93,14 +114,6 @@
       </span>
     </a>
   </li>
- <!-- Nav Item - Manage Schedules -->
-    <!-- <li class="nav-item">
-        {% url 'emploie_admin' as emploie_admin %}
-        <a href="{{ emploie_admin }}" class="nav-link ">
-            <i class="nav-icon fas fa-calendar-day"></i>
-            <span>Manage Schedule</span>
-        </a>
-    </li> -->
 
     <li class="nav-item active">
 
