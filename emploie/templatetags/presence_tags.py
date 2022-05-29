@@ -13,6 +13,12 @@ def connected_prof_id(user):
     if prof:    
         return prof.id
 
+@register.simple_tag
+def connected_prof_username(user):
+    prof = Professeur.objects.get(user_id=user.id)
+    if prof:    
+        return prof.user.first_name + ' ' + prof.user.last_name
+
 # template filter
 @register.filter(name='presence_filter')
 def presenceFilter(presence):

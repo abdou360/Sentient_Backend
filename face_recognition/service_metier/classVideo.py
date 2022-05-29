@@ -4,16 +4,20 @@
                 + MOUZAFIR ABDELHADI
 """
 
-import cv2
-from .utils import *
+import cv2, os
 from users.models import Students
 
 path_dataset = "face_recognition/service_metier/dataset/"
 
+def assure_path_exists(path):
+    dir = os.path.dirname(path)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+
 class VideoCamera():
 	def __init__(self,id):
 		self.id=id
-		self.video = cv2.VideoCapture(CAMERA_PORT, cv2.CAP_DSHOW)
+		self.video = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 		self.count = 0 
   
 	def __del__(self):
@@ -21,7 +25,7 @@ class VideoCamera():
   
 	def get_frame(self):
 		success, image = self.video.read()
-		faceCascade = getHaarcascadeXML()
+		faceCascade = cv2.CascadeClassifier("face_recognition/service_metier/models/haarcascade_frontalface_default.xml")
 		gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 		faces_detected = faceCascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5,minSize= (30,30))
   		
