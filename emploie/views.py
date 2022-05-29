@@ -1,21 +1,20 @@
-import http
+
+""" RESPONSABLE : CODEVERSE
+    @authors    + Espace admin : FIROUD Reda & OUSSAHI Salma
+                + Espace professeur : KANNOUFA Fatima Ezzahra
+"""
 
 from django.shortcuts import render
 from emploie.forms import PlanningForm
-from module.models import ElementModule
-from users.models import Professeur, CustomUser
 from semestre.models import Semestre, Groupe, Niveau
-from filiere.models import Filiere, Etablissement
-from django.http import HttpResponseRedirect
+from filiere.models import Filiere
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from slugify import slugify
-from emploie.models import Planning, Presence, Salle, Seance
+from emploie.models import Planning, Presence, Seance
 
-""" RESPONSABLE : CODEVERSE
-        + Espace admin : FIROUD Reda & OUSSAHI Salma
-        + Espace professeur : @authors : KANNOUFA Fatima Ezzahra
-"""
+
+###   ESPACE ADMIN  ###
 
 #   permet a l'admin de créer les emploies des profs    #
 selectefilliere: Filiere
@@ -97,7 +96,7 @@ def SendGroupes(request):
 
 
 
-
+###   ESPACE PROF  ###
 
 #   permet d'afficher l'emploi du professeur connécté dans un calendrier    #
 @login_required
@@ -105,7 +104,7 @@ def EmploieProf(request):
     return render(request, "emploie/espace_prof/pages/emploie_calendar.prof.html")
 
 
-#   permet de lister la liste des étudiants avec leur présence pour une séance donnée   #
+#   permet de lister les étudiants avec leur présence pour une séance donnée   #
 @login_required
 def ListePresence(request, slug, idSeance):
     

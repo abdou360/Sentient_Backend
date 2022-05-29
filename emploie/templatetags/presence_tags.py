@@ -9,7 +9,7 @@ register = template.Library()
 # tags
 @register.simple_tag
 def connected_prof_id(user):
-    prof = Professeur.objects.get(admin_id=user.id)
+    prof = Professeur.objects.get(user_id=user.id)
     if prof:    
         return prof.id
 
