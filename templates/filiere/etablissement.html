@@ -1,4 +1,5 @@
-{% extends "users/base-home.html" %} {% load static %}{% block title %} Filieres
+{% extends "admin/base-home.html" %} 
+{% load static %}{% block title %} Filieres
 {% endblock %}
  
 <!-- importation des fichier css  -->
@@ -92,9 +93,9 @@
               <td id="email">{{dt.email}}</td>
               <td class="image">
                 {% if dt.logo %}
-              <img src="{{dt.logo.url}}" alt="" srcset="" />
+              <img style="width: 60px;height: 46px;border-radius: 3px;" src="{{dt.logo.url}}" alt="" srcset="" />
              {% else %}
-            <img src="{% static 'img/default.png' %}" />
+            <img style="width: 60px;height: 46px;border-radius: 3px;" src="{% static 'img/default.png' %}" />
             {% endif %}
                 
               </td>
