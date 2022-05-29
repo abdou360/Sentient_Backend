@@ -647,7 +647,7 @@ def chapitres_list_api(request):
         chapitres, many=True)
     # chapitres = chapitre_serializer.data
 
-    return Response(chapitre_serializer.data)
+    return Response(chapitre_serializer.data.c)
 
 
 @api_view(['GET'])
@@ -726,11 +726,11 @@ def traitements_list_api(request, id_chapitre):
     #     'images': image_serializer.data
     # }
 
-    response = {
-        'traitements': res
-    }
+    # response = [
+    #     res
+    # ]
 
-    return Response(response)
+    return Response(res)
 
 
 @api_view(['GET'])
