@@ -13,9 +13,9 @@ from .api.views import *
 
 urlpatterns = [
     # machine learning : learning par web 
-    path('create_dataset_submit/', test_module_submit),
     path('training/<str:filiere>/<str:niveau>/<str:groupe>/', training , name ='training'),
     path('testerModel/', TesterModel , name ='testerModel'),
+    path('testRegisterBD/', testRegisterBD , name ='testRegisterBD'),
     
     # gest_presence : admin dashbord
     path('gestion-presence-modele/', EntrainementAdminDash , name ='EntrainementAdminDash'),

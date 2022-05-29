@@ -46,7 +46,7 @@ class Planning(models.Model):
     element_module = models.ForeignKey(ElementModule , null = True , on_delete= models.SET_NULL )
     
     def __str__(self):
-        return self.liblle
+        return self.libelle
 
 
 class Seance(models.Model):
