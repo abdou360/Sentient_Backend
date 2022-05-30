@@ -3,6 +3,7 @@ import os
 import time
 import datetime
 from django.db.models import Q
+from functools import reduce
 from users.models import Professeur
 from semestre.models import Niveau, Semestre
 from module.models import ElementModule, Module
@@ -20,6 +21,9 @@ import json
 from django.core.serializers import serialize
 from distutils.command import check
 import sys
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializers import FileSerializer,Modele3DSerializer,TraitementSerializer,DocumentSerializer
 
 NoneType = type(None)
 
@@ -29,6 +33,47 @@ NoneType = type(None)
 
 # Create your views here.
 
+@api_view(['POST'])
+def get_traitement(request):
+    try:
+#returns the first modele3d that contains at least one of desired words
+        str = request.data.get('text')
+        chunks = str.split(',')
+        list = [f",{s}," for s in chunks]
+        Traitements = Traitement.objects.filter(chapitre=request.data.get('chapitre_id')).filter(reduce(lambda x, y: x | y, [Q(label_traitement__contains=word) for word in list]))
+        print (list)
+        
+        Modele3Ds=Modele3D.objects.filter(id=Traitements[0].modele3D_id).first()
+        Files =File.objects.filter(modele3D=Modele3Ds.id)
+        # a = Q(label_traitement__icontains=',a,')
+        # b =Q(label_traitement__icontains=',b,')
+        # c = Q(label_traitement__icontains=',c,')
+
+        # filters = reduce(lambda x, y: x | y, [Q(label_traitement__contains=word) for word in list])
+        # for item in list :
+        #   print("hi") 
+          
+        # qs = Traitement.objects.filter(
+        #   (filters)).annotate(a_filter_cnt=Count('id', filter=a)).annotate(b_filter_cnt=Count('id', filter=b)).annotate(c_filter_cnt=Count('id', filter=c)).annotate(total_filter_cnt=F('a_filter_cnt') +
+        #                              F('b_filter_cnt') +
+        #                              F('c_filter_cnt')).order_by('-total_filter_cnt')
+
+
+
+
+        serializer = FileSerializer(Files,many=True)
+        return Response(serializer.data)
+    except File.DoesNotExist:
+        return Response([])
+
+@api_view(['GET'])
+def get_Document(request,id):
+    try:
+        Documents = Document.objects.filter(chapitre_id=id).all()
+        serializer = DocumentSerializer(Documents,many=True)
+        return Response(serializer.data)
+    except Document.DoesNotExist:
+        return Response([])
 
 @login_required
 def chapitres_list(request):

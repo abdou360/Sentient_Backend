@@ -8,6 +8,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('getTextTraitement', get_traitement ,name='get_traitement'),
+    path('allDocs/<int:id>', get_Document ,name='get_Document'),
+
     path('', chapitres_list, name='chapitres_list'),
     path('filiere=<str:val>',
          search_chapitres_by_filiere, name="search_chapitres_by_filiere"),
