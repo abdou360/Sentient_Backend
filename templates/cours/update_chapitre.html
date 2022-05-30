@@ -28,7 +28,7 @@
         <form class="row g-3" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="col-12 d-none d-block ml-3">
-                Nom du Cours
+                Nom du Cours :
             </div>
             <div class="form-group col-12 mr-3">
                 <div class="col-12 p-3"> {{updated_chapitre.libelle|as_crispy_field}}</div>
