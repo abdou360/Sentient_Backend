@@ -102,6 +102,18 @@ class Traitement(models.Model):
 
 
 class File(models.Model):
+    # path = models.CharField(max_length=100,null = False )
+    modele3D = models.ForeignKey(
+        Modele3D, null=False,  on_delete=models.CASCADE)
+    path_file = models.FileField(
+        upload_to=file_upload_location, null=False, max_length=255)
+    # file = models.FileField(upload_to=file_upload_location(foldername=get_modele_3d(modele3D)),null = False )
+    # file = models.FileField(null = False )
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class File(models.Model):
     modele3D = models.ForeignKey(
         Modele3D, null=False,  on_delete=models.CASCADE)
     path_file = models.FileField(
