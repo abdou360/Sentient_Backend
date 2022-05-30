@@ -1,3 +1,5 @@
+#*@author ABDELHADI MOUZAFIR
+
 from operator import mod
 from django.db import models
 from semestre.models import Semestre

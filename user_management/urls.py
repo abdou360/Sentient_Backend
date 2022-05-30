@@ -9,10 +9,15 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 urlpatterns = [
+    #path('admin', admin.site.urls),
+    
     path('', include('users.urls')),
+    path('admin/', admin.site.urls),
     path('filiere_etab/', include('filiere.urls')),
+    path('emploie/',include('emploie.urls')),
     path('cours/', include('cours.urls')),
     path('', include('module.urls')),
     path('semestre/',include('semestre.urls.index')),
+    path('face-recognition/',include('face_recognition.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

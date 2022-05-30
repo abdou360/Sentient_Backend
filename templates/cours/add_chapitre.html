@@ -2,14 +2,14 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %} Ajout d'un Chapitre {% endblock title%}
+{% block title %} Ajout d'un Cours {% endblock title%}
 {% block content %}
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
             <div class="row mr-3">
                 <div class="col col-12 text-center">
                     <h4 class="m-3">
-                        Ajout d'un Chapitre
+                        Ajout d'un Cours
                     </h4>
                 </div>
             </div>
@@ -36,9 +36,9 @@
                 <div class="form-group col-12 mr-3">
                     <div class="col-12 p-3"> {{new_chapitre.image|as_crispy_field}}</div>
                 </div>
-                {% comment %} <div class="form-group col-12 mr-3">
+                <div class="form-group col-12 mr-3">
                     <div class="col-12 p-3"> {{new_chapitre.element_module|as_crispy_field}}</div>
-                </div> {% endcomment %}
+                </div>
                 <div class="form-group col-12 text-center mr-3">
                     <button type="submit" class="btn btn-primary col-11">Confirmer</button>
                 </div>
@@ -55,7 +55,7 @@
                         <div class="card-body">
                           <h5 class="card-title">{{chapitre.libelle}}</h5>
                           <p class="card-text">{{chapitre.description|default_if_none:"---"}}</p>
-                          <a href="#" class="btn btn-primary">Voir le Chapitre</a>
+                          <a href="#" class="btn btn-primary">Voir le Cours</a>
                         </div>
                     </div>
                 </div> 

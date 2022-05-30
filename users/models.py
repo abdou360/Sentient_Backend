@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from PIL import Image
+# from PIL import Image
 from django.core.validators import RegexValidator
 from django.urls import reverse
 from django.dispatch import receiver
@@ -14,7 +14,6 @@ class SessionYearModel(models.Model):
     objects = models.Manager()
 
 
-# Overriding the Default Django Auth User and adding One More Field (user_type)
 class CustomUser(AbstractUser):
     user_type_data = ((1, "Admin"), (2, "Professeur"), (3, "Etudiant"))
     user_type = models.CharField(
@@ -34,25 +33,24 @@ class Admin(models.Model):
 
 class Professeur(models.Model):
     id = models.AutoField(primary_key=True)
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    admin = models.ForeignKey(Admin, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    specialite = models.CharField(max_length=45, default="informatique")
-    matricule = models.CharField(max_length=45, default="")
-    telephone = models.CharField(max_length=10, default="")
     objects = models.Manager()
 
 # UnivIt responsable : ismail errouk
 
 
 class Students(models.Model):
-    cne = models.CharField(max_length=10, default="")
+    cne = models.CharField(max_length=100, default="")
     adresse = models.CharField(max_length=100, default="")
     path_photos = models.CharField(max_length=200, default="")
-    telephone = models.CharField(max_length=10, default="")
-    code_apogee = models.CharField(max_length=10, default="")
+    telephone = models.CharField(max_length=100, default="")
+    code_apogee = models.CharField(max_length=100, default="")
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     admin = models.ForeignKey(Admin, on_delete=models.CASCADE)
+    profile_pic = models.FileField(null=True)
     groupes = models.ManyToManyField('semestre.Groupe', null=True)
 
 
@@ -71,7 +69,12 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == 2:
             Professeur.objects.create(admin=instance)
         if instance.user_type == 3:
-            Students.objects.create(admin=instance)
+            Students.objects.create(admin=instance,
+                                    # course_id=
+                                    session_year_id=SessionYearModel.objects.get(id=1),
+                                    address="",
+                                    profile_pic="",
+                                    gender="")
 
 
 @receiver(post_save, sender=CustomUser)

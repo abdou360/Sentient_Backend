@@ -25,7 +25,7 @@
         {% endfor %}
     {% endif %}
 
-    <div class="row">
+    <div class="row" id="row-content">
         <div class="col-md-12 col-md-offset-3">
             <form id="msform" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -72,20 +72,71 @@
                 <fieldset id="fs-3">
                     <h2 class="fs-title">Ajout du modèle</h2>
                     <h3 class="fs-subtitle">Veuillez ajouter le modèle 3D</h3>
-                    {{new_modele3d.titre_modele3d|as_crispy_field}}
-                    {{new_file.path_file|as_crispy_field}}
+
+                    <!-- <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary">
+                          <input class="btn-check" type="radio" name="options" id="option1"> Option 1
+                        </label>
+                        <label class="btn btn-primary">
+                          <input class="btn-check" type="radio" name="options" id="option2"> Option 2
+                        </label>
+                    </div> -->
+
+                    <!-- <div class="row"> -->
+                        <div class="col col-12">
+                            <ul class="nav justify-content-center nav-pills"> 
+                                <li class="active customized-nav"><a class="nav-link" data-toggle="tab" href="#new-modele">Nouveau modèle 3D</a></li>  
+                                <!-- <li class="customized-nav" ><a class="nav-link" data-toggle="tab" href="#document">Documents</a></li>   -->
+                                <li class="customized-nav" ><a class="nav-link" data-toggle="tab" href="#existant-modele">Modèle 3D existant</a></li>  
+                            </ul> 
+                            <hr>
+                            <div class="tab-content scroll">  
+                                <div id="new-modele" class="tab-pane fade in show active">  
+                                    <div class='col-12'>
+                                        {{new_modele3d.titre_modele3d|as_crispy_field}}
+                                    </div>
+                                    <div class='col-12'>
+                                        {{new_file.path_file|as_crispy_field}}
+                                    </div>
+                                </div> 
+                    
+                                <!-- <div id="document" class="tab-pane fade">  
+                                    <h2>Document</h2> 
+                                    <div class="row content" >
+                                   
+                                    </div>
+                                </div>  -->
+                        
+                                <div id="existant-modele" class="tab-pane fade">  
+                                    <div class="col-12" >
+                                        {% for m in modeles_visibles %}
+                                            <div>{{m}}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>  
+                            </div> 
+                        </div>
+                    <!-- </div> -->
+
+
+
+                    
+                    
                     <input type="button" name="previous" class="previous-to-2 action-button-previous" value="Previous"/>
                     <input type="submit" name="submit" class="submit action-button submit_traitement" value="Submit"/>
-                    {% comment %} <button type="submit" name="submit" class="submit action-button">Submit</button> {% endcomment %}
+                    {% comment %} <button type="submit" name="submit" class="submit action-button ">Submit</button> {% endcomment %}
                 </fieldset>
             </form>
-            {% comment %} <form id="msform" action="" method="post" enctype="multipart/form-data">
-                <input type="submit" name="submit_t" class="submit action-button" value="Submit"/>
-            </form> {% endcomment %}
         </div>
     </div>
     
     <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src=" {% static 'js/cours/add_traitement.js' %}"></script>
 
+    <style>
+        .btn-check {
+            visibility: hidden;
+            position:absolute;
+        }
+    </style>
 {% endblock content %}

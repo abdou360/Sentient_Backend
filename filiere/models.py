@@ -1,15 +1,15 @@
 from django.db import models
 import datetime
 import time
-
+from os import path
 # Create your models here.
 def upload_location_filiere(instance, filename):
-        filebase, extension = filename.split('.')
+        filebase, extension = path.splitext(filename)
         now = time.time()
         stamp = datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d-%H-%M-%S')
         return 'filiere_images/%s.%s' % (str(stamp), extension)
 def upload_location_etablissement(instance, filename):
-        filebase, extension = filename.split('.')
+        filebase, extension = path.splitext(filename)
         now = time.time()
         stamp = datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d-%H-%M-%S')
         return 'etablissement_images/%s.%s' % (str(stamp), extension)

@@ -3,7 +3,7 @@ from pymysql import NULL
 from module.models import ElementModule
 import datetime
 import time
-from PIL import Image
+# from PIL import Image
 
 from users.models import Professeur
 
@@ -49,7 +49,6 @@ class Chapitre(models.Model):
         ElementModule, null=True,  on_delete=models.SET_NULL)
     professeur = models.ForeignKey(
         Professeur, null=False, on_delete=models.CASCADE)
-    # enseignant_responsable
     # visibilite
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
@@ -97,6 +96,7 @@ class Traitement(models.Model):
         Image, null=True, blank=True,  on_delete=models.SET_NULL, default=NULL)
     modele3D = models.ForeignKey(
         Modele3D, null=False,  on_delete=models.CASCADE)
+    visibilite = models.ManyToManyField(Professeur)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -120,3 +120,12 @@ class File(models.Model):
         upload_to=file_upload_location, null=False, max_length=255)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+# class VisibiliteModele(models.Model):
+#     modele3D = models.ForeignKey(
+#         Modele3D, null=False,  on_delete=models.CASCADE)
+#     professeur = models.ForeignKey(
+#         Professeur, null=False, on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True, editable=False)
+#     updated_at = models.DateTimeField(auto_now=True)

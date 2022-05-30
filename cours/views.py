@@ -1,43 +1,61 @@
-from distutils.command import check
-import sys
-from tkinter import Image
-from django.contrib import messages
-from django.shortcuts import redirect, render
-from pymysql import NULL
-from cours.forms import *
-from django.contrib.auth.decorators import login_required
-
-from cours.models import Chapitre, Document, Modele3D, Traitement, File
-from filiere.models import Filiere
-from module.models import ElementModule, Module
-from semestre.models import Niveau, Semestre
-from users.models import Professeur
-
-from django.db.models import Q
-
-import datetime
-import time
 
 import os
+import time
+import datetime
+from django.db.models import Q
+from users.models import Professeur
+from semestre.models import Niveau, Semestre
+from module.models import ElementModule, Module
+from filiere.models import Filiere
+from cours.models import Chapitre, Document, Modele3D, Traitement, File, Image
+from django.db.models import Count
+from django.db.models.functions import ExtractYear
+from django.contrib.auth.decorators import login_required
+from cours.forms import *
+from pymysql import NULL
+from django.shortcuts import redirect, render
+from django.http import HttpResponse, JsonResponse
+from django.contrib import messages
+import json
+from django.core.serializers import serialize
+from distutils.command import check
+import sys
+
+NoneType = type(None)
+
+
+# , VisibiliteModele
+
 
 # Create your views here.
-
-from django.contrib.auth.decorators import login_required
 
 
 @login_required
 def chapitres_list(request):
+    search_by = NoneType
     professeur = Professeur.objects.filter(admin_id=request.user.id).first()
     # professeur = Professeur.objects.filter(admin_id = 1).first()
-    filieres = Filiere.objects.all()
-    niveaux = Niveau.objects.all()
-    element_modules = ElementModule.objects.all()
-    annees = Chapitre.objects.filter(
-        professeur=professeur.id).dates('created_at', 'year')
+    # filieres = Filiere.objects.all()
+    # niveaux = Niveau.objects.all()
+    element_modules = ElementModule.objects.filter(prof_id=professeur)
+    modules = Module.objects.filter(
+        id__in=element_modules.values_list('module_id'))
+    semestres = Semestre.objects.filter(
+        id__in=modules.values_list('semestre_id'))
+    niveaux = Niveau.objects.filter(
+        id__in=semestres.values_list('niveau_id'))
+    filieres = Filiere.objects.filter(id__in=niveaux.values_list('filiere_id'))
+
+    # annees = Chapitre.objects.filter(
+    #     professeur=professeur.id).dates('created_at', 'year')
+
+    annees = Chapitre.objects.annotate(year=ExtractYear('created_at'))
     search_chapitre = request.GET.get('search')
     if search_chapitre:
+        # chapitres = search_chapitres(search_chapitre, professeur)
         chapitres = Chapitre.objects.filter((Q(libelle__icontains=search_chapitre) | Q(
             description__icontains=search_chapitre)) & Q(professeur=professeur.id))
+        search_by = " qui contiennent \" " + search_chapitre + " \""
     else:
         chapitres = Chapitre.objects.filter(professeur=professeur.id)
     context = {
@@ -47,10 +65,155 @@ def chapitres_list(request):
         "niveaux": niveaux,
         "element_modules": element_modules,
         "annees": annees,
+        "search_by": search_by
     }
     return render(request, 'cours/chapitres.html', context)
 
 
+# def search_chapitres(search_chapitre, professeur):
+#     chapitres = Chapitre.objects.filter((Q(libelle__icontains=search_chapitre) | Q(
+#         description__icontains=search_chapitre)) & Q(professeur=professeur.id))
+#     return chapitres
+
+
+@login_required
+def search_chapitres_by_filiere(request, val):
+
+    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
+
+    filieres = Filiere.objects.all()
+    filiere = Filiere.objects.filter(nom_filiere=val).first()
+    niveaux = Niveau.objects.filter(filiere=filiere)
+    semestres = Semestre.objects.filter(niveau__in=niveaux)
+    modules = Module.objects.filter(semestre__in=semestres)
+    element_modules = ElementModule.objects.filter(module__in=modules)
+    chapitres = Chapitre.objects.filter(element_module__in=element_modules)
+    annees = Chapitre.objects.annotate(year=ExtractYear('created_at'))
+
+    search_by = "pour la filière \" "+val + " \""
+    search_chapitre = request.GET.get('search')
+    if search_chapitre:
+        chapitres = Chapitre.objects.filter((Q(libelle__icontains=search_chapitre) | Q(
+            description__icontains=search_chapitre)) & Q(professeur=professeur.id) & Q(element_module__in=element_modules))
+        search_by += " qui contiennent \" " + search_chapitre + " \""
+
+    context = {
+        "chapitres": chapitres,
+        "professeur": professeur,
+        "filieres": filieres,
+        "niveaux": niveaux,
+        "element_modules": element_modules,
+        "annees": annees,
+        "search_by": search_by
+    }
+
+    return render(request, "cours/chapitres.html", context)
+
+
+@login_required
+def search_chapitres_by_niveau(request, val):
+
+    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
+
+    filieres = Filiere.objects.all()
+    niveaux = Niveau.objects.all()
+    niveau = Niveau.objects.get(nom_niveau=val)
+    semestres = Semestre.objects.filter(niveau=niveau)
+    modules = Module.objects.filter(semestre__in=semestres)
+    element_modules = ElementModule.objects.filter(module__in=modules)
+    chapitres = Chapitre.objects.filter(element_module__in=element_modules)
+    annees = Chapitre.objects.annotate(year=ExtractYear('created_at'))
+
+    search_by = "pour le niveau \" "+val + " \""
+
+    search_chapitre = request.GET.get('search')
+    if search_chapitre:
+        chapitres = Chapitre.objects.filter((Q(libelle__icontains=search_chapitre) | Q(
+            description__icontains=search_chapitre)) & Q(professeur=professeur.id) & Q(element_module__in=element_modules))
+        search_by += " qui contiennent \" " + search_chapitre + " \""
+
+    context = {
+        "chapitres": chapitres,
+        "professeur": professeur,
+        "filieres": filieres,
+        "niveaux": niveaux,
+        "element_modules": element_modules,
+        "annees": annees,
+        "search_by": search_by
+    }
+
+    return render(request, "cours/chapitres.html", context)
+
+
+@login_required
+def search_chapitres_by_element_module(request, val):
+
+    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
+
+    filieres = Filiere.objects.all()
+    niveaux = Niveau.objects.all()
+    # semestres = Semestre.objects.all()
+    # modules = Module.objects.all()
+    element_modules = ElementModule.objects.all()
+    element_module = ElementModule.objects.filter(
+        libelle_element_module=val).first()
+    chapitres = Chapitre.objects.filter(element_module=element_module)
+    annees = Chapitre.objects.annotate(year=ExtractYear('created_at'))
+
+    search_by = "pour le module \" "+val + " \""
+
+    search_chapitre = request.GET.get('search')
+    if search_chapitre:
+        chapitres = Chapitre.objects.filter((Q(libelle__icontains=search_chapitre) | Q(
+            description__icontains=search_chapitre)) & Q(professeur=professeur.id) & Q(element_module=element_module))
+        search_by += " qui contiennent \" " + search_chapitre + " \""
+
+    context = {
+        "chapitres": chapitres,
+        "professeur": professeur,
+        "filieres": filieres,
+        "niveaux": niveaux,
+        "element_modules": element_modules,
+        "annees": annees,
+        "search_by": search_by
+    }
+
+    return render(request, "cours/chapitres.html", context)
+
+
+@login_required
+def search_chapitres_by_annee(request, val):
+
+    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
+    # professeur = Professeur.objects.filter(admin_id = 1).first()
+    filieres = Filiere.objects.all()
+    niveaux = Niveau.objects.all()
+    element_modules = ElementModule.objects.all()
+    annees = Chapitre.objects.annotate(year=ExtractYear('created_at'))
+
+    # print('annes', annees)
+
+    chapitres = Chapitre.objects.filter(created_at__contains=val)
+
+    search_by = "crées pendant l'année \" "+val + " \""
+
+    search_chapitre = request.GET.get('search')
+    if search_chapitre:
+        chapitres = Chapitre.objects.filter((Q(libelle__icontains=search_chapitre) | Q(
+            description__icontains=search_chapitre)) & Q(professeur=professeur.id) & Q(created_at__contains=val))
+        search_by += " qui contiennent \" " + search_chapitre + " \""
+
+    context = {
+        "chapitres": chapitres,
+        "professeur": professeur,
+        "filieres": filieres,
+        "niveaux": niveaux,
+        "element_modules": element_modules,
+        "annees": annees,
+        "search_by": search_by
+    }
+
+    return render(request, "cours/chapitres.html", context)
 
 
 @login_required
@@ -75,9 +238,10 @@ def add_chapitre(request):
     professeur = Professeur.objects.filter(admin_id=request.user.id).first()
     # professeur = Professeur.objects.filter(admin_id=1).first()
     if request.method == "GET":
-        new_chapitre = ChapitreForm()
+        new_chapitre = ChapitreForm(request=request)
     elif request.method == "POST":
-        new_chapitre = ChapitreForm(request.POST, request.FILES)
+        new_chapitre = ChapitreForm(
+            request.POST, request.FILES, request=request)
         if new_chapitre.is_valid():
             chapitre = new_chapitre.save(commit=False)
             chapitre.professeur = professeur
@@ -104,10 +268,10 @@ def delete_chapitre(request, id):
 def update_chapitre(request, id):
     chapitre = Chapitre.objects.get(id=id)
     if request.method == "GET":
-        updated_chapitre = ChapitreForm(instance=chapitre)
+        updated_chapitre = ChapitreForm(instance=chapitre, request=request)
     elif request.method == "POST":
         updated_chapitre = ChapitreForm(
-            request.POST, request.FILES, instance=chapitre)
+            request.POST, request.FILES, instance=chapitre, request=request)
         if updated_chapitre.is_valid():
             updated_chapitre.save()
             messages.success(
@@ -170,45 +334,51 @@ EXTENSIONS = ['jpg', 'png', 'bin', 'gltf']
 
 @login_required
 def add_traitement(request, id):
-
+    professeur = Professeur.objects.filter(
+        admin_id=request.user.id).first()
     chapitre = Chapitre.objects.filter(id=id).first()
+
+    Traitements_visibles = Traitement.objects.filter(visibilite=professeur)
+    modeles_visibles = Modele3D.objects.filter(
+        id__in=[val.id for val in Traitements_visibles])
     if request.method == "GET":
-        new_traitement = TraitementForm()
+        new_traitement = TraitementForm(request=request)
         new_image = ImageForm()
         new_modele3d = Modele3DForm()
         new_file = FileForm()
 
     elif request.method == "POST":
-        print('<message>', file=sys.stderr)
+        # print('<message>', file=sys.stderr)
 
-        new_traitement = TraitementForm(request.POST, request.FILES)
+        new_traitement = TraitementForm(
+            request.POST, request.FILES, request=request)
 
-        print('<titre_modele3d>'+request.POST.get("titre_modele3d"), file=sys.stderr)
-        print('<titre_traitement>' +
-              request.POST.get("titre_traitement"), file=sys.stderr)
-        print('<label_traitement>' +
-              request.POST.get("label_traitement"), file=sys.stderr)
-        print('<type_traitement>' +
-              request.POST.get("type_traitement"), file=sys.stderr)
+        # print('<titre_modele3d>'+request.POST.get("titre_modele3d"), file=sys.stderr)
+        # print('<titre_traitement>' +
+        #       request.POST.get("titre_traitement"), file=sys.stderr)
+        # print('<label_traitement>' +
+        #       request.POST.get("label_traitement"), file=sys.stderr)
+        # print('<type_traitement>' +
+        #       request.POST.get("type_traitement"), file=sys.stderr)
 
         invalid_extension = 0
 
         if new_traitement.is_valid():
-            print('<traitement valid>', file=sys.stderr)
+            # print('<traitement valid>', file=sys.stderr)
             traitement = new_traitement.save(commit=False)
             traitement.chapitre = chapitre
             print('<traitement>'+traitement.type_traitement, file=sys.stderr)
 
             new_modele3d = Modele3DForm(request.POST, request.FILES)
-            print('<new_modele3d["titre_modele3d"]>' +
-                  new_modele3d['titre_modele3d'].value(), file=sys.stderr)
+            # print('<new_modele3d["titre_modele3d"]>' +
+            #       new_modele3d['titre_modele3d'].value(), file=sys.stderr)
             if new_modele3d.is_valid():
                 new_modele = new_modele3d.save(commit=False)
                 new_modele.path_modele3d = model_location(
                     new_modele3d['titre_modele3d'].value())
                 makedirs(new_modele.path_modele3d)
 
-                print('<modele3d //>'+str(new_modele.id), file=sys.stderr)
+                # print('<modele3d //>'+str(new_modele.id), file=sys.stderr)
 
                 new_modele.save()
 
@@ -216,29 +386,29 @@ def add_traitement(request, id):
 
                 for f in files:
                     filebase, extension = f.name.split('.')
-                    print('<file extension>'+extension, file=sys.stderr)
+                    # print('<file extension>'+extension, file=sys.stderr)
                     if EXTENSIONS.__contains__(extension):
-                        print('<extension //>'+str(extension), file=sys.stderr)
-                        print('<invalid_extension //>' +
-                              str(invalid_extension), file=sys.stderr)
+                        # print('<extension //>'+str(extension), file=sys.stderr)
+                        # print('<invalid_extension //>' +
+                        #       str(invalid_extension), file=sys.stderr)
                         ...
                     else:
-                        print('<extension //>'+str(extension), file=sys.stderr)
-                        print('<invalid_extension //>' +
-                              str(invalid_extension), file=sys.stderr)
+                        # print('<extension //>'+str(extension), file=sys.stderr)
+                        # print('<invalid_extension //>' +
+                        #       str(invalid_extension), file=sys.stderr)
                         invalid_extension += 1
                         messages.error(
                             request, 'Erreur : L\'extension n\'est pas autorisée !')
 
                 if invalid_extension == 0:
                     for f in files:
-                        print('<file name>'+f.name, file=sys.stderr)
+                        # print('<file name>'+f.name, file=sys.stderr)
                         # print('<file extension>'+f.name, file=sys.stderr)
                         obj = File.objects.create(
                             modele3D=new_modele, path_file=f)
 
                     if traitement.type_traitement == "Texte":
-                        print('<Texte>', file=sys.stderr)
+                        # print('<Texte>', file=sys.stderr)
                         traitement.image = None
                     else:
                         new_image = ImageForm(request.POST, request.FILES)
@@ -254,20 +424,65 @@ def add_traitement(request, id):
                         else:
                             messages.error(
                                 request, 'Erreur : L\'image que vous avez entrer ne peut pas être acceptée !')
-                    print('<Texte ??>', traitement.type_traitement, file=sys.stderr)
+                    # print('<Texte ??>', traitement.type_traitement, file=sys.stderr)
                     traitement.modele3D = new_modele
                     traitement.save()
+                    traitement.visibilite.add(professeur)
+                    # visibilite = VisibiliteModele.objects.create(
+                    #     modele3D=new_modele, professeur=professeur)
                     messages.success(request, ('Le modele AR a été ajouté !'))
                 # else:
                 #     return redirect('add_traitement')
             else:
                 messages.error(
                     request, 'Erreur : Le modèle ne peut pas être enregistré !')
-        return redirect("chapitres_list")
+        # return redirect("chapitres_list")
+        return redirect('chapitre_details', id)
+        # return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
-    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file
+    return render(request, 'cours/add_traitement.html', context={'new_traitement': new_traitement, 'new_modele3d': new_modele3d, 'new_image': new_image, 'new_file': new_file, 'modeles_visibles': modeles_visibles
                                                                  #  , 'trait': trait
                                                                  })
+
+
+@login_required
+def traitement_details(request):
+    # if request.is_ajax and request.method == "GET":
+    traitement_id = request.GET.get("traitement_id", None)
+    professeur = Professeur.objects.filter(
+        admin_id=request.user.id).first()
+
+    traitement = Traitement.objects.filter(id=traitement_id).first()
+    modele3d = Modele3D.objects.filter(id=traitement.modele3D_id).first()
+    files = File.objects.filter(modele3D=modele3d).all()
+    # fileCount = {"count": files}
+    if(traitement.type_traitement != "Texte"):
+        image = Image.objects.filter(id=traitement.image_id).first()
+        context = {
+            "traitement": json.loads(serialize('json', [traitement]))[0],
+            "professeur": json.loads(serialize('json', [professeur]))[0],
+            "modele3d": json.loads(serialize('json', [modele3d]))[0],
+            "files": serialize('json', files),
+            "image": json.loads(serialize('json', [image]))[0]
+        }
+    else:
+        context = {
+            "traitement": json.loads(serialize('json', [traitement]))[0],
+            "professeur": json.loads(serialize('json', [professeur]))[0],
+            "modele3d": json.loads(serialize('json', [modele3d]))[0],
+            # "files": files
+            "files": serialize('json', files),
+            # "professeur": json.dumps(professeur),
+            # "modele3d": json.dumps(modele3d),
+            # "image": image,
+            # "traitement": serialize('json', [traitement, ]),
+            # "professeur": serialize('json', [professeur, ]),
+            # "modele3d": serialize('json', [modele3d]),
+        }
+    return JsonResponse(context, status=200)
+    # return JsonResponse({}, status=400)
+    # return HttpResponse(context)
+    # return render(request, 'cours/chapitre_details.html', context)
 
 
 def file_upload_location(modele3d, filename):
@@ -295,3 +510,85 @@ def makedirs(path):
     except OSError as e:
         if e.errno == 17:
             pass
+
+
+@login_required
+def update_traitement(request, id):
+    professeur = Professeur.objects.filter(
+        admin_id=request.user.id).first()
+    traitement = Traitement.objects.filter(id=id).first()
+    q = Traitement.objects.filter(id=id).annotate(Count('id'))
+    type_traitement = q[0].type_traitement
+    chapitre_id = q[0].chapitre_id
+    modele3d = Modele3D.objects.filter(id=traitement.modele3D_id).first()
+    files = File.objects.filter(modele3D=modele3d).all()
+    if type_traitement != 'Texte':
+        image = Image.objects.filter(id=traitement.image_id).first()
+    updated_image = None
+    # print('ggtemp')
+    if request.method == "GET":
+        updated_traitement = TraitementForm(
+            instance=traitement, request=request)
+        updated_modele3d = Modele3DForm(instance=modele3d, request=request)
+        if type_traitement != 'Texte':
+            updated_image = ImageForm(instance=image, request=request)
+
+    elif request.method == "POST":
+        updated_traitement = TraitementForm(
+            request.POST, request.FILES, instance=traitement, request=request)
+        updated_modele3d = Modele3DForm(
+            request.POST, request.FILES, instance=modele3d, request=request)
+        if type_traitement != 'Texte':
+            updated_image = ImageForm(
+                request.POST, request.FILES, instance=image, request=request)
+
+        if updated_traitement.is_valid():
+            visibilite_profs = updated_traitement.cleaned_data.get(
+                "visibilite")
+            # print('visibilite')
+            # print(visibilite_profs.count())
+            # print(visibilite_profs[0].pk)
+            traitement = updated_traitement.save(commit=False)
+            traitement.type_traitement = type_traitement
+            if updated_modele3d.is_valid():
+                updated_modele3d = updated_modele3d.save()
+
+                if traitement.type_traitement != "Texte":
+                    if updated_image.is_valid():
+                        updated_image = updated_image.save()
+                        traitement.image = updated_image
+                    else:
+                        messages.error(
+                            request, 'Erreur : L\'image que vous avez entré ne peut pas être acceptée !')
+                traitement.modele3D = updated_modele3d
+                traitement.save()
+                # print('traitement.visibilite[0].id')
+                # print(traitement.visibilite.all()[0].pk)
+                # [val for val in Traitement.attribute_answers.all(
+                # ) if val in WishList.attribute_answers.all()]
+                for prof in Professeur.objects.all():
+                    # .exclude(id=professeur.id):
+                    traitement.visibilite.remove(prof)
+                traitement.visibilite.add(professeur)
+                for prof in visibilite_profs:
+                    prof_exist = 0
+                    for visible in traitement.visibilite.all():
+                        if(prof.pk == visible.pk):
+                            prof_exist += 1
+                            print('equal')
+                        if(prof_exist == 0):
+                            print('inexist')
+                            traitement.visibilite.add(prof)
+                messages.success(request, ('Le modele AR a été modifié !'))
+            else:
+                messages.error(
+                    request, 'Erreur : Le modèle ne peut pas être enregistré !')
+        else:
+            messages.error(
+                request, 'Erreur : Le modèle ne peut pas être enregistré !' + traitement.type_traitement)
+        return redirect('chapitre_details', chapitre_id)
+
+    return render(request, 'cours/update_traitement.html', context={'updated_traitement': updated_traitement, 'updated_modele3d': updated_modele3d, 'updated_image': updated_image                                                                    # , 'new_file': new_file
+                                                                    , 'updated_files': files
+                                                                    #  , 'trait': trait
+                                                                    })

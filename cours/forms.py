@@ -3,57 +3,57 @@ from pyexpat import model
 from django import forms
 
 from cours.models import Chapitre, Document, Image, Modele3D, Traitement, File
-<<<<<<< HEAD
-=======
+from module.models import ElementModule
+from users.models import Professeur
 
->>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7
+
+def get_prof_id(request):
+    professeur = Professeur.objects.filter(
+        admin_id=request.user.id).first()
+    return professeur
+
 
 class ChapitreForm(forms.ModelForm):
+
+    # element_module = forms.ModelChoiceField(
+    #     queryset=ElementModule.objects.filter(prof_id=get_prof_id(request)))
+
     class Meta:
         model = Chapitre
         fields = (
             'libelle',
             'description',
             'image',
-            # 'element_module',
+            'element_module',
         )
         labels = {
-            'libelle': 'Nom du chapitre',
-            'description': 'Description du chapitre',
+            'libelle': 'Nom du cours',
+            'description': 'Description du cours',
             'image': 'Image',
-            # 'element_module': 'Element de module'
+            'element_module': 'Element de module'
         }
         widgets = {
-            'libelle': forms.TextInput(attrs={'placeholder': 'Nom du chapitre',
-<<<<<<< HEAD
-                                                               'class': 'form-control', 
-                                                               }),
-            'description': forms.Textarea(attrs={'placeholder': 'Description du chapitre',
-                                                               'class': 'form-control',
-                                                               'cols': 80, 'rows': 5
-                                                               }),
-=======
+            'libelle': forms.TextInput(attrs={'placeholder': 'Nom du cours',
                                               'class': 'form-control',
                                               }),
-            'description': forms.Textarea(attrs={'placeholder': 'Description du chapitre',
+            'description': forms.Textarea(attrs={'placeholder': 'Description du cours',
                                                  'class': 'form-control',
                                                  'cols': 80, 'rows': 5
                                                  }),
->>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7
+            # 'element_module': forms.ChoiceField(choices="hi")
         }
+
     def __init__(self, *args, **kwargs):
+        # if kwargs.__contains__("request"):
+        self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['libelle'].label = ''
         self.fields['description'].label = ''
         self.fields['image'].label = ''
         self.fields['element_module'].label = ''
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['libelle'].label = ''
-        self.fields['description'].label = ''
-        self.fields['image'].label = ''
-        # self.fields['element_module'].label = ''
+        self.fields['element_module'].required = False
+        self.fields['element_module'].queryset = ElementModule.objects.filter(
+            prof_id=get_prof_id(self.request))
 
 
 class DocumentForm(forms.ModelForm):
@@ -90,18 +90,6 @@ class Modele3DForm(forms.ModelForm):
         labels = {
             'titre_modele3d': 'Nom du Modèle 3D'
         }
-<<<<<<< HEAD
-        widgets={
-            'titre_modele3d': forms.TextInput(attrs={'placeholder': 'Nom du Modèle 3D',
-                                                               'class': 'form-control',
-                                                               }),
-        }
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['titre_modele3d'].label = ''
-        
-CHOICES=[('image','Image'),('texte','Texte'),('qrcode','QR-Code')]
-=======
         widgets = {
             'titre_modele3d': forms.TextInput(attrs={'placeholder': 'Nom du Modèle 3D',
                                                      'class': 'form-control',
@@ -109,13 +97,14 @@ CHOICES=[('image','Image'),('texte','Texte'),('qrcode','QR-Code')]
         }
 
     def __init__(self, *args, **kwargs):
+        if kwargs.keys().__contains__("request"):
+            self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['titre_modele3d'].label = ''
 
 
 CHOICES = [('image', 'Image'), ('texte', 'Texte'), ('qrcode', 'QR-Code')]
 
->>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7
 
 class TraitementForm(forms.ModelForm):
     class Meta:
@@ -124,25 +113,14 @@ class TraitementForm(forms.ModelForm):
             'titre_traitement',
             'label_traitement',
             'type_traitement',
+            'visibilite'
         )
         labels = {
             'titre_traitement': 'Titre',
             'label_traitement': 'Type du generateur du modele',
-            'type_traitement': 'Label'
+            'type_traitement': 'Label',
+            'visibilite': 'Visibilité'
         }
-<<<<<<< HEAD
-        widgets={
-            'titre_traitement': forms.TextInput(attrs={'placeholder': 'Nom',
-                                                               'class': 'form-control',
-                                                               }),
-            'label_traitement': forms.Textarea(attrs={'placeholder': 'Label',
-                                                               'class': 'form-control',
-                                                               'cols': 80, 'rows': 3
-                                                               }),
-            'type_traitement': forms.RadioSelect(choices=CHOICES
-                                    #   , attrs={'class': 'custom-control-input'}
-                                      )
-=======
         widgets = {
             'titre_traitement': forms.TextInput(attrs={'placeholder': 'Nom',
                                                        'class': 'form-control',
@@ -153,19 +131,29 @@ class TraitementForm(forms.ModelForm):
                                                       }),
             'type_traitement': forms.RadioSelect(choices=CHOICES
                                                  #   , attrs={'class': 'custom-control-input'}
-                                                 )
->>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7
+                                                 ),
+            # 'visibilite': forms.MultipleChoiceField(initial=)
             # 'type_traitement': forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'class': 'custom-control-input'}))
         }
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['titre_traitement'].label = ''
-        self.fields['label_traitement'].label = ''
+
+    # members = forms.ModelMultipleChoiceField(
+    #     queryset=Member.objects.all(),
+    #     widget=forms.CheckboxSelectMultiple
+    # )
 
     def __init__(self, *args, **kwargs):
+        if kwargs.keys().__contains__("request"):
+            self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['titre_traitement'].label = ''
         self.fields['label_traitement'].label = ''
+        self.fields['visibilite'].label = ''
+        self.fields['type_traitement'].required = False
+        self.fields['label_traitement'].required = False
+        self.fields["visibilite"].queryset = Professeur.objects.all().exclude(
+            id=get_prof_id(self.request).id)
+        # self.fields["visibilite"].initial = Professeur.objects.get(
+        #     id=get_prof_id(self.request).id)
 
 
 class ImageForm(forms.ModelForm):
@@ -176,14 +164,6 @@ class ImageForm(forms.ModelForm):
             'path_image': 'Image',
             # 'is_qrcode': ''
         }
-<<<<<<< HEAD
-        widgets={
-            'name_image': forms.TextInput(attrs={'placeholder': 'Nom de l\'image',
-                                                               'class': 'form-control',
-                                                               }),
-            # 'is_qrcode': forms.HiddenInput(attrs={'id': 'is-qrcode'})
-        }
-=======
         widgets = {
             'name_image': forms.TextInput(attrs={'placeholder': 'Nom de l\'image',
                                                  'class': 'form-control',
@@ -191,16 +171,14 @@ class ImageForm(forms.ModelForm):
             # 'is_qrcode': forms.HiddenInput(attrs={'id': 'is-qrcode'})
         }
 
->>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7
     def __init__(self, *args, **kwargs):
+        if kwargs.keys().__contains__("request"):
+            self.request = kwargs.pop("request")
         super().__init__(*args, **kwargs)
         self.fields['name_image'].label = ''
         self.fields['path_image'].label = ''
 
-<<<<<<< HEAD
-=======
 
->>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7
 class FileForm(forms.ModelForm):
     class Meta:
         model = File
@@ -210,15 +188,8 @@ class FileForm(forms.ModelForm):
         widgets = {
             'path_file': forms.ClearableFileInput(attrs={'multiple': True}),
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['path_file'].label = ''
         # self.fields['path'].label = ''
-<<<<<<< HEAD
-        
-=======
->>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7

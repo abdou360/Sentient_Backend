@@ -11,7 +11,7 @@ from users.permissionForm import AddPermissionForm, EditPermissionForm
 # UnivIt responsable : ismail errouk
 def addPermission(request):
     form = AddPermissionForm()
-    return render(request, 'admin/add_Permission_template.html', {'form': form})
+    return render(request, 'roles_permissions/add_Permission_template.html', {'form': form})
 
 # UnivIt responsable : ismail errouk
 def addPermissionSave(request):
@@ -34,7 +34,7 @@ def editPermission(request, id):
         "id": id,
         "form": form
     }
-    return render(request, "admin/edit_permission_template.html", context)
+    return render(request, "roles_permissions/edit_permission_template.html", context)
 
 # UnivIt responsable : ismail errouk
 def editPermissionSave(request, id):
@@ -56,4 +56,4 @@ def deletePermission(request, id):
 # UnivIt responsable : ismail errouk
 def managePermission(request):
     permissions = Permission.objects.all()
-    return render(request, 'admin/manage_Permission_template.html', {'permissions': permissions})
+    return render(request, 'roles_permissions/manage_Permission_template.html', {'permissions': permissions})

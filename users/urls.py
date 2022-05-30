@@ -4,9 +4,11 @@ from users import views, PermissionsView, rolesView
 from users.views import home
 from django.contrib.auth.views import LoginView, LogoutView
 from . import AdminViews, TeacherViews, StudentViews
+from emploie import views as EmploieViews
 from django.conf import settings
 from django.conf.urls.static import static
 from users.StudentViews import *
+from face_recognition.views import video_feed
 
 urlpatterns = [
                   # UnivIt responsable : Ettafssaoui Youssef 
@@ -34,12 +36,15 @@ urlpatterns = [
                #    path('edit_session_save/', AdminViews.edit_session_save, name="edit_session_save"),
                #    path('delete_session/<session_id>/', AdminViews.delete_session, name="delete_session"),
                   # UnivIt responsable : ismail errouk
+                  path('students/', StudentViews.getAllStudents, name="get_all_students"),
                   path('add_student/', StudentViews.add_student, name="add_student"),
                   path('add_student_save/', StudentViews.add_student_save, name="add_student_save"),
                   path('add_student_groups/<int:id>', StudentViews.add_student_groups, name="add_student_groups"),
                   path('add_student_groups_save/<int:id>', StudentViews.add_student_groups_save,
                        name="add_student_groups_save"),
                   path('edit_student/<student_id>', StudentViews.edit_student, name="edit_student"),
+                  
+                  path('edit_student/video_feed/<str:id>/', video_feed, name='video_feed'),
                   path('edit_student_save/<int:id>', StudentViews.edit_student_save, name="edit_student_save"),
                   path('edit_groupe_add_save/<int:id>', StudentViews.edit_groupe_add_save, name="edit_groupe_add_save"),
                   path('edit_groupe_groupes/<int:id>', StudentViews.edit_groupe_groupes, name="edit_groupe_groupes"),
@@ -84,5 +89,8 @@ urlpatterns = [
                   path('delete_role/<int:id>', rolesView.deleteRole, name="delete_role"),
                   path('delete_role_permission/<int:id1>/<int:id2>', rolesView.deleteRolePermission,
                        name="delete_role_permission"),
+                  # Schedules
+                  # CodeVerse:responsable : FIROUD Reda & OUSSAHI Salma
+                  path('emploie-admin',EmploieViews.EmploieAdmin, name="emploie_admin"),
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
