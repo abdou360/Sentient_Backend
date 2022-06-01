@@ -66,30 +66,11 @@
                 <input type="button" name="previous" class="previous-to-1 action-button-previous" value="Précédant" />
                 <input type="button" name="next" class="next-to-3 action-button" value="Suivant" />
             </fieldset>
-            <!-- <fieldset id='fs-qrcode'>
-                <h2 class="fs-title">Ajout du QR Code</h2>
-                <hr />
-                <h3 class="fs-subtitle">Veuillez ajouter le QR Code</h3>
-                {{new_image.name_image|as_crispy_field}}
-                {{new_image.path_image|as_crispy_field}}
-                <input type="button" name="previous" class="previous-to-1 action-button-previous" value="Précédant" />
-                <input type="button" name="next" class="next-to-3 action-button" value="Suivant" />
-            </fieldset> -->
             <fieldset id="fs-3">
                 <h2 class="fs-title mb-4">Ajout du modèle</h2>
                 <hr />
                 <h3 class="fs-subtitle">Veuillez ajouter le modèle 3D</h3>
 
-                <!-- <div class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-primary">
-                          <input class="btn-check" type="radio" name="options" id="option1"> Option 1
-                        </label>
-                        <label class="btn btn-primary">
-                          <input class="btn-check" type="radio" name="options" id="option2"> Option 2
-                        </label>
-                    </div> -->
-
-                <!-- <div class="row"> -->
                 <br>
                 <br>
                 <div class="col col-12">
@@ -111,33 +92,17 @@
                             </div>
                         </div>
 
-                        <!-- <div id="document" class="tab-pane fade">  
-                                    <h2>Document</h2> 
-                                    <div class="row content" >
-                                   
-                                    </div>
-                                </div> -->
-
                         <div id="existant-modele" class="tab-pane fade">
                             <div class="col-12">
                                 {{new_traitement.modele3D|as_crispy_field}}
-                                <!-- {% for m in modeles_visibles %}
-                                            <div>{{m}}</div>
-                                        {% endfor %} -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- </div> -->
-
-
-
-
 
                 <input type="button" name="previous" class="previous-to-2 action-button-previous" value="Previous" />
                 <input type="submit" name="submit" class="submit action-button submit_traitement" value="Submit" />
-                {% comment %} <button type="submit" name="submit" class="submit action-button ">Submit</button>
-                {%endcomment %}
+
             </fieldset>
         </form>
     </div>
@@ -151,9 +116,5 @@
         visibility: hidden;
         position: absolute;
     }
-
-    /* .fs-title {
-            margin-top: 200px;
-        } */
 </style>
 {% endblock content %}

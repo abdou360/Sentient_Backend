@@ -100,13 +100,6 @@
                     <img class="p-3" src="img/cours/folder-files-and-folders-svgrepo-com.svg" alt="..." height="210"
                         width="100%" />
                     {% endif %}
-                    <!-- {% comment %} <img
-                            class="p-3"
-                            src="{{chapitre.image.url}}"
-                            alt="..."
-                            height="210" 
-                            width="100%"
-                            /> {% endcomment %} -->
                     <div class="card-body">
                         <div class="row">
                             <div class="col col-12">
@@ -120,7 +113,6 @@
                                 <a href="{% url 'chapitre_details' chapitre.id %}" class="tooltip_show"
                                     title="Voir le chapitre"><i class="fa fa-eye"></i></a>
                             </div>
-                            <!-- <div class="col col-2 mt-2"></div> -->
                             <div class="col col-4 mt-4">
                                 <a href="{% url 'update_chapitre' chapitre.id %}" class="tooltip_update"
                                     title="Modifier le chapitre"><i class="fa fa-pen" style="color:#e5bf41"></i></a>
@@ -148,8 +140,6 @@
 <link href="{% static 'css/cours/custom_tooltip.css' %}" rel="stylesheet" type="text/css">
 {% endblock style%}
 
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
-
 <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
 
 <script src=" {% static 'js/cours/chapitres.js' %}"></script>
@@ -159,11 +149,6 @@
     $('.delete_object').click(function () {
         return confirm('Vous êtes sûr que vous voulez supprimer ce chapitre ?');
     })
-
-    // var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    // var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    // return new bootstrap.Tooltip(tooltipTriggerEl)
-    // })
 
     $(document).ready(function () {
         $("#tooltip_add").tooltip({

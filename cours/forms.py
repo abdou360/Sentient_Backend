@@ -15,9 +15,6 @@ def get_prof_id(request):
 
 class ChapitreForm(forms.ModelForm):
 
-    # element_module = forms.ModelChoiceField(
-    #     queryset=ElementModule.objects.filter(prof_id=get_prof_id(request)))
-
     class Meta:
         model = Chapitre
         fields = (
@@ -135,17 +132,7 @@ class TraitementForm(forms.ModelForm):
             'type_traitement': forms.RadioSelect(choices=CHOICES
                                                  #   , attrs={'class': 'custom-control-input'}
                                                  ),
-            # 'modele3D': forms.RadioSelect(
-            #     #   , attrs={'class': 'custom-control-input'}
-            # ),
-            # 'visibilite': forms.MultipleChoiceField(initial=)
-            # 'type_traitement': forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'class': 'custom-control-input'}))
         }
-
-    # members = forms.ModelMultipleChoiceField(
-    #     queryset=Member.objects.all(),
-    #     widget=forms.CheckboxSelectMultiple
-    # )
 
     def __init__(self, *args, **kwargs):
         if kwargs.keys().__contains__("request"):
@@ -163,8 +150,6 @@ class TraitementForm(forms.ModelForm):
             id=get_prof_id(self.request).id)
         self.fields["modele3D"].queryset = Modele3D.objects.filter(
             id__in=[val.id for val in Traitement.objects.filter(visibilite=get_prof_id(self.request))])
-        # self.fields["visibilite"].initial = Professeur.objects.get(
-        #     id=get_prof_id(self.request).id)
 
 
 class ImageForm(forms.ModelForm):
@@ -179,7 +164,6 @@ class ImageForm(forms.ModelForm):
             'name_image': forms.TextInput(attrs={'placeholder': 'Nom de l\'image',
                                                  'class': 'form-control',
                                                  }),
-            # 'is_qrcode': forms.HiddenInput(attrs={'id': 'is-qrcode'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -204,4 +188,3 @@ class FileForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['path_file'].label = ''
         self.fields['path_file'].required = False
-        # self.fields['path'].label = ''

@@ -2,9 +2,6 @@ from cours.models import *
 from rest_framework import serializers
 
 
-# class
-
-
 class ChapitreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapitre

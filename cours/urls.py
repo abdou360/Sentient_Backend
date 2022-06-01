@@ -8,8 +8,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('getTextTraitement', get_traitement ,name='get_traitement'),
-    path('allDocs/<int:id>', get_Document ,name='get_Document'),
+    path('getTextTraitement', get_traitement, name='get_traitement'),
+    path('allDocs/<int:id>', get_Document, name='get_Document'),
 
     path('', chapitres_list, name='chapitres_list'),
     path('filiere=<str:val>',
@@ -37,7 +37,6 @@ urlpatterns = [
          traitement_details, name='traitement_details'),
 
     path('delete_document/<int:id>', delete_document, name='delete_document'),
-
 
     path('api/chapitres', chapitres_list_api, name='chapitres_list_api'),
     path('api/chapitre/<int:id_chapitre>',
