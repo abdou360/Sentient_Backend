@@ -48,25 +48,27 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UserConfig',
+    'corsheaders',
+    'rest_framework_simplejwt',
+    'rest_framework.authtoken',
+    'api',
     'semestre',
     'filiere',
     'emploie',
     'module',
     'crispy_forms',
     'rest_framework',
-    'rest_framework.authtoken',
     'cours',
-    'face_recognition',
+    'face_recognition'
 ]
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ],
+    'DEFAULT_PERMISSION_CLASSES':["rest_framework.permissions.AllowAny"],
+    'DEFAULT_PARSER_CLASSES': ['rest_framework.parsers.JSONParser'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
 }
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -79,7 +81,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -112,12 +117,10 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-
         'NAME': 'ar-crud-project',
-
         'USER': 'root',
-        'PASSWORD': '',
-        'PORT': '3306',
+        'PASSWORD': 'root',
+        'PORT': '8889',
         'HOST': '127.0.0.1'
     }
 }
