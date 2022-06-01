@@ -9,7 +9,7 @@ from users.models import Professeur
 
 def get_prof_id(request):
     professeur = Professeur.objects.filter(
-        admin_id=request.user.id).first()
+        user_id=request.user.id).first()
     return professeur
 
 

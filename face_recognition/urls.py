@@ -13,10 +13,9 @@ from .api.views import *
 
 urlpatterns = [
     # machine learning : learning par web 
-    path('create_dataset_submit/', test_module_submit),
-    path('edit_student/video_feed/<str:id>/', video_feed, name='video_feed'),
     path('training/<str:filiere>/<str:niveau>/<str:groupe>/', training , name ='training'),
     path('testerModel/', TesterModel , name ='testerModel'),
+    path('testRegisterBD/', testRegisterBD , name ='testRegisterBD'),
     
     # gest_presence : admin dashbord
     path('gestion-presence-modele/', EntrainementAdminDash , name ='EntrainementAdminDash'),
@@ -25,6 +24,7 @@ urlpatterns = [
     path('groupes-json/<str:niveau>/', get_json_group_data, name="jsonGroupes"),
     
     # rest framework 
+    path('mobile/salles/', getSalles, name='salles_list'),
     path('mobile/filieres', filiere_liste, name='filiere_liste'),
     path('mobile/niveau/<str:nom_filiere>', Niveau_liste, name='niveau_liste'),
     path('mobile/niveau_Choisi', post_niveau, name='post_niveau'),

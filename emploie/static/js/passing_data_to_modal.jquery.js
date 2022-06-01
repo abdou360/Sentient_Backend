@@ -14,7 +14,7 @@ function (event) {
     var id_seance = btn.data('id_seance')
     var nom_etudiant = btn.data('nom_etudiant')
 
-    $("#modifier_url").attr("href", "http://localhost:8000/emploie/modifier-presence/"+ id_seance + "/" + id_etudiant)
+    $("#modifier_url").attr("href", "/emploie/modifier-presence/"+ id_seance + "/" + id_etudiant)
       
     var modal = $(this)
           

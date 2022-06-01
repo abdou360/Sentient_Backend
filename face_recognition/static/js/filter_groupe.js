@@ -5,7 +5,6 @@
  *            + MOUZAFIR ABDELHADI
  */
 
-
  const Form = document.getElementById('modele-admin-form')
 
  const FiliereDataBox = document.getElementById('filiere-data-box')
@@ -24,7 +23,7 @@
  
  $.ajax({
      type: 'GET',
-     url: '/filieres-json/',
+     url: '/face-recognition/filieres-json/',
      success: function(response){
          console.log(response.data)
          const filieresData = response.data
@@ -42,6 +41,8 @@
      }
  })
  
+
+ 
  var selectedFiliere
  var selectedNiveau
  var selectedGroupe
@@ -58,21 +59,68 @@
      NiveauDataBox.innerHTML = ""
      GroupeDataBox.innerHTML = ""
      dropdownFilieres.textContent = e.target.id
+     
+     dropdownNiveaux.textContent = "Filière"
+     dropdownGroupes.textContent = "Groupe"
  
      
  
      $.ajax({
          type: 'GET',
-         url: `/niveaux-json/${selectedFiliere}`,
+         url: `/face-recognition/niveaux-json/${selectedFiliere}`,
          success: function(response){
              console.log(response.data) 
              const niveauxData = response.data
              niveauxData.map( item => {
                  const option = document.createElement('div')
-                 option.textContent = item.nom_niveaux
+                 option.textContent = item.nom_niveau
                  option.setAttribute('class', 'dropdown-item')
-                 option.setAttribute('id', item.nom_niveaux)
+                 option.setAttribute('id', item.nom_niveau)
                  NiveauDataBox.appendChild(option)
+             })
+
+
+             NiveauInput.addEventListener('click', e=>{
+                 
+                 btnBox.classList.add('disabled')
+                 dropdownNiveaux.textContent = e.target.id
+                 dropdownGroupes.textContent = "Groupe"
+                 GroupeDataBox.innerHTML = ""
+                 console.log(e.target.id)
+                 selectedNiveau = e.target.id
+
+
+                 $.ajax({
+                     type: 'GET',
+                     url: `/face-recognition/groupes-json/${selectedNiveau}`,
+                     success: function(response){
+                         console.log(response.data) 
+                         const groupesData = response.data
+                         groupesData.map( item => {
+                             const option = document.createElement('div')
+                             option.textContent = item.nom_group
+                             option.setAttribute('class', 'dropdown-item')
+                             option.setAttribute('id', item.nom_group)
+                             GroupeDataBox.appendChild(option)
+                         })
+         
+         
+                         GroupeInput.addEventListener('click', e=>{
+                             console.log(e.target.id)
+                             selectedGroupe = e.target.id
+                             
+                             dropdownGroupes.textContent = e.target.id
+                             btnBox.classList.remove('disabled')
+
+                             btnBox.setAttribute("href", `/face-recognition/training/${selectedFiliere}/${selectedNiveau}/${selectedGroupe}/`)
+                             console.log("attr = " + btnBox)
+                         })
+                 
+                     },
+                     error: function(error){
+                         console.log(error)
+                     }
+                 })
              })
 
      
@@ -83,8 +131,5 @@
          }
      })
  
-     
- 
-     
  })
- 
+

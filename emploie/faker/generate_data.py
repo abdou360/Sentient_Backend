@@ -7,15 +7,16 @@ from faker import Faker
 from datetime import date
 from emploie.models import Planning, Presence, Seance, TypeSalle, Salle
 from filiere.models import Etablissement, Filiere
-from semestre.models import Groupe, Niveau, Semestre
+from semestre.models import AnneUniversitaire, Groupe, Niveau, Semestre
 from module.models import ElementModule, Module
 from users.models import Admin, CustomUser, Students, Professeur
+import datetime
 
   
   
 #   Générer des données alétoire à l'aide de faker
 #   Tables remplies : Salle, TypeSalle, Etablissement, Filiere, Niveau, Groupe, Semestre, Module, ElementModule, 
-#                     CustomUser, Student, Professeur, Admin, Seance, Presence, Planning.
+#                     CustomUser, Student, Professeur, Admin, Seance, Presence, Planning, AnneUniversitaire.
 
 
 Faker.seed(321)
@@ -47,19 +48,19 @@ print("insertion de 4 salles")
 
 
 ########### Etablissement (FSTG)
-etab = Etablissement(1, "Faculté des Sciences et Techniques Marrakech", "B.P 549, Av.Abdelkarim Elkhattabi, Guéliz Marrakech", "(+212) 524 43 34 04", "Enseignement supérieur", "http://www.fstg-marrakech.ac.ma/FST/", "contact@fstg-marrakech.com", "https://via.placeholder.com/640x480.png/004466?text=fstg+logo")
+etab = Etablissement(1, "Faculté des Sciences et Techniques Marrakech", "B.P 549, Av.Abdelkarim Elkhattabi, Guéliz Marrakech", "(+212) 524 43 34 04", "Enseignement supérieur", "http://www.fstg-marrakech.ac.ma/FST/", "contact@fstg-marrakech.com", "logo_fstg.png")
 etab.save()
 print("insertion de 1 etablissement")
 
 
 ########### FILIERE (IRISI, SDAD, SIR)	
-irisi = Filiere(1, "IRISI", "https://via.placeholder.com/640x480.png/004466?text=irisi+logo", 1)
+irisi = Filiere(1, "IRISI", "logo.png", 1)
 irisi.save()
 
-sdad = Filiere(2, "SDAD", "https://via.placeholder.com/640x480.png/004466?text=sdad+logo", 1)
+sdad = Filiere(2, "SDAD", "logo.png", 1)
 sdad.save()
 
-sir = Filiere(3, "SIR", "https://via.placeholder.com/640x480.png/004466?text=sir+logo", 1)
+sir = Filiere(3, "SIR", "logo.png", 1)
 sir.save()
 print("insertion de 3 filieres")
 
@@ -123,7 +124,7 @@ s5_sir.save()
 print("insertion de 5 semestres")
 
 
-########### MODULE 	(13 modules)
+########### MODULE 	(3~5 modules/semestre)
 tab_module = [
     "Intelligence artificielle",
     "base de données répartie",
@@ -136,10 +137,11 @@ tab_module = [
     "Méthode agile",
     "administration de base de données",
 ]
-for i in range(13):
-    module = Module(libelle_module=tab_module[fake.random.randint(0,9)], semestre=Semestre.objects.get(pk = fake.random.randint(1,5)) , created_at=fake.date(), updated_at=date.today())
-    module.save()
-print("insertion de 13 modules")
+for i in range(4): 
+    semestre = Semestre.objects.get(pk = i+1)
+    for j in range(fake.random.randint(3,5)):
+        module = Module(libelle_module=tab_module[fake.random.randint(0,9)], semestre=semestre , created_at=fake.date(), updated_at=date.today())
+        module.save()
 
 ########### users_customuser (820 users : 20 profs + 800 students)
 # users_students
@@ -147,40 +149,168 @@ users_students = []
 for i in range(800):
     first_name = fake.first_name()
     last_name = fake.last_name()
-    user = CustomUser(username=first_name + " " + last_name + "_" + str(i), password="pbkdf2_sha256$260000$tgju8L06fP2IOwmmF9D7X7$89SE3SCUcjNN8PFKmOsvDOP7xt+o4dfwWeF5CPgMnMs=", email=last_name + "." + first_name + "@edu.uca.ma",  first_name=first_name, last_name=last_name, last_login = date.today(), user_type=3)
+    user = CustomUser(username=first_name + " " + last_name + "_" + str(i),
+                      password="pbkdf2_sha256$320000$5a2pLmnD2pZdPCvDJVQyFz$LNTXyVuU0/TNXC3NFKMy978wC8BmN0nXN0bobJeGl9M=", 
+                      email=last_name + "." + first_name + "@edu.uca.ma",
+                      first_name=first_name,
+                      last_name=last_name,
+                      user_type=3)
     user.save()
     users_students += [user]
     
+            
+#####################################################
+#                    IRISI 2                        #
+#####################################################
+irisi2_students = [
+    {
+        "first_name": "F.Ezzahra",
+        "last_name": "Kannoufa",
+    },    
+    {
+        "first_name": "Salma",
+        "last_name": "Oussahi",
+    },
+    {
+        "first_name": "Reda",
+        "last_name": "Firoud",
+    },
+    
+    {
+        "first_name": "Hicham",
+        "last_name": "Marouni",
+    },
+    {
+        "first_name": "Narjis",
+        "last_name": "Bentouhami",
+    },
+    {
+        "first_name": "Abdelhadi",
+        "last_name": "Mouzafir",
+    },
+    {
+        "first_name": "Aminatou",
+        "last_name": "Hamissou Abdou",
+    },
+    {
+        "first_name": "Sami",
+        "last_name": "Jimouh",
+    },
+    {
+        "first_name": "Khadija",
+        "last_name": "Ougoud",
+    },
+    {
+        "first_name": "Kaoutar",
+        "last_name": "Oubenaddi",
+    },
+    {
+        "first_name": "Youssef",
+        "last_name": "Ettafssaoui",
+    },
+    {
+        "first_name": "Ismail",
+        "last_name": "Errouk",
+    },
+    {
+        "first_name": "Said",
+        "last_name": "Aabilla",
+    },
+    {
+        "first_name": "Zakaria",
+        "last_name": "Outhouna",
+    },
+    {
+        "first_name": "Nabil",
+        "last_name": "Lamkadam",
+    },
+    {
+        "first_name": "Abdelaziz",
+        "last_name": "Aguenchich",
+    },
+    {
+        "first_name": "Bougary",
+        "last_name": "Tamega",
+    },
+    {
+        "first_name": "Hajar",
+        "last_name": "Safiaeddine",
+    },
+    {
+        "first_name": "nourelhouda",
+        "last_name": "raguigue",
+    },
+    {
+        "first_name": "Ahmed",
+        "last_name": "ElRhaouti",
+    },
+  
+]
+
+
+for i in range(19):
+    student = irisi2_students[i]
+    last_name = student['last_name']
+    first_name = student['first_name']
+    user = CustomUser(username=first_name+ " " + last_name,
+                    password="pbkdf2_sha256$320000$5a2pLmnD2pZdPCvDJVQyFz$LNTXyVuU0/TNXC3NFKMy978wC8BmN0nXN0bobJeGl9M=", 
+                    email=last_name + "." + first_name + "@edu.uca.ma",
+                    first_name=first_name,
+                    last_name=last_name,
+                    user_type=3)
+    user.save()
+    users_students += [user]
+    
+
+
 # users_prof
+count = 2
 users_prof = []
 for i in range(20):   
     first_name = fake.first_name()
     last_name = fake.last_name()
-    user = CustomUser(username=first_name + " " + last_name + "_" + str(i), password="pbkdf2_sha256$260000$tgju8L06fP2IOwmmF9D7X7$89SE3SCUcjNN8PFKmOsvDOP7xt+o4dfwWeF5CPgMnMs=", email=last_name + "." + first_name + "@edu.uca.ma", first_name=first_name, last_name=last_name, last_login = date.today(), user_type=2)
+    user = CustomUser(id=count, username=first_name + " " + last_name + "_" + str(i),
+                      password="pbkdf2_sha256$320000$5a2pLmnD2pZdPCvDJVQyFz$LNTXyVuU0/TNXC3NFKMy978wC8BmN0nXN0bobJeGl9M=",
+                      email=last_name + "." + first_name + "@edu.uca.ma",
+                      first_name=first_name,
+                      last_name=last_name,
+                      user_type=2)
     user.save()
+    count +=1
     users_prof += [user]
-print("insertion de 820 users")
 
 
 ########### ADMIN 	
-admin = Admin(created_at=fake.date(), updated_at=date.today(), admin_id=1)
+admin = Admin(id=1,created_at=fake.date(), updated_at=date.today(), admin_id=1)
 admin.save()
 
 ########### STUDENTS (800 students)
-for i in range(800):
-    student = Students(cne=fake.numerify('EE######'), adresse=fake.address(), path_photos="/path_photos/",	telephone=fake.numerify('06########'), code_apogee=fake.numerify('18#####'), admin_id=1,	user_id=users_students[i].id)
+for i in range(818):
+    user = users_students[i]
+    student = Students(cne=fake.numerify('EE######'),
+                       adresse=fake.address(),
+                       path_photos="face_recognition/service_metier/dataset/Etudiant_"+ user.last_name + "_" + user.first_name  +'/',
+                       telephone=fake.numerify('06########'),
+                       code_apogee=fake.numerify('18#####'),
+                       admin_id=1,
+                       user_id=user.id,
+                       profile_pic="photo.jpg"
+                       )      
     student.save()
-print("insertion de 800 students")
+    
 
 
 ############ PROFESSEUR (20 profs)
 for i in range(20):
-    prof = Professeur(matricule=fake.numerify('########'), specialite="Informatique", telephone=fake.numerify('06########'), created_at=fake.date(), updated_at=date.today(), admin_id=users_prof[i].id)
+    #prof = Professeur(matricule=fake.numerify('########'), specialite="Informatique", telephone=fake.numerify('06########'), created_at=fake.date(), updated_at=date.today(), admin_id=users_prof[i].id)
+    prof = Professeur(created_at=fake.date(), updated_at=date.today(), admin_id=users_prof[i].id)
     prof.save()
-print("insertion de 20 profs")
+    
 
 
 ############ Element de module (1 element / module)
+
+#id	libelle_element_module	volumeHoraire	objectif	created_at	updated_at	module_id	responsable_id
 modules = Module.objects.all()
 profs = Professeur.objects.all()
 for i in range(13):
@@ -188,36 +318,72 @@ for i in range(13):
     elt_module.save()
 
 
-############ Planning
+############ Planning (1~3 planings / eltModule)
+JOURS =["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
 elts_mod = ElementModule.objects.all()	
-for i in range(20):
-    elt_mod = elts_mod[fake.random.randint(0,12)]
-    planning = Planning(liblle=elt_mod.libelle_element_module,
-                        groupe_id=fake.random.randint(1,6),
-                        professeur_id=profs[i].id,
-                        salle_id=fake.random.randint(1,4),
-                        element_module_id=elt_mod.id
-                        )
-    planning.save()
+for elt in elts_mod:
+    for i in range(fake.random.randint(1,3)):
+        planning = Planning(libelle=elt.libelle_element_module,
+                            groupe_id=fake.random.randint(1,6),
+                            professeur_id=profs[i].id,
+                            salle_id=fake.random.randint(1,4),
+                            element_module_id=elt.id,
+                            jour=JOURS[fake.random.randint(0,4)],
+                            heure_debut=datetime.time(10, 30, 00),
+                            heure_fin=datetime.time(12, 30, 00),
+                            )
+        planning.save()
 
 
-############ Seance (8~15 séances / planning)
+############ Seance (8~10 séances / planning)
 plannings = Planning.objects.all()	
 for planning in plannings:
-    for i in range(fake.random.randint(8,15)):
+    for i in range(fake.random.randint(8,10)):
         day = fake.date_this_month()
-        seance = Seance(date_debut=day,
-                        date_fin=day,
+        seance = Seance(date=day,
                         planning_id=planning.id
                         )
         seance.save()
+        
+        
+############# Students -- Groupe : AnneUniversitaire
+#   enregistrement des étudiants d'IRISI2 dans le groupe G1/IRISI_2/IRISI
+grp_irisi2 = Groupe.objects.get(niveau__nom_niveau='IRISI_2')
+students_irisi2 = Students.objects.filter(id__gte=803)
+for student in students_irisi2:
+    annee = AnneUniversitaire(
+        libelle = '2021/2022',
+        date = date.today(),
+        etudiant_id	= student.id,
+        group_id = grp_irisi2.id,
+    )
+    annee.save()	
+
+#   enregistrement des autres étudiants dans des groupes aléatoires
+groups = Groupe.objects.exclude(niveau__nom_niveau='IRISI_2')
+students= Students.objects.filter(id__lte=802)
+for student in students:
+    annee = AnneUniversitaire(
+        libelle = '2021/2022',
+        date = date.today(),
+        etudiant_id	= student.id,
+        group_id = groups[fake.random.randint(0,(groups.count() - 1))].id,
+    )
+    annee.save()	
+
 
 ############ Presence (enregistrer des présences pour chaque séance)
-
 seances = Seance.objects.all()
-etudiants = Students.objects.all()
 
 for seance in seances:
-        for i in range(fake.random.randint(20,100)):
-            presence = Presence(libelle="Séance : " + str(seance.date_debut), etudiant_id=etudiants[fake.random.randint(1,800)].id, is_present=fake.boolean(), seance_id=seance.id)
-            presence.save()
+    # récupérer l'id du grp concerné pour cette séance
+    groupe_id = seance.planning.groupe_id
+    etudiants_groupes = AnneUniversitaire.objects.filter(group_id=groupe_id)
+    for etudiant_grp in etudiants_groupes:
+        presence = Presence(libelle="Séance : " + str(seance.date), 
+                            etudiant_id=etudiant_grp.etudiant_id, 
+                            is_present=fake.boolean(),
+                            seance_id=seance.id)
+        presence.save()
+
+            

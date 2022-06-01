@@ -28,6 +28,15 @@ def get_json_group_data(request, niveau):
     return JsonResponse({'data': data})
 
 
+#   API   #
+@api_view(['GET'])
+def getSalles(request):
+    try:
+        salles = Salle.objects.all()
+        serializer = SalleSerializer(salles, many=True)
+        return Response(serializer.data)
+    except Niveau.DoesNotExist:
+        return Response([])
 
 @api_view(['GET'])
 def filiere_liste(request):

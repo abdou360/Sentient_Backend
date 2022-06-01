@@ -7,10 +7,8 @@ from emploie.models import Planning, Seance
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializers import SeanceSerializer
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 
-
-from module.models import ElementModule
 from users.models import Professeur
 
 
@@ -33,7 +31,7 @@ def getSeances(request, idProf):
 
 # filtrage d'1 séance
 def get_json_module_data(request):
-    professeur = Professeur.objects.get(admin_id=request.user.id)
+    professeur = Professeur.objects.get(user_id=request.user.id)
     qs_val = list(Planning.objects.filter(professeur_id=professeur.id).values())
     return JsonResponse({'data': qs_val})
 

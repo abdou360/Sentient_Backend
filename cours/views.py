@@ -4,6 +4,7 @@ import time
 import datetime
 from django.db.models import Q
 from cours.serializers import *
+from functools import reduce
 from users.models import Professeur
 from semestre.models import Niveau, Semestre
 from module.models import ElementModule, Module
@@ -23,6 +24,7 @@ from distutils.command import check
 import sys
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from .serializers import FileSerializer, Modele3DSerializer, TraitementSerializer, DocumentSerializer
 
 NoneType = type(None)
 
@@ -32,12 +34,54 @@ NoneType = type(None)
 
 # Create your views here.
 
+@api_view(['POST'])
+def get_traitement(request):
+    try:
+        # returns the first modele3d that contains at least one of desired words
+        str = request.data.get('text')
+        chunks = str.split(',')
+        list = [f",{s}," for s in chunks]
+        Traitements = Traitement.objects.filter(chapitre=request.data.get('chapitre_id')).filter(
+            reduce(lambda x, y: x | y, [Q(label_traitement__contains=word) for word in list]))
+        print(list)
+
+        Modele3Ds = Modele3D.objects.filter(
+            id=Traitements[0].modele3D_id).first()
+        Files = File.objects.filter(modele3D=Modele3Ds.id)
+        # a = Q(label_traitement__icontains=',a,')
+        # b =Q(label_traitement__icontains=',b,')
+        # c = Q(label_traitement__icontains=',c,')
+
+        # filters = reduce(lambda x, y: x | y, [Q(label_traitement__contains=word) for word in list])
+        # for item in list :
+        #   print("hi")
+
+        # qs = Traitement.objects.filter(
+        #   (filters)).annotate(a_filter_cnt=Count('id', filter=a)).annotate(b_filter_cnt=Count('id', filter=b)).annotate(c_filter_cnt=Count('id', filter=c)).annotate(total_filter_cnt=F('a_filter_cnt') +
+        #                              F('b_filter_cnt') +
+        #                              F('c_filter_cnt')).order_by('-total_filter_cnt')
+
+        serializer = FileSerializer(Files, many=True)
+        return Response(serializer.data)
+    except File.DoesNotExist:
+        return Response([])
+
+
+@api_view(['GET'])
+def get_Document(request, id):
+    try:
+        Documents = Document.objects.filter(chapitre_id=id).all()
+        serializer = DocumentSerializer(Documents, many=True)
+        return Response(serializer.data)
+    except Document.DoesNotExist:
+        return Response([])
+
 
 @login_required
 def chapitres_list(request):
     search_by = NoneType
-    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
-    # professeur = Professeur.objects.filter(admin_id = 1).first()
+    professeur = Professeur.objects.filter(user_id=request.user.id).first()
+    # professeur = Professeur.objects.filter(user_id = 1).first()
     # filieres = Filiere.objects.all()
     # niveaux = Niveau.objects.all()
     element_modules = ElementModule.objects.filter(prof_id=professeur)
@@ -82,7 +126,7 @@ def chapitres_list(request):
 @login_required
 def search_chapitres_by_filiere(request, val):
 
-    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
+    professeur = Professeur.objects.filter(user_id=request.user.id).first()
 
     filieres = Filiere.objects.all()
     filiere = Filiere.objects.filter(nom_filiere=val).first()
@@ -116,7 +160,7 @@ def search_chapitres_by_filiere(request, val):
 @login_required
 def search_chapitres_by_niveau(request, val):
 
-    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
+    professeur = Professeur.objects.filter(user_id=request.user.id).first()
 
     filieres = Filiere.objects.all()
     niveaux = Niveau.objects.all()
@@ -151,7 +195,7 @@ def search_chapitres_by_niveau(request, val):
 @login_required
 def search_chapitres_by_element_module(request, val):
 
-    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
+    professeur = Professeur.objects.filter(user_id=request.user.id).first()
 
     filieres = Filiere.objects.all()
     niveaux = Niveau.objects.all()
@@ -187,8 +231,8 @@ def search_chapitres_by_element_module(request, val):
 @login_required
 def search_chapitres_by_annee(request, val):
 
-    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
-    # professeur = Professeur.objects.filter(admin_id = 1).first()
+    professeur = Professeur.objects.filter(user_id=request.user.id).first()
+    # professeur = Professeur.objects.filter(user_id = 1).first()
     filieres = Filiere.objects.all()
     niveaux = Niveau.objects.all()
     element_modules = ElementModule.objects.all()
@@ -221,8 +265,8 @@ def search_chapitres_by_annee(request, val):
 
 @login_required
 def chapitre_details(request, id):
-    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
-    # professeur = Professeur.objects.filter(admin_id=1).first()
+    professeur = Professeur.objects.filter(user_id=request.user.id).first()
+    # professeur = Professeur.objects.filter(user_id=1).first()
     chapitre = Chapitre.objects.filter(id=id).first()
     traitements = Traitement.objects.filter(chapitre_id=id).all()
     documents = Document.objects.filter(chapitre_id=id).all()
@@ -238,8 +282,8 @@ def chapitre_details(request, id):
 
 @login_required
 def add_chapitre(request):
-    professeur = Professeur.objects.filter(admin_id=request.user.id).first()
-    # professeur = Professeur.objects.filter(admin_id=1).first()
+    professeur = Professeur.objects.filter(user_id=request.user.id).first()
+    # professeur = Professeur.objects.filter(user_id=1).first()
     if request.method == "GET":
         new_chapitre = ChapitreForm(request=request)
     elif request.method == "POST":
@@ -325,7 +369,6 @@ def delete_image(request, id):
 @login_required
 def delete_Traitement(request, id):
     traitement = Traitement.objects.get(id=id)
-
     if traitement.delete():
         messages.success(request, ('Le modele AR a été supprimé !'))
     else:
@@ -339,7 +382,7 @@ EXTENSIONS = ['jpg', 'png', 'bin', 'gltf']
 @login_required
 def add_traitement(request, id):
     professeur = Professeur.objects.filter(
-        admin_id=request.user.id).first()
+        user_id=request.user.id).first()
     chapitre = Chapitre.objects.filter(id=id).first()
 
     Traitements_visibles = Traitement.objects.filter(visibilite=professeur)
@@ -494,7 +537,7 @@ def traitement_details(request):
     # if request.is_ajax and request.method == "GET":
     traitement_id = request.GET.get("traitement_id", None)
     professeur = Professeur.objects.filter(
-        admin_id=request.user.id).first()
+        user_id=request.user.id).first()
 
     traitement = Traitement.objects.filter(id=traitement_id).first()
     modele3d = Modele3D.objects.filter(id=traitement.modele3D_id).first()
@@ -559,7 +602,7 @@ def makedirs(path):
 @login_required
 def update_traitement(request, id):
     professeur = Professeur.objects.filter(
-        admin_id=request.user.id).first()
+        user_id=request.user.id).first()
     traitement = Traitement.objects.filter(id=id).first()
     q = Traitement.objects.filter(id=id).annotate(Count('id'))
     type_traitement = q[0].type_traitement

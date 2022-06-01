@@ -5,10 +5,13 @@
             padding: 0;
         }
 
+<<<<<<< HEAD
+=======
         .customized-nav{
             padding-right: 5%;
         }
 
+>>>>>>> da8c434d998f667adaa380bb02437dadf7a057d7
         html {
             height: 100%;
             background: #6441A5; /* fallback for old browsers */

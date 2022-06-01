@@ -3,13 +3,12 @@
   @author : KANNOUFA FATIMA EZZAHRA
 -->
 <!-- En cours de développement : 
-    1- personnaliser les filtres
     2- filtrage selon : filière/groupe ...
  -->
 
 {% extends '../base.html' %}
 
-
+{% load presence_tags %}
 {% load static %}
 
 {% block title %} Liste de présence {% endblock %}
@@ -30,10 +29,6 @@
                 <div class="text-sm mb-0 text-gray-600">Liste des étudiants de 
                   <span class="text-gray-900">
                     {{ seance.planning.groupe.niveau.filiere.nom_filiere }} / {{ seance.planning.groupe.niveau.nom_niveau }} / {{ seance.planning.groupe.nom_group }}
-                  </span>
-                  pour la séance de 
-                  <span class="text-gray-900">
-                    {{ seance.date_debut }}
                   </span>
                 </div>
               </div>
@@ -56,7 +51,7 @@
             <div class="col-3 ">
               <span class="badge badge-pill badge-light border border-secondary">
                 <h6 class="m-0 font-weight-bold text-gray-700 px-4">
-                  {{ seance.date_debut }}
+                  {{ seance.date | date:"D j F Y"  }}
                 </h6>
               </span>
             </div>
@@ -89,27 +84,32 @@
                   <thead class="text-dark">
                       <tr>
                           <th>Photo</th>
-                          <th>Nom et prénom</th>
-                          <th>Code Apogée</th>
-                          <th>Présence</th>
+                          <th>
+                            Nom et prénom 
+                            <i class="fas fa-sort text-gray-500"></i>
+                          </th>
+                          <th>
+                            Code Apogée
+                            <i class="fas fa-sort text-gray-500"></i>
+                          </th>
+                          <th>
+                            Présence
+                            <i class="fas fa-sort text-gray-500"></i>
+                          </th>
                       </tr>
                   </thead>
                   <tbody>
                       {% for presence in presences %}
                         <tr data-toggle="modal" data-target="#changePresenceModal" data-id_seance="{{seance.id}}" data-id_etudiant="{{presence.etudiant.id}}" data-nom_etudiant="{{ presence.etudiant.user.last_name }} {{ presence.etudiant.user.first_name }}">
-                            <td>avatar</td>
+                            <td>
+                              {{  presence.etudiant.profile_pic | photo_filter }}
+                            </td>
                             <td> {{ presence.etudiant.user.last_name }} {{ presence.etudiant.user.first_name }} </td>
                             <td> {{ presence.etudiant.code_apogee }} </td>
                             <td>
-                             
-                              <a id="changePresenceBtn">
-                                {% if presence.is_present %}
-                                  <span class="badge badge-pill badge-success center"> Présent(e)</span>
-                                {% else %}
-                                  <span class="badge badge-pill badge-danger center"> Absent(e)</span>
-                                {% endif %}
+                              <a id="changePresenceBtn"> 
+                                {{  presence.is_present | presence_filter }}
                               </a>
-
                             </td>
                         </tr>
                       {% endfor %}
