@@ -1,17 +1,11 @@
 <!-- Sidebar -->
-<ul
-  class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-  id="accordionSidebar"
->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
   <!-- Sidebar - Brand -->
-  <a
-    class="sidebar-brand d-flex align-items-center justify-content-center"
-    href="/"
-  >
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
     <div class="sidebar-brand-icon rotate-n-15">
       <i class="fas fa-laugh-wink"></i>
     </div>
-    <div class="sidebar-brand-text mx-3">Dashboard <sup>2</sup></div>
+    <div class="sidebar-brand-text mx-3">e-platforme</div>
   </a>
 
   <!-- Divider -->
@@ -25,12 +19,6 @@
       <span>Teacher Home </span>
     </a>
   </li>
-  <li class="nav-item">
-    <a href="{% url 'emploiProfesseur' %}" class="nav-link {% if request.path == emploiProfesseur %} active {% endif %}">
-      <i class="nav-icon fas fa-tachometer-alt"></i>
-      <span>Mon emploi du temps</span>
-    </a>
-  </li>
 
   <!-- Divider -->
   <hr class="sidebar-divider" />
@@ -39,45 +27,34 @@
   <div class="sidebar-heading">Interdfaces</div>
 
 
-
-
-
-
-
-
-  <!-- Nav Item - Utilisateurs -->
   <li class="nav-item">
-    <a class="nav-link" href="#">
-      <i class="fas fa-fw fa-users"></i>
-      <span>gestion des Utilisateurs</span></a
-    >
+    <a href="{% url 'emploiProfesseur' %}"
+      class="nav-link {% if request.path == emploiProfesseur %} active {% endif %}">
+      <i class="nav-icon fas fa-tachometer-alt"></i>
+      <span>Mon emploi du temps</span>
+    </a>
   </li>
 
+
   <!-- Nav Item - Fillieres -->
-  <li class="nav-item">
-
-    <!-- <a class="nav-link" href="/dashboard/filiere"> -->
-
+  <!-- <li class="nav-item">
     <a class="nav-link" href="/filiere_etab/filiere">
 
       <i class="fas fa-fw fa-house-user"></i>
-      <span>gestion des Fillieres</span></a
-    >
-  </li>
+      <span>gestion des Fillieres</span></a>
+  </li> -->
   <!-- Nav Item - Etablissements -->
-  <li class="nav-item">
+  <!-- <li class="nav-item">
     <a class="nav-link" href="/filiere_etab/etablissement">
       <i class="fas fa-fw fa-house-user"></i>
-      <span>gestion des Etablissements</span></a
-    >
-  </li>
+      <span>gestion des Etablissements</span></a>
+  </li> -->
 
   <!-- Nav Item - Semestres -->
   <li class="nav-item">
     <a class="nav-link" href="/semestre/semestre">
       <i class="fas fa-fw fa-table"></i>
-      <span>gestion des Semestres</span></a
-    >
+      <span>gestion des Semestres</span></a>
   </li>
 
   <!-- Nav Item - Cours -->
@@ -108,17 +85,30 @@
 
   </li> -->
 
-  <!-- Nav Item - Cours -->
-  <li class="nav-item">
-    <a class="nav-link" href="/cours">
+
+  {% url 'chapitres_list' as chapitres_list %}
+  {% url 'add_chapitre' as add_chapitre %}
+  <li class="nav-item {% if request.path == add_chapitre or request.path == chapitres_list %} active {% endif %}">
+
+    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilitiesCours" aria-expanded="true"
+      aria-controls="collapseUtilitiesCours">
       <i class="fas fa-fw fa-book-open"></i>
-      <span>gestion des Cours</span></a
-    >
+      <span>Gestion des Cours</span>
+    </a>
+    <div id="collapseUtilitiesCours"
+      class="collapse {% if request.path == add_chapitre or request.path == chapitres_list %} show {% endif %}"
+      aria-labelledby="headingUtilitiesCours" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h2 class="collapse-header"> Gestion des Cours</h2>
+        <hr />
+        <a class="collapse-item active" href="{{ chapitres_list }}">
+          <i class="far fa-circle nav-icon fa-sm"></i> Liste des Cours</a>
+        <br />
+        <a class="collapse-item active" href="{{ add_chapitre }}">
+          <i class="far fa-circle nav-icon fa-sm"></i> Ajouter des Cours</a>
+      </div>
+    </div>
   </li>
-
-
-
-
 
 
 

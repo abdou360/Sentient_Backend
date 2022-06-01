@@ -78,7 +78,7 @@ def filiere_search(request):
     return HttpResponse(html_template.render(context, request))
 
 # creation d'une nouvelle filiere
-@login_required(login_url="/login/")
+# @login_required(login_url="/login/")
 def filiere_create(request):
     context = {}
     if request.method == "POST":
@@ -175,10 +175,8 @@ def etablissement_search(request):
 def etablissement_create(request):
     context = {}
     if request.method == "POST":
-        
         form = EtablissementForm(request.POST,request.FILES)
         if form.is_valid():
-            print("Test réussi")
             nom = form.cleaned_data['nom']
             adresse = form.cleaned_data['adresse']
             telephone = form.cleaned_data['telephone']

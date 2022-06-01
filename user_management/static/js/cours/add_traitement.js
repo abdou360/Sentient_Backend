@@ -34,9 +34,20 @@ $("input[type='text'][name='titre_traitement']").change(function() {
     traitement_name = $("input[type='text'][name='titre_traitement']").val()
 })
 
-$("input[type='file']").change(function() {
+$("#id_path_image").change(function() {
     image_path = $("input[type='file']").val()
+    console.log(image_path)
 })
+
+// $("#id_path_image")[0].change(function() {
+//     image_path = $("input[type='file']:nth-child(1)")
+//     console.log(image_path)
+// })
+
+// $("#id_path_image")[1].change(function() {
+//     image_path = $("input[type='file']:nth-child(1)").val()
+//     console.log(image_path)
+// })
 
 $(".next-to-2").click(function(){
 
@@ -60,7 +71,8 @@ $(".next-to-2").click(function(){
                 next_fs = $("#fs-image")
                 break;
             case "QR-Code":
-                next_fs = $("#fs-qrcode")
+                next_fs = $("#fs-image")
+                // next_fs = $("#fs-qrcode")
                 break;
             case "Texte":
                 next_fs = $("#fs-texte")
@@ -201,7 +213,7 @@ $(".next-to-3").click(function(){
                     $("#next-error").remove()
                     next_error=""
                 }
-                $('<div class="alert alert-danger" id="next-error" role="alert">Vous devez remplir tous les champs avant de pouvoir continuer</div>').insertBefore( "#row-content" );
+                $('<div class="alert alert-danger" id="next-error" role="alert">Vous devez remplir tous les champs de la section Image avant de pouvoir continuer</div>').insertBefore( "#row-content" );
             }
             break;
         case "QR-Code":
@@ -246,7 +258,7 @@ $(".next-to-3").click(function(){
                     $("#next-error").remove()
                     next_error=""
                 }
-                $('<div class="alert alert-danger" id="next-error" role="alert">Vous devez remplir tous les champs avant de pouvoir continuer</div>').insertBefore( "#row-content" );
+                $('<div class="alert alert-danger" id="next-error" role="alert">Vous devez remplir tous les champs de la section code QR avant de pouvoir continuer</div>').insertBefore( "#row-content" );
             }
             break;
         case "Texte":
@@ -292,7 +304,7 @@ $(".next-to-3").click(function(){
                     $("#next-error").remove()
                     next_error=""
                 }
-                $('<div class="alert alert-danger" id="next-error" role="alert">Vous devez remplir tous les champs avant de pouvoir continuer</div>').insertBefore( "#row-content" );
+                $('<div class="alert alert-danger" id="next-error" role="alert">Vous devez remplir tous les champs de la secrion Texte avant de pouvoir continuer</div>').insertBefore( "#row-content" );
             }
             break;
         default:
@@ -336,7 +348,8 @@ $(".previous-to-2").click(function(){
             previous_fs = $("#fs-image")
             break;
         case "QR-Code":
-            previous_fs = $("#fs-qrcode")
+            previous_fs = $("#fs-image")
+            // previous_fs = $("#fs-qrcode")
             break;
         case "Texte":
             previous_fs = $("#fs-texte")

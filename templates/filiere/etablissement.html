@@ -175,7 +175,7 @@
   </div>
 </div>
 
-<!-- Modal pour la creation  d'une filiere  -->
+<!-- Modal pour la creation  d'un etablissement  -->
 
 <div
   class="modal fade"
@@ -260,14 +260,14 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Annuler
         </button>
-        <button type="submit" class="btn btn-primary">Créer</button>
+        <button type="submit" class="btn btn-primary">Creer</button>
       </div>
       </form>
     </div>
   </div>
 </div>
 
-<!-- Modal pour la  modification de filiere  -->
+<!-- Modal pour la  modification d'etablissement  -->
 
 <div
   class="modal fade"
@@ -331,7 +331,7 @@
           </div>
           <div class="form-group">
             <label for="exampleSelect1">Niveau</label>
-            <select class="form-select" id="exampleSelect1">
+            <select name="niveau"  class="form-select" id="exampleSelect1">
               <option>Préscolaire</option>
               <option>Primaire</option>
               <option>Secondaire</option>
@@ -340,11 +340,11 @@
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Adresse email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required>
+            <input type="email" name="email" class="form-control" id="input-email" aria-describedby="emailHelp" placeholder="Enter email" required>
           </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Site web</label>
-            <input type="url" class="form-control" id="exampleInputEmail1" aria-describedby="urlHelp" placeholder="https://" required>
+            <input type="url" name="website" class="form-control" id="input-website"  aria-describedby="urlHelp" placeholder="https://" required>
           </div>
           <div class="form-group">
             <label for="recipient-name" class="col-form-label"
@@ -383,6 +383,7 @@
   // confirmation de supprission
   $("#confirm").click(function (e) {
     e.preventDefault();
+    console.log("hehehhehhe")
     window.location.href = $(this).attr("link");
   });
   // placer le nom de la filiere et le lien de table vers la formule
@@ -392,6 +393,8 @@
   $("#input-nom").val($(this).parent().parent().children("#nom").text());
   $("#input-adresse").val($(this).parent().parent().children("#adresse").text());
   $("#input-telephone").val($(this).parent().parent().children("#telephone").text());
+  $("#input-email").val($(this).parent().parent().children("#email").text());
+  $("#input-website").val($(this).parent().parent().children("#website").text());
   $("#editform").attr("action","/filiere_etab/etablissement/edit/"+$(this).parent().parent().children("#ide").text());
 });
 });

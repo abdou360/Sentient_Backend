@@ -1,21 +1,15 @@
 <!-- Sidebar -->
-<ul
-        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-        id="accordionSidebar"
->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
-    <a
-            class="sidebar-brand d-flex align-items-center justify-content-center"
-            href="/"
-    >
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Dashboard <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">e-platform</div>
     </a>
 
     <!-- Divider -->
-    <hr class="sidebar-divider my-0"/>
+    <hr class="sidebar-divider my-0" />
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
@@ -27,7 +21,7 @@
     </li>
 
     <!-- Divider -->
-    <hr class="sidebar-divider"/>
+    <hr class="sidebar-divider" />
 
     <!-- Heading -->
     <div class="sidebar-heading">Interfaces</div>
@@ -39,47 +33,55 @@
             <span> Entrainement des modèles </span>
         </a>
     </li>
-   <!-- Nav Item Etablissement -->
-   <li class="nav-item active">
-   
-    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-        aria-expanded="true" aria-controls="collapseUtilities">
-        <i class="fas fa-school"></i>
-        <span>Etablissements</span>
-    </a>
-    <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
-        data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h2 class="collapse-header"> Gestion des établissements </h2>
-            <a class="collapse-item active" href="{% url 'etablissement' %}">
-              <i class="far fa-circle nav-icon fa-sm"></i> Etablissement</a>
+    <!-- Nav Item Etablissement -->
+    <li class="nav-item active">
 
-            <hr>
-            <h2 class="collapse-header py-2">Gestion des filières</h2>
-            <a class="collapse-item active" href="{% url 'filiere' %}"><i class="far fa-circle nav-icon fa-sm"></i> Filières</a>
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true"
+            aria-controls="collapseUtilities">
+            <i class="fas fa-school"></i>
+            <span>Etablissements</span>
+        </a>
+        <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h2 class="collapse-header"> Gestion des établissements </h2>
+                <a class="collapse-item active" href="{% url 'etablissement' %}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Etablissement</a>
+
+                <hr>
+                <h2 class="collapse-header py-2">Gestion des filières</h2>
+                <a class="collapse-item active" href="{% url 'filiere' %}"><i class="far fa-circle nav-icon fa-sm"></i>
+                    Filières</a>
+            </div>
+
         </div>
-        
-    </div>
 
-  </li>
-    <!-- Nav Item - Manage Teachers -->
-    <li class="nav-item">
-        {% url 'manage_teacher' as manage_teacher %}
-        {% url 'edit_teacher' teacher_id=id as edit_teacher %}
-        <a href="{{ manage_teacher }}"
-           class="nav-link {% if request.path == manage_teacher %} active {% endif %} {% if request.path == edit_staff %} active {% endif %}">
-            <i class="nav-icon fas fa-chalkboard-teacher"></i>
-            <span>Manage Teacher</span>
-        </a>
     </li>
+    <!-- Nav Item - Manage Teachers -->
+    {% url 'manage_teacher' as manage_teacher %}
+    {% url 'edit_teacher' teacher_id=id as edit_teacher %}
+    {% url 'add_teacher' as add_teacher %}
+    <li
+        class="nav-item {% if request.path == add_teacher or request.path == manage_teacher %} active {% endif %} {% if request.path == edit_staff %} active {% endif %}">
 
-
-    <li class="nav-item">
-        {% url 'add_teacher' as add_teacher %}
-        <a href="{{ add_teacher }}" class="nav-link {% if request.path == add_teacher %} active {% endif %}">
-            <i class="nav-icon fas fa-th"></i>
-            <span>Add Teacher</span>
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilitiesProf" aria-expanded="true"
+            aria-controls="collapseUtilitiesProf">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Gestion des Professeurs</span>
         </a>
+        <div id="collapseUtilitiesProf"
+            class="collapse {% if request.path == add_teacher or request.path == manage_teacher or request.path == edit_staff %} show {% endif %}"
+            aria-labelledby="headingUtilitiesProf" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h2 class="collapse-header"> Gestion des Professeurs</h2>
+                <hr />
+                <a class="collapse-item active" href="{{ add_teacher }}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Ajouter des professeurs</a>
+                <br />
+                <a class="collapse-item active" href="{{ manage_teacher }}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Gérer les professeurs</a>
+            </div>
+        </div>
     </li>
 
     <!-- Nav Item - Manage Schedules -->
@@ -92,133 +94,154 @@
     </li>
 
     <!-- Nav Item - Students -->
-    <li class="nav-item">
-        {% url 'manage_student' as manage_student %}
-        {% url 'edit_student' student_id=id as edit_student %}
-        <a href="{{ manage_student }}"
-           class="nav-link {% if request.path == manage_student %} active {% endif %} {% if request.path == edit_student %} active {% endif %}">
-            <i class="nav-icon fas fa-user-graduate"></i>
-            </span>
-            Manage Student
-            </span>
+    {% url 'manage_student' as manage_student %}
+    {% url 'edit_student' student_id=id as edit_student %}
+    {% url 'add_student' as add_student %}
+    <li
+        class="nav-item {% if request.path == add_student or request.path == manage_student %} active {% endif %} {% if request.path == edit_student %} active {% endif %}">
+
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilitiesEtudiant"
+            aria-expanded="true" aria-controls="collapseUtilitiesEtudiant">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Gestion des étudiants</span>
         </a>
+        <div id="collapseUtilitiesEtudiant"
+            class="collapse {% if request.path == add_student or request.path == manage_student or request.path == edit_student %} show {% endif %}"
+            aria-labelledby="headingUtilitiesEtudiant" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h2 class="collapse-header"> Gestion des Rôles</h2>
+                <hr />
+                <a class="collapse-item active" href="{{ add_student }}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Ajouter des étudiants</a>
+                <br />
+                <a class="collapse-item active" href="{{ manage_student }}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Gérer les étudiants</a>
+            </div>
+        </div>
     </li>
 
-
-    <li class="nav-item">
-        {% url 'add_student' as add_student %}
-        <a href="{{ add_student }}" class="nav-link {% if request.path == add_student %} active {% endif %}">
-            <i class="nav-icon fas fa-th"></i>
-            <span>
-        Add Student
-      </span>
-    </a>
-  </li>
+    <!-- Nav Item - Manage Schedules -->
+    <!-- <li class="nav-item">
+        {% url 'emploie_admin' as emploie_admin %}
+        <a href="{{ emploie_admin }}" class="nav-link ">
+            <i class="nav-icon fas fa-calendar-day"></i>
+            <span>Manage Schedule</span>
+        </a>
+    </li> -->
 
     <li class="nav-item active">
 
-      <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities1"
-          aria-expanded="true" aria-controls="collapseUtilities1">
-          <i class="fas fa-fw fa-book"></i>
-          <span>Manage Schedule</span>
-      </a>
-      <div id="collapseUtilities1" class="collapse show" aria-labelledby="headingUtilities"
-          data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item active" href="{% url 'AddPlanning' %}">
-              <i class="far fa-circle nav-icon fa-sm"></i> Add Schedule</a>
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities1" aria-expanded="true"
+            aria-controls="collapseUtilities1">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Manage Schedule</span>
+        </a>
+        <div id="collapseUtilities1" class="collapse show" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item active" href="{% url 'AddPlanning' %}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Add Schedule</a>
                 <hr>
-              <a class="collapse-item active" href="{% url 'all' %}">
-              <i class="far fa-circle nav-icon fa-sm"></i> All Schedule</a>
+                <a class="collapse-item active" href="{% url 'all' %}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> All Schedule</a>
                 <hr>
-              <a class="collapse-item active" href="{% url 'emploiAdmin' %}">
-              <i class="far fa-circle nav-icon fa-sm"></i> Find Schedule</a>
+                <a class="collapse-item active" href="{% url 'emploiAdmin' %}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Find Schedule</a>
 
 
 
-          </div>
+            </div>
 
-      </div>
-
-    </li>
-
-
-
-
-
-
-
-
-  <li class="nav-item">
-    {% url 'add_role' as add_role %}
-    <a href="{{ add_role }}" class="nav-link {% if request.path == add_role %} active {% endif %}">
-      <i class="nav-icon fas fa-th"></i>
-      <span>
-        Add Role
-      </span>
-        </a>
-    </li>
-
-
-    <li class="nav-item">
-        {% url 'manage_roles' as manage_roles %}
-        <a href="{{ manage_roles }}" class="nav-link {% if request.path == manage_roles %} active {% endif %}">
-            <i class="nav-icon fas fa-person-booth"></i>
-            <span>
-        Manage Roles
-      </span>
-        </a>
-    </li>
-
-
-    <li class="nav-item">
-        {% url 'add_permission' as add_permission %}
-        <a href="{{ add_permission }}" class="nav-link {% if request.path == add_permission %} active {% endif %}">
-            <i class="nav-icon fas fa-th"></i>
-            <span>
-        Add Permission
-      </span>
-        </a>
-    </li>
-
-
-    <li class="nav-item">
-        {% url 'manage_permissions' as add_permission %}
-        <a href="{{ add_permission }}" class="nav-link {% if request.path == add_permission %} active {% endif %}">
-            <i class="nav-icon fas fa-lock-open"></i>
-            <span>
-        Manage Permissions
-      </span>
-    </a>
-  </li>
-  <li class="nav-item active">
-   
-    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-        aria-expanded="true" aria-controls="collapseUtilities">
-        <i class="fas fa-fw fa-book"></i>
-        <span>gestion des Modules</span>
-    </a>
-    <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
-        data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h2 class="collapse-header"> Gestion des Modules </h2>
-            <a class="collapse-item active" href="{% url 'display_majors' %}">
-              <i class="far fa-circle nav-icon fa-sm"></i> Fillières</a>
-
-            <hr>
-            <h2 class="collapse-header py-2">Tous les Modules</h2>
-            <a class="collapse-item active" href="{% url 'manage_modules' %}"><i class="far fa-circle nav-icon fa-sm"></i> Modules</a>
-
-            <h2 class="collapse-header py-2">Tous les Elements Module</h2>
-            <a class="collapse-item active" href="{% url 'manage_elem_modules' %}"><i class="far fa-circle nav-icon fa-sm"></i> Elements Module</a>
-          
         </div>
-        
-    </div>
 
-  </li>
-  <!-- Divider -->
-  <hr class="sidebar-divider d-none d-md-block" />
+    </li>
+
+
+
+
+    {% url 'add_role' as add_role %}
+    {% url 'manage_roles' as manage_roles %}
+    <li class="nav-item {% if request.path == add_role or request.path == manage_roles %} active {% endif %}">
+
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilitiesRole" aria-expanded="true"
+            aria-controls="collapseUtilitiesRole">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Gestion des Rôles</span>
+        </a>
+        <div id="collapseUtilitiesRole"
+            class="collapse {% if request.path == add_role or request.path == manage_roles %} show {% endif %}"
+            aria-labelledby="headingUtilitiesRole" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h2 class="collapse-header"> Gestion des Rôles</h2>
+                <hr />
+                <a class="collapse-item active" href="{{ add_role }}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Ajouter des rôles</a>
+                <br />
+                <a class="collapse-item active" href="{{ manage_roles }}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Gérer les rôles</a>
+            </div>
+        </div>
+    </li>
+
+    {% url 'add_permission' as add_permission %}
+    {% url 'manage_permissions' as manage_permissions %}
+    <li
+        class="nav-item {% if request.path == add_permission or request.path == manage_permissions %} active {% endif %}">
+
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilitiesPermission"
+            aria-expanded="true" aria-controls="collapseUtilitiesPermission">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Gestion des Permissions</span>
+        </a>
+        <div id="collapseUtilitiesPermission"
+            class="collapse {% if request.path == add_permission or request.path == manage_permissions %} show {% endif %}"
+            aria-labelledby="headingUtilitiesPermission" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h2 class="collapse-header"> Gestion des Permissions</h2>
+                <hr />
+                <!-- {% url 'add_permission' as add_permission %} -->
+                <a class="collapse-item active" href="{{ add_permission }}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Ajouter des permissions</a>
+                <br />
+                <!-- <hr> -->
+                <!-- <h2 class="collapse-header py-2">Gérer les permissions</h2> -->
+                <!-- {% url 'manage_permissions' as manage_permissions %} -->
+                <a class="collapse-item active" href="{{ manage_permissions }}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Gérer les permissions</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item active">
+
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true"
+            aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-book"></i>
+            <span>gestion des Modules</span>
+        </a>
+        <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h2 class="collapse-header"> Gestion des Modules </h2>
+                <a class="collapse-item active" href="{% url 'display_majors' %}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Fillières</a>
+
+                <hr>
+                <h2 class="collapse-header py-2">Tous les Modules</h2>
+                <a class="collapse-item active" href="{% url 'manage_modules' %}"><i
+                        class="far fa-circle nav-icon fa-sm"></i> Modules</a>
+
+                <h2 class="collapse-header py-2">Tous les Elements Module</h2>
+                <a class="collapse-item active" href="{% url 'manage_elem_modules' %}"><i
+                        class="far fa-circle nav-icon fa-sm"></i> Elements Module</a>
+
+            </div>
+
+        </div>
+
+    </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block" />
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

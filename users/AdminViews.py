@@ -11,7 +11,6 @@ from semestre.models import Groupe
 from users.models import CustomUser, Professeur, Students
 
 
-
 def admin_home(request):
     all_student_count = Students.objects.all().count()
     # course_count = Courses.objects.all().count()
@@ -49,17 +48,35 @@ def add_teacher_save(request):
         telephone = request.POST.get('telephone')
 
         try:
-            user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=2)
-            user.teacher.specialite = specialite
-            user.teacher.matricule = matricule
-            user.teacher.telephone = telephone
-            user.save()
-            messages.success(request, "teacher Added Successfully!")
-            return redirect('add_teacher')
+            if not CustomUser.objects.filter(email=email).exists:
+                user = CustomUser()
+
+                user.user_type = 2
+                user.first_name = first_name
+                user.last_name = last_name
+                user.email = email
+                user.username = username
+                user.password = password
+
+                user.save()
+
+                professeur = Professeur.objects.get(user=user)
+
+                professeur.specialite = specialite
+                professeur.matricule = matricule
+                professeur.telephone = telephone
+                professeur.user = user
+
+                professeur.save()
+                messages.success(request, "teacher Added Successfully!")
+                return redirect('add_teacher')
+            else:
+                messages.error(
+                    request, "Cet email est associé à un autre compte")
+                return redirect('add_teacher')
         except:
             messages.error(request, "Failed to Add teacher!")
             return redirect('add_teacher')
-
 
 
 def manage_teacher(request):
@@ -71,7 +88,7 @@ def manage_teacher(request):
 
 
 def edit_teacher(request, teacher_id):
-    teacher = Professeur.objects.get(admin=teacher_id)
+    teacher = Professeur.objects.get(user=teacher_id)
 
     context = {
         "teacher": teacher,
@@ -101,9 +118,9 @@ def edit_teacher_save(request):
             user.email = email
             user.username = username
             user.save()
-            
+
             # INSERTING into Professeur Model
-            teacher_model = Professeur.objects.get(admin=teacher_id)
+            teacher_model = Professeur.objects.get(user=teacher_id)
             teacher_model.specialite = specialite
             teacher_model.matricule = matricule
             teacher_model.telephone = telephone
@@ -117,9 +134,8 @@ def edit_teacher_save(request):
             return redirect('/edit_teacher/'+teacher_id)
 
 
-
 def delete_teacher(request, teacher_id):
-    teacher = Professeur.objects.get(admin=teacher_id)
+    teacher = Professeur.objects.get(user=teacher_id)
     try:
         teacher.delete()
         messages.success(request, "teacher Deleted Successfully.")
@@ -144,16 +160,15 @@ def add_user_save(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-
         try:
-            user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
+            user = CustomUser.objects.create_user(
+                username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
             user.save()
             messages.success(request, "User Added Successfully !")
             return redirect('add_user')
         except:
             messages.error(request, "Failed to Add User !")
             return redirect('add_user')
-
 
 
 def manage_user(request):
@@ -192,14 +207,13 @@ def edit_user_save(request):
             user.email = email
             user.username = username
             user.save()
-            
+
             messages.success(request, "user Updated Successfully !")
             return redirect('/edit_user/'+user_id)
 
         except:
             messages.error(request, "Failed to Update user !")
             return redirect('/edit_user/'+user_id)
-
 
 
 def delete_user(request, user_id):
@@ -211,7 +225,7 @@ def delete_user(request, user_id):
     except:
         messages.error(request, "Failed to Delete user.")
         return redirect('manage_user')
-    
+
 # def add_course(request):
 
 # def add_course_save(request):
@@ -292,7 +306,6 @@ def delete_user(request, user_id):
 #     except:
 #         messages.error(request, "Failed to Delete Session.")
 #         return redirect('manage_session')
-
 
 
 # if request.method != "POST":
@@ -395,4 +408,3 @@ def teacher_profile(request):
 
 def student_profile(requtest):
     pass
-

@@ -4,181 +4,175 @@
 
 {% block title %} Cours {% endblock title%}
 {% block content %}
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == 'error' %}
-                <div class="alert alert-danger" role="alert">
-                    {{ message }}
-                </div>
-            {% elif message.tags == "success" %}
-                <div class="alert alert-success" role="alert">
-                    {{ message }}
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-    
-    <div class="card o-hidden border-0 shadow-lg my-5">
-        <div class="card-body p-0">
-            <div class="row mr-3">
-                <form class="col-md-2 col-sm-6 d-none d-block"  action="#">
-                    <select class="custom-select custom-select-sm form-control form-control-sm m-3 chapitre-search-by" aria-label=".form-select-sm example">
-                        <option selected>Filière</option>
-                        <option value="{% url 'chapitres_list' %}">Toutes</option>
-                        {% for filiere in filieres %}
-                        <option value="{% url 'search_chapitres_by_filiere' val=filiere.nom_filiere %}">{{filiere.nom_filiere}}</option>
-                        {% endfor %}
-                    </select>
-                </form>
-                <div class="col-md-2 col-sm-6 d-none d-block">
-                    <select class="custom-select custom-select-sm form-control form-control-sm m-3 chapitre-search-by" aria-label=".form-select-sm example">
-                        <option selected>Niveau</option>
-                        <option value="{% url 'chapitres_list' %}">Tous</option>
-                        {% for niveau in niveaux %}
-                        <option value="{% url 'search_chapitres_by_niveau' val=niveau.nom_niveau %}">{{niveau.nom_niveau}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-2 col-sm-6 d-none d-block">
-                    <select class="custom-select custom-select-sm form-control form-control-sm m-3 chapitre-search-by" aria-label=".form-select-sm example">
-                        <option selected>Module</option>
-                        <option value="{% url 'chapitres_list' %}">Tous</option>
-                        {% for element_module in element_modules %}
-                        <option value="{% url 'search_chapitres_by_element_module' val=element_module.libelle_element_module %}">{{element_module.libelle_element_module}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-2 col-sm-6 d-none d-block">
-                    <select class="custom-select custom-select-sm form-control form-control-sm m-3 chapitre-search-by" aria-label=".form-select-sm example">
-                        <option selected>Année</option>
-                        <option value="{% url 'chapitres_list' %}">Tous</option>
-                        {% for annee in annees %}
-                        <option value="{% url 'search_chapitres_by_annee' val=annee.year %}">{{annee.year}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <form class=" col-md-4 col-sm-12 d-none d-block" action="#">
-                        <input class="form-control form-control-sm m-3" type="search" placeholder="Search ..." area-controls="dataTable" name="search">
-                </form>
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == 'error' %}
+<div class="alert alert-danger" role="alert">
+    {{ message }}
+</div>
+{% elif message.tags == "success" %}
+<div class="alert alert-success" role="alert">
+    {{ message }}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+<div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card-body p-0">
+        <div class="row mr-3">
+            <form class="col-md-2 col-sm-6 d-none d-block" action="#">
+                <select class="custom-select custom-select-sm form-control form-control-sm m-3 chapitre-search-by"
+                    aria-label=".form-select-sm example">
+                    <option selected>Filière</option>
+                    <option value="{% url 'chapitres_list' %}">Toutes</option>
+                    {% for filiere in filieres %}
+                    <option value="{% url 'search_chapitres_by_filiere' val=filiere.nom_filiere %}">
+                        {{filiere.nom_filiere}}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            <div class="col-md-2 col-sm-6 d-none d-block">
+                <select class="custom-select custom-select-sm form-control form-control-sm m-3 chapitre-search-by"
+                    aria-label=".form-select-sm example">
+                    <option selected>Niveau</option>
+                    <option value="{% url 'chapitres_list' %}">Tous</option>
+                    {% for niveau in niveaux %}
+                    <option value="{% url 'search_chapitres_by_niveau' val=niveau.nom_niveau %}">{{niveau.nom_niveau}}
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
+            <div class="col-md-2 col-sm-6 d-none d-block">
+                <select class="custom-select custom-select-sm form-control form-control-sm m-3 chapitre-search-by"
+                    aria-label=".form-select-sm example">
+                    <option selected>Module</option>
+                    <option value="{% url 'chapitres_list' %}">Tous</option>
+                    {% for element_module in element_modules %}
+                    <option
+                        value="{% url 'search_chapitres_by_element_module' val=element_module.libelle_element_module %}">
+                        {{element_module.libelle_element_module}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 col-sm-6 d-none d-block">
+                <select class="custom-select custom-select-sm form-control form-control-sm m-3 chapitre-search-by"
+                    aria-label=".form-select-sm example">
+                    <option selected>Année</option>
+                    <option value="{% url 'chapitres_list' %}">Tous</option>
+                    {% for annee in annees %}
+                    <option value="{% url 'search_chapitres_by_annee' val=annee.year %}">{{annee.year}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <form class=" col-md-4 col-sm-12 d-flex  align-items-center" action="{% url 'chapitres_list' %}">
+                <div class="col-10">
+                    <input class="form-control form-control-sm m-3" type="search" placeholder="Search ..."
+                        area-controls="dataTable" name="search">
+                </div>
+                <div class="col-2">
+                    <button type="submit" style="height: 35px;" class="btn btn-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <div class="card o-hidden border-0 shadow-lg my-3">
-        <div class="card-body p-0">
-            <div class="row">
-                <div class="col-12 d-none d-block text-center">
-                    <h3 class="m-3">
-                        Liste des Cours {{search_by|default_if_none:""}}
-                    </h3>
-                    <hr class="mb-6">
-                </div>
+<div class="card o-hidden border-0 shadow-lg my-3">
+    <div class="card-body p-0">
+        <div class="row">
+            <div class="col-12 d-none d-block text-center">
+                <h3 class="m-3">
+                    Liste des Cours {{search_by|default_if_none:""}}
+                </h3>
+                <hr class="mb-6">
             </div>
-            <div class="row">
-                {% for chapitre in chapitres %}
-                <div class="col-md-4 col-sm-6 col-lg-3 d-none d-block p-3 text-center">
-                    <div class="card">
-                        {% if chapitre.image %}
-                            <img
-                            class="p-3"
-                            src="{{chapitre.image.url}}"
-                            alt="..."
-                            height="210" 
-                            width="100%"
-                            />
-                        {% else %}
-                            <img
-                            class="p-3"
-                            src="img/cours/folder-files-and-folders-svgrepo-com.svg"
-                            alt="..."
-                            height="210" 
-                            width="100%"
-                            />
-                        {% endif %}
-                        <!-- {% comment %} <img
-                            class="p-3"
-                            src="{{chapitre.image.url}}"
-                            alt="..."
-                            height="210" 
-                            width="100%"
-                            /> {% endcomment %} -->
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col col-12">
-                                    <h5 class="card-title">{{chapitre.libelle}}</h5>
-                                </div>
-                                <div class="col col-12">
-                                    <p class="card-text">{{chapitre.description|default_if_none:"---"}}</p>
-                                </div>
-                                <hr/>
-                                <div class="col col-4 mt-4">
-                                    <a href="{% url 'chapitre_details' chapitre.id %}" class="tooltip_show" title="Voir le chapitre"><i class="fa fa-eye"></i></a>
-                                </div>
-                                <!-- <div class="col col-2 mt-2"></div> -->
-                                <div class="col col-4 mt-4">
-                                    <a href="{% url 'update_chapitre' chapitre.id %}" class="tooltip_update" title="Modifier le chapitre"><i class="fa fa-pen" style="color:#e5bf41"></i></a>
-                                </div>
-                                <div class="col col-4 mt-4">
-                                    <a href="{% url 'delete_chapitre' chapitre.id %}" class="tooltip_delete delete_object" style="color:#e14848" id="delete_object" title="Supprimer le chapitre"><i class="fa fa-trash"></i></a>
-                                </div>
+        </div>
+        <div class="row">
+            {% for chapitre in chapitres %}
+            <div class="col-md-4 col-sm-6 col-lg-3 d-none d-block p-3 text-center">
+                <div class="card">
+                    {% if chapitre.image %}
+                    <img class="p-3" src="{{chapitre.image.url}}" alt="..." height="210" width="100%" />
+                    {% else %}
+                    <img class="p-3" src="img/cours/folder-files-and-folders-svgrepo-com.svg" alt="..." height="210"
+                        width="100%" />
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col col-12">
+                                <h5 class="card-title">{{chapitre.libelle}}</h5>
+                            </div>
+                            <div class="col col-12">
+                                <p class="card-text">{{chapitre.description|default_if_none:"---"}}</p>
+                            </div>
+                            <hr />
+                            <div class="col col-4 mt-4">
+                                <a href="{% url 'chapitre_details' chapitre.id %}" class="tooltip_show"
+                                    title="Voir le chapitre"><i class="fa fa-eye"></i></a>
+                            </div>
+                            <div class="col col-4 mt-4">
+                                <a href="{% url 'update_chapitre' chapitre.id %}" class="tooltip_update"
+                                    title="Modifier le chapitre"><i class="fa fa-pen" style="color:#e5bf41"></i></a>
+                            </div>
+                            <div class="col col-4 mt-4">
+                                <a href="{% url 'delete_chapitre' chapitre.id %}" class="tooltip_delete delete_object"
+                                    style="color:#e14848" id="delete_object" title="Supprimer le chapitre"><i
+                                        class="fa fa-trash"></i></a>
                             </div>
                         </div>
                     </div>
-                </div> 
-                {% endfor %}
+                </div>
             </div>
-            <a href="{% url 'add_chapitre' %}" class="float" id="tooltip_add" title="Ajouter un nouveau chapitre">
-                <i class="fa fa-plus my-float"></i>
-            </a>
+            {% endfor %}
         </div>
+        <a href="{% url 'add_chapitre' %}" class="float" id="tooltip_add" title="Ajouter un nouveau chapitre">
+            <i class="fa fa-plus my-float"></i>
+        </a>
     </div>
+</div>
 
 
-    {% block style %}
-        <link href="{% static 'css/cours/custom_float_btn.css' %}" rel="stylesheet" type="text/css">
-        <link href="{% static 'css/cours/custom_tooltip.css' %}" rel="stylesheet" type="text/css">
-    {% endblock style%}
+{% block style %}
+<link href="{% static 'css/cours/custom_float_btn.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'css/cours/custom_tooltip.css' %}" rel="stylesheet" type="text/css">
+{% endblock style%}
 
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+<script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
 
-    <script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src=" {% static 'js/cours/chapitres.js' %}"></script>
 
-    <script src=" {% static 'js/cours/chapitres.js' %}"></script>
+<script>
 
-    <script>
+    $('.delete_object').click(function () {
+        return confirm('Vous êtes sûr que vous voulez supprimer ce chapitre ?');
+    })
 
-        $('.delete_object').click(function(){
-            return confirm('Vous êtes sûr que vous voulez supprimer ce chapitre ?');
-        })
-
-        // var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        // var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        // return new bootstrap.Tooltip(tooltipTriggerEl)
-        // })
- 
-        $(document).ready(function(){
-            $("#tooltip_add").tooltip({
-                placement:"auto"
-            });              
+    $(document).ready(function () {
+        $("#tooltip_add").tooltip({
+            placement: "auto"
         });
+    });
 
-        $(document).ready(function(){
-            $(".tooltip_show").tooltip({
-                placement:"auto"
-            });              
+    $(document).ready(function () {
+        $(".tooltip_show").tooltip({
+            placement: "auto"
         });
+    });
 
-        $(document).ready(function(){
-            $(".tooltip_update").tooltip({
-                placement:"auto"
-            });              
+    $(document).ready(function () {
+        $(".tooltip_update").tooltip({
+            placement: "auto"
         });
-        
-        $(document).ready(function(){
-            $(".tooltip_delete").tooltip({
-                placement:"auto"
-            });              
-        });
+    });
 
-    </script>
+    $(document).ready(function () {
+        $(".tooltip_delete").tooltip({
+            placement: "auto"
+        });
+    });
+
+</script>
 {% endblock content %}
