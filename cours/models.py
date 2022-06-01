@@ -75,6 +75,9 @@ class Modele3D(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.titre_modele3d
+
 
 class Image(models.Model):
     name_image = models.CharField(
