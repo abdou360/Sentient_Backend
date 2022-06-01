@@ -43,7 +43,7 @@ def index(request):
     return HttpResponse(html_template.render(context, request))
 
 # affichage du page de gestion des filieres
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def filiere(request):
     context = {'segment': 'filiere'}
     data = Filiere.objects.all()
@@ -54,7 +54,7 @@ def filiere(request):
     return HttpResponse(html_template.render(context, request))
 
 # supprission d'une filiere
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def filiere_delete(request,id):
     filiere = Filiere.objects.get(id=id)
     if filiere.logo:
@@ -64,7 +64,7 @@ def filiere_delete(request,id):
     return HttpResponseRedirect('/filiere_etab/filiere')
 
 # rechereche par nom d'une ou des filieres
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def filiere_search(request):
     context = {}
     if request.method == "POST":
@@ -99,7 +99,7 @@ def filiere_create(request):
     return HttpResponse(html_template.render(context, request))
     
 # modification d'une filiere
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def filiere_edit(request,id):
     context = {}
     if request.method == "POST":
@@ -138,7 +138,7 @@ def etablissement_liste(request):
         return Response([])
 
 # affichage du page de gestion des etablissements
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def etablissement(request):
     context = {'segment': 'etablissement'}
     data = Etablissement.objects.all()
@@ -147,7 +147,7 @@ def etablissement(request):
     return HttpResponse(html_template.render(context, request))
 
 # supprission d'un etablissement
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def etablissement_delete(request,id):
     etablissement = Etablissement.objects.get(id=id)
     if etablissement.logo:
@@ -157,7 +157,7 @@ def etablissement_delete(request,id):
     return HttpResponseRedirect('/filiere_etab/etablissement')
 
 # rechereche par nom d'une ou des etablissements
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def etablissement_search(request):
     context = {}
     if request.method == "POST":
@@ -171,7 +171,7 @@ def etablissement_search(request):
     return HttpResponse(html_template.render(context, request))
 
 # creation d'une nouvelle etablissement
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def etablissement_create(request):
     context = {}
     if request.method == "POST":
@@ -195,7 +195,7 @@ def etablissement_create(request):
     return HttpResponse(html_template.render(context, request))
     
 # modification d'une etablissement
-# @login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def etablissement_edit(request,id):
     context = {}
     if request.method == "POST":
