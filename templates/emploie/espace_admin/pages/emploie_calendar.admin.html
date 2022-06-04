@@ -321,7 +321,7 @@
                
            {% for planning in plannings %}
            {
-            {% if planning.jour == "monday" %}
+            {% if planning.jour == "MONDAY" %}
                title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
                startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
@@ -330,7 +330,7 @@
                daysOfWeek:[1]
             {% endif  %}
 
-            {% if planning.jour == "tuesday" %}
+            {% if planning.jour == "TUESDAY" %}
                title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
                startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
@@ -339,7 +339,7 @@
                daysOfWeek:[2]
             {% endif  %}
 
-            {% if planning.jour == "wednesday" %}
+            {% if planning.jour == "WEDNESDAY" %}
                title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
                startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
@@ -348,7 +348,7 @@
                daysOfWeek:[3]
             {% endif  %}
 
-            {% if planning.jour == "thursday" %}
+            {% if planning.jour == "THURSDAY" %}
                title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
                startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
@@ -356,7 +356,7 @@
                startTime:'{{ planning.heure_debut }}',
                daysOfWeek:[4]
             {% endif  %}
-            {% if planning.jour == "friday" %}
+            {% if planning.jour == "FRIDAY" %}
                title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
                startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
@@ -364,7 +364,7 @@
                startTime:'{{ planning.heure_debut }}',
                daysOfWeek:[5]
             {% endif  %}
-            {% if planning.jour == "saturday" %}
+            {% if planning.jour == "SATURDAY" %}
                title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
                startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
@@ -372,7 +372,7 @@
                startTime:'{{ planning.heure_debut }}',
                daysOfWeek:[6]
             {% endif  %}
-            {% if planning.jour == "sunday" %}
+            {% if planning.jour == "SUNDAY" %}
                title: "{{ planning.element_module.libelle_element_module}} ({{ planning.heure_debut}} to {{ planning.heure_fin}}) ",
                startTime:"{{ planning.heure_debut}}",   
                start: '{{ planning.date_debut|date:"Y-m-d" }}',
