@@ -114,7 +114,7 @@
                                             <select class="form-control" name="responsable">
                                                 {% for prof in responsables %}
                                                     <option value="{{ prof.id }}">
-                                                        <div>{{ prof.admin.last_name }} {{ prof.admin.first_name }}</div>
+                                                        <div>{{ prof.user.last_name }} {{ prof.user.first_name }}</div>
                                                         <div>/ [{{ prof.specialite }}]</div>
                                                     </option>
                                                 {% endfor %}
@@ -148,7 +148,7 @@
                                             <select class="form-control" name="prof" multiple>
                                                 {% for prof in profs %}
                                                     <option value="{{ prof.id }}">
-                                                        {{ prof.admin.last_name }} {{ prof.admin.first_name }}  / [{{ prof.specialite }}]
+                                                        {{ prof.user.last_name }} {{ prof.user.first_name }}  / [{{ prof.specialite }}]
                                                     </option>
                                                 {% endfor %}
                                             </select>
