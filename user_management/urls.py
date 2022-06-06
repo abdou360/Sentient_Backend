@@ -5,6 +5,7 @@ from django.urls import path, include,re_path
 
 from django.conf import settings
 from django.conf.urls.static import static
+
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -22,6 +23,7 @@ urlpatterns = [
     path('', include('module.urls')),
     path('semestre/',include('semestre.urls.index')),
     path('face-recognition/',include('face_recognition.urls')),
+    path('api/user/', include('users.urls')),
     path('api/', include('api.urls')),
     path('api-auth/', include('rest_framework.urls')), 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
