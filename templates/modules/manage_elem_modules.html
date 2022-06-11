@@ -199,7 +199,7 @@
                                            
                                             {% for prof in elem_module.prof_id.all %}
                                                 <img src="https://img.icons8.com/ios-glyphs/30/4a90e2/person-male.png"/>
-                                                <a href="#" class="text-dark text-decoration-none">{{ prof.admin.last_name }} {{ prof.admin.first_name }}</a>
+                                                <a href="#" class="text-dark text-decoration-none">{{ prof.user.last_name }} {{ prof.user.first_name }}</a>
                                                 <br>
                                             {% endfor %}
                                             <hr>
@@ -240,7 +240,7 @@
                                 </td>
                             {% endif %}
                             <td>
-                                {{ elem_module.responsable.admin.last_name }}  {{ elem_module.responsable.admin.first_name }}
+                                {{ elem_module.responsable.user.last_name }}  {{ elem_module.responsable.user.first_name }}
                                 <td>
                                     <td class="text-center">
                                         <a data-toggle="modal" data-target="#modal{{ elem_module.id }}">

@@ -16,6 +16,7 @@ class SessionYearModel(models.Model):
 
 class CustomUser(AbstractUser):
     user_type_data = ((1, "Admin"), (2, "Professeur"), (3, "Etudiant"))
+    AbstractUser._meta.get_field('email')._unique = True
     user_type = models.CharField(
         default=1, choices=user_type_data, max_length=10)
 
@@ -34,13 +35,16 @@ class Admin(models.Model):
 class Professeur(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    admin = models.ForeignKey(Admin, on_delete=models.CASCADE)
+    admin = models.ForeignKey(Admin, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    specialite = models.CharField(max_length=45, default="Informatique")
+    matricule = models.CharField(max_length=45, default="")
+    telephone = models.CharField(max_length=10, default="")
     objects = models.Manager()
 
     def __str__(self):
-        return self.admin.username
+        return self.user.username
 
 # UnivIt responsable : ismail errouk
 
@@ -70,7 +74,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == 1:
             Admin.objects.create(admin=instance)
         if instance.user_type == 2:
-            Professeur.objects.create(admin=instance)
+            Professeur.objects.create(user=instance)
         if instance.user_type == 3:
             Students.objects.create(admin=instance,
                                     # course_id=
@@ -85,8 +89,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     if instance.user_type == 1:
         instance.admin.save()
-    if instance.user_type == 2:
-        instance.teachers.save()
+    # if instance.user_type == 2:
+    #     instance.teacher.save()
     if instance.user_type == 3:
         instance.students.save()
 

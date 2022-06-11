@@ -103,7 +103,7 @@ def add_student_save(request):
     global student
     if request.method == 'POST':
         admin = Admin.objects.get(id=request.POST['select_admin'])
-        
+
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
 
@@ -111,7 +111,8 @@ def add_student_save(request):
         user.first_name = request.POST['first_name']
         user.last_name = request.POST['last_name']
         user.email = request.POST['email']
-        user.username = request.POST['first_name'] + '_' + request.POST['last_name']
+        user.username = request.POST['first_name'] + \
+            '_' + request.POST['last_name']
         user.user_type = 'STUDENT'
         if request.POST['password'] == request.POST['confirm_password']:
             user.password = request.POST['password']
@@ -122,7 +123,8 @@ def add_student_save(request):
         student.cne = request.POST['cne']
         student.adresse = request.POST['adresse']
         student.profile_pic = request.POST['profile_pic']
-        student.path_photos = "face_recognition/dataset/Etudiant_"+ first_name + "_" + last_name + "/"
+        student.path_photos = "face_recognition/dataset/Etudiant_" + \
+            first_name + "_" + last_name + "/"
         student.telephone = request.POST['telephone']
         student.code_apogee = request.POST['code_apogee']
         student.save()
@@ -137,7 +139,8 @@ def getAllStudents(request):
         groupes = student.groupes.all()
         student_groupes = []
         for groupe in groupes:
-            student_groupes.append({'nom groupe': groupe.nom_group, 'niveau': groupe.niveau.nom_niveau})
+            student_groupes.append(
+                {'nom groupe': groupe.nom_group, 'niveau': groupe.niveau.nom_niveau})
         students.append({
             'first_name': student.user.first_name,
             'last_name': student.user.last_name,
@@ -236,7 +239,8 @@ def edit_student_save(request, id):
         user.first_name = request.POST['first_name']
         user.last_name = request.POST['last_name']
         user.email = request.POST['email']
-        user.username = request.POST['first_name'] + '_' + request.POST['last_name']
+        user.username = request.POST['first_name'] + \
+            '_' + request.POST['last_name']
         user.user_type = 'STUDENT'
         user.password = request.POST['password']
         user.save()
