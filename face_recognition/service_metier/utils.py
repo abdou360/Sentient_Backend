@@ -131,3 +131,16 @@ def getImagesAndLabels(filiere, niveau, groupe):
                 ids.append(id)
 
     return faceSamples,ids
+
+def backup(filiere, niveau, groupe, idSeance):
+    path_dir = "face_recognition/service_metier/backup/" + filiere + "/" + niveau + "/" + groupe + "/" + str(idSeance) + "/"
+    assure_path_exists(path_dir)
+    
+    folder_path = "face_recognition/service_metier/folder/"
+    list_images = os.listdir(folder_path)
+    
+    for i in range(len(list_images)):
+        imagePath = folder_path + list_images[i]
+        img = cv2.imread(imagePath)
+        print(imagePath)
+        cv2.imwrite(path_dir + "frame"+str(i)+".jpg", img)

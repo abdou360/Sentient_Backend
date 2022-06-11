@@ -1,6 +1,7 @@
 from django import template
 import markdown
 from django.utils.safestring import mark_safe
+import os, cv2
 
 from users.models import Professeur
 
@@ -12,12 +13,6 @@ def connected_prof_id(user):
     prof = Professeur.objects.get(user_id=user.id)
     if prof:    
         return prof.id
-
-@register.simple_tag
-def connected_prof_username(user):
-    prof = Professeur.objects.get(user_id=user.id)
-    if prof:    
-        return prof.user.first_name + ' ' + prof.user.last_name
 
 # template filter
 @register.filter(name='presence_filter')
@@ -45,4 +40,18 @@ def photoFilter(profile_picture):
 @register.filter(name='markdown')
 def markdown_format(text):
     return mark_safe(markdown.markdown(text))
+
+@register.simple_tag
+def show_images(filiere="IRISI", niveau="IRISI_1", groupe="G1", idSeance=1):
+    path = filiere + "/" + niveau + "/" + groupe + "/" + str(idSeance) + "/"
+    path_dir = "face_recognition/service_metier/backup/" + path
+    
+    list_images = os.listdir(path_dir)
+    
+    images = []
+    for i in range(len(list_images)):
+        imagePath = path + list_images[i]
+        print(imagePath)
+        images += [imagePath]
+    return {'images': images}
 

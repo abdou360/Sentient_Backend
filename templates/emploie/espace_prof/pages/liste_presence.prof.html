@@ -2,9 +2,6 @@
   EQUIPE  : CodeVerse
   @author : KANNOUFA FATIMA EZZAHRA
 -->
-<!-- En cours de développement : 
-    2- filtrage selon : filière/groupe ...
- -->
 
 {% extends '../base.html' %}
 
@@ -38,13 +35,9 @@
         </div>
     </div>
   </div>
-
-
   <!-- Table -->
   <div class="card shadow mb-4">
-    <!--
-    {% include '../includes/_filter_seances.html'%}
-    -->
+
       <div class="card-header py-3">
           
           <div class="row flatpickr flex align-items-center">
@@ -69,15 +62,20 @@
                 </h6>
               </span>
             </div>
-            <div class="col-3 text-right">
-              <a href="" class="d-none d-lg-inline-block btn btn-warning shadow-sm px-4">
-                <i class="fas fa-cloud fa-lg text-white-50"></i>
-                 Revenir aux images
-              </a>
+            <div class="col-3 text-right" data-toggle="modal" data-target="#backupModal" 
+                      data-filiere="{{seance.planning.groupe.niveau.filiere.nom_filiere}}" 
+                      data-niveau="{{seance.planning.groupe.niveau.nom_niveau}}" 
+                      data-groupe="{{seance.planning.groupe.nom_group}}" 
+                      data-id_seance="{{seance.id}}">
+                      
+                <div class="d-none d-lg-inline-block btn btn-warning shadow-sm px-4">
+                  <i class="fas fa-cloud fa-lg text-white-50"></i>
+                  Revenir aux images
+                </div>
             </div>
           </div>
       </div>
-
+      
       <div class="card-body">
           <div class="table-responsive">
               <table class="table text-center table-hover" id="dataTable" width="100%" cellspacing="0">
@@ -119,6 +117,9 @@
       </div>
   </div> 
 
-  {% include '../includes/modals/_change_presence_modal.html' %}
 
-{% endblock %}
+  {% include '../includes/modals/_change_presence_modal.html' %}
+  {% include '../includes/modals/_backup.html' %}
+  
+  
+  {% endblock %}
