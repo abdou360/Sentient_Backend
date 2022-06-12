@@ -35,7 +35,8 @@
         </div>
     </div>
   </div>
-  <!-- Table -->
+  
+  
   <div class="card shadow mb-4">
 
       <div class="card-header py-3">
@@ -119,7 +120,8 @@
 
 
   {% include '../includes/modals/_change_presence_modal.html' %}
-  {% include '../includes/modals/_backup.html' %}
+  
+  {% show_images seance.planning.groupe.niveau.filiere.nom_filiere seance.planning.groupe.niveau.nom_niveau  seance.planning.groupe.nom_group seance.id %}
   
   
   {% endblock %}

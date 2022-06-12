@@ -132,6 +132,7 @@ def getImagesAndLabels(filiere, niveau, groupe):
 
     return faceSamples,ids
 
+
 def backup(filiere, niveau, groupe, idSeance):
     path_dir = "face_recognition/service_metier/backup/" + filiere + "/" + niveau + "/" + groupe + "/" + str(idSeance) + "/"
     assure_path_exists(path_dir)
@@ -144,3 +145,18 @@ def backup(filiere, niveau, groupe, idSeance):
         img = cv2.imread(imagePath)
         print(imagePath)
         cv2.imwrite(path_dir + "frame"+str(i)+".jpg", img)
+        
+        
+def getImagesFromBackup(filiere, niveau, groupe, idSeance):
+    path = filiere + "/" + niveau + "/" + groupe + "/" + str(idSeance) + "/"
+    path_dir = "face_recognition/service_metier/backup/" + path
+    
+    assure_path_exists(path_dir)
+    list_images = os.listdir(path_dir)
+    
+    images = []
+    for i in range(len(list_images)):
+        imagePath = path + list_images[i]
+        images += [imagePath]
+        
+    return images

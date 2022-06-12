@@ -1,7 +1,7 @@
 {% extends 'admin/base-home.html' %}
 
 {% block title %}
-    Edit Teacher | Username : {{ teacher.admin.username }} | #ID : {{ teacher.admin.id }}
+Edit Teacher | Username : {{ teacher.user.username }} | #ID : {{ teacher.user.id }}
 {% endblock title %}
 
 {% block content %}
@@ -15,91 +15,100 @@
             <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="card card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Edit teacher</h3>
-                </div>
-                <!-- /.card-header -->
-                <!-- form start -->
-                <form role="form" method="POST" action="{% url 'edit_teacher_save' %}">
-                    {% csrf_token %}
+                    <div class="card-header">
+                        <h3 class="card-title">Edit teacher</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" action="{% url 'edit_teacher_save' %}">
+                        {% csrf_token %}
 
-                    
-                            {% comment %} Display Messages {% endcomment %}
-                            {% if messages %}
-                            <div class="form-group">
+
+                        {% comment %} Display Messages {% endcomment %}
+                        {% if messages %}
+                        <div class="form-group">
                             <div class="col-12">
                                 {% for message in messages %}
                                 {% if message.tags == "error" %}
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                                    style="margin-top: 10px;">
                                     {{ message }}
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
-                                    </div>
+                                </div>
                                 {% elif message.tags == "success" %}
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert"
+                                    style="margin-top: 10px;">
                                     {{ message }}
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
-                                    </div>
+                                </div>
                                 {% endif %}
                                 {% endfor %}
                             </div>
+                        </div>
+                        {% endif %}
+
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Email address</label>
+                                <input type="email" class="form-control" name="email" value="{{ teacher.user.email }}">
                             </div>
-                            {% endif %}
-                        
 
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label>Email address</label>
-                            <input type="email" class="form-control" name="email" value="{{ teacher.admin.email }}">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" class="form-control" name="username"
+                                    value="{{ teacher.user.username }}">
+                            </div>
+
+                            {% comment %} <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" class="form-control" name="password"
+                                    value="{{ teacher.user.password }}">
+                            </div> {% endcomment %}
+
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" name="first_name"
+                                    value="{{ teacher.user.first_name }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" name="last_name"
+                                    value="{{ teacher.user.last_name }}">
+                                <input type="hidden" name="teacher_id" value="{{ teacher.user.id }}" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Matricule</label>
+                                <input type="text" class="form-control" name="matricule"
+                                    value="{{ teacher.matricule }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="text" class="form-control" name="telephone"
+                                    value="{{ teacher.telephone }}">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Specialite</label>
+                                <input type="text" class="form-control" name="specialite"
+                                    value="{{ teacher.specialite }}">
+                            </div>
+
                         </div>
+                        <!-- /.card-body -->
 
-                        <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" class="form-control" name="username" value="{{ teacher.admin.username }}">
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Update teacher</button>
                         </div>
-
-                        {% comment %} <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" class="form-control" name="password" value="{{ teacher.admin.password }}">
-                        </div> {% endcomment %}
-
-                        <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" class="form-control" name="first_name" value="{{ teacher.admin.first_name }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" class="form-control" name="last_name" value="{{ teacher.admin.last_name }}">
-                            <input type="hidden" name="teacher_id" value="{{ teacher.admin.id }}" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Matricule</label>
-                            <input type="text" class="form-control" name="matricule" value="{{ teacher.matricule }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Phone Number</label>
-                            <input type="text" class="form-control" name="telephone" value="{{ teacher.telephone }}">
-                        </div>
-
-
-                        <div class="form-group">
-                            <label>Specialite</label>
-                            <input type="text" class="form-control" name="specialite" value="{{ teacher.specialite }}">
-                        </div>
-
-                    </div>
-                    <!-- /.card-body -->
-
-                    <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Update teacher</button>
-                    </div>
-                </form>
+                    </form>
                 </div>
                 <!-- /.card -->
 
@@ -107,7 +116,7 @@
         </div>
 
     </div><!-- /.container-fluid -->
-  </section>
+</section>
 
 
-  {% endblock content %}
+{% endblock content %}

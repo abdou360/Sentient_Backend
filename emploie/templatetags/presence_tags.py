@@ -1,8 +1,7 @@
 from django import template
 import markdown
 from django.utils.safestring import mark_safe
-import os, cv2
-
+from face_recognition.service_metier.utils import getImagesFromBackup
 from users.models import Professeur
 
 register = template.Library()
@@ -37,21 +36,9 @@ def photoFilter(profile_picture):
     return mark_safe(markdown.markdown(str))
 
 
-@register.filter(name='markdown')
-def markdown_format(text):
-    return mark_safe(markdown.markdown(text))
-
-@register.simple_tag
-def show_images(filiere="IRISI", niveau="IRISI_1", groupe="G1", idSeance=1):
-    path = filiere + "/" + niveau + "/" + groupe + "/" + str(idSeance) + "/"
-    path_dir = "face_recognition/service_metier/backup/" + path
+@register.inclusion_tag('emploie/espace_prof/includes/modals/_backup.html')
+def show_images(filiere, niveau, groupe, idSeance):
+    images = getImagesFromBackup(filiere, niveau, groupe, idSeance)
     
-    list_images = os.listdir(path_dir)
-    
-    images = []
-    for i in range(len(list_images)):
-        imagePath = path + list_images[i]
-        print(imagePath)
-        images += [imagePath]
     return {'images': images}
 

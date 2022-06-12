@@ -33,29 +33,30 @@
             <span> Entrainement des modèles </span>
         </a>
     </li>
-   <!-- Nav Item Etablissement -->
-   <li class="nav-item active">
-   
-    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-        aria-expanded="true" aria-controls="collapseUtilities">
-        <i class="fas fa-school"></i>
-        <span>Etablissements</span>
-    </a>
-    <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
-        data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h2 class="collapse-header"> Gestion des établissements </h2>
-            <a class="collapse-item active" href="{% url 'etablissement' %}">
-              <i class="far fa-circle nav-icon fa-sm"></i> Etablissement</a>
+    <!-- Nav Item Etablissement -->
+    <li class="nav-item active">
 
-            <hr>
-            <h2 class="collapse-header py-2">Gestion des filières</h2>
-            <a class="collapse-item active" href="{% url 'filiere' %}"><i class="far fa-circle nav-icon fa-sm"></i> Filières</a>
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities22" aria-expanded="true"
+            aria-controls="collapseUtilities22">
+            <i class="fas fa-school"></i>
+            <span>Etablissements</span>
+        </a>
+        <div id="collapseUtilities22" class="collapse show" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h2 class="collapse-header"> Gestion des établissements </h2>
+                <a class="collapse-item active" href="{% url 'etablissement' %}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Etablissement</a>
+
+                <hr>
+                <h2 class="collapse-header py-2">Gestion des filières</h2>
+                <a class="collapse-item active" href="{% url 'filiere' %}"><i class="far fa-circle nav-icon fa-sm"></i>
+                    Filières</a>
+            </div>
+
         </div>
-        
-    </div>
 
-  </li>
+    </li>
     <!-- Nav Item - Manage Teachers -->
     {% url 'manage_teacher' as manage_teacher %}
     {% url 'edit_teacher' teacher_id=id as edit_teacher %}
@@ -83,14 +84,7 @@
         </div>
     </li>
 
-    <!-- Nav Item - Manage Schedules -->
-    <li class="nav-item">
-        {% url 'emploie_admin' as emploie_admin %}
-        <a href="{{ emploie_admin }}" class="nav-link ">
-            <i class="nav-icon fas fa-calendar-day"></i>
-            <span>Manage Schedule</span>
-        </a>
-    </li>
+   
 
     <!-- Nav Item - Students -->
     {% url 'manage_student' as manage_student %}
@@ -118,36 +112,46 @@
             </div>
         </div>
     </li>
+    <li class="nav-item active">
 
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities11" aria-expanded="true"
+            aria-controls="collapseUtilities11">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Gestion des salles</span>
+        </a>
+        <div id="collapseUtilities11" class="collapse show" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item active" href="{% url 'AddTypeSalle' %}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Type de salle</a>
+                <hr>
+                <a class="collapse-item active" href="{% url 'AddSalle' %}">
+                    <i class="far fa-circle nav-icon fa-sm"></i> Salle</a>
+                </div>
 
-    <li class="nav-item">
-        {% url 'add_student' as add_student %}
-        <a href="{{ add_student }}" class="nav-link {% if request.path == add_student %} active {% endif %}">
-            <i class="nav-icon fas fa-th"></i>
-            <span>
-        Add Student
-      </span>
-    </a>
-  </li>
+        </div>
+
+    </li>
+
 
     <li class="nav-item active">
 
         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities1" aria-expanded="true"
             aria-controls="collapseUtilities1">
             <i class="fas fa-fw fa-book"></i>
-            <span>Manage Schedule</span>
+            <span>Gestion des emplois</span>
         </a>
         <div id="collapseUtilities1" class="collapse show" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item active" href="{% url 'AddPlanning' %}">
-                    <i class="far fa-circle nav-icon fa-sm"></i> Add Schedule</a>
+                    <i class="far fa-circle nav-icon fa-sm"></i> Ajouter une séance</a>
                 <hr>
                 <a class="collapse-item active" href="{% url 'all' %}">
-                    <i class="far fa-circle nav-icon fa-sm"></i> All Schedule</a>
+                    <i class="far fa-circle nav-icon fa-sm"></i> Toutes les séances</a>
                 <hr>
                 <a class="collapse-item active" href="{% url 'emploiAdmin' %}">
-                    <i class="far fa-circle nav-icon fa-sm"></i> Find Schedule</a>
+                    <i class="far fa-circle nav-icon fa-sm"></i> Checher un emploi</a>
 
 
 
