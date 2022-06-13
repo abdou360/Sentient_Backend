@@ -1,7 +1,7 @@
 from django import template
 import markdown
 from django.utils.safestring import mark_safe
-
+from face_recognition.service_metier.utils import getImagesFromBackup
 from users.models import Professeur
 
 register = template.Library()
@@ -12,12 +12,6 @@ def connected_prof_id(user):
     prof = Professeur.objects.get(user_id=user.id)
     if prof:    
         return prof.id
-
-@register.simple_tag
-def connected_prof_username(user):
-    prof = Professeur.objects.get(user_id=user.id)
-    if prof:    
-        return prof.user.first_name + ' ' + prof.user.last_name
 
 # template filter
 @register.filter(name='presence_filter')
@@ -42,7 +36,9 @@ def photoFilter(profile_picture):
     return mark_safe(markdown.markdown(str))
 
 
-@register.filter(name='markdown')
-def markdown_format(text):
-    return mark_safe(markdown.markdown(text))
+@register.inclusion_tag('emploie/espace_prof/includes/modals/_backup.html')
+def show_images(filiere, niveau, groupe, idSeance):
+    images = getImagesFromBackup(filiere, niveau, groupe, idSeance)
+    
+    return {'images': images}
 

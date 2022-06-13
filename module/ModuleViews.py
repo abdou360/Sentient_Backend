@@ -12,6 +12,10 @@ from django.urls import reverse
 from module.models import *
 from semestre.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from rest_framework.decorators import api_view
+from module.models import ElementModule, Module, Perequis
+from module.serializers import ModuleSerializer, ElementModuleSerializer, PerequisSerializer
+from rest_framework.response import Response
 
 
 @login_required
@@ -521,3 +525,35 @@ def NotcontainsNumber(value):
         if character.isdigit():
             return False
     return True
+
+
+
+    """@author
+        Aminatou
+    """
+@api_view(['GET'])
+def liste_modules(request):
+    try:
+        mod = Module.objects.all()
+        serializer = ModuleSerializer(mod,many=True)
+        return Response(serializer.data)
+    except Module.DoesNotExist:
+        return Response([])
+
+@api_view(['GET'])
+def liste_ElementModule(request):
+    try:
+        element = ElementModule.objects.all()
+        serializer = ElementModuleSerializer(element,many=True)
+        return Response(serializer.data)
+    except Module.DoesNotExist:
+        return Response([])
+
+@api_view(['GET'])
+def liste_Perequis(request):
+    try:
+        perequis = Perequis.objects.all()
+        serializer = PerequisSerializer(perequis,many=True)
+        return Response(serializer.data)
+    except Module.DoesNotExist:
+        return Response([]) 

@@ -168,6 +168,7 @@ STATICFILES_DIRS = [
     'cours/static',
     'emploie/static',
     'face_recognition/static',
+    'face_recognition/service_metier/backup/',
 ]
 
 MEDIA_URL = '/media/'
