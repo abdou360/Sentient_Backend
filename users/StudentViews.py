@@ -1,4 +1,5 @@
 import json
+import os
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -122,13 +123,27 @@ def add_student_save(request):
         student.admin = admin
         student.cne = request.POST['cne']
         student.adresse = request.POST['adresse']
-        student.profile_pic = request.POST['profile_pic']
+        # student.profile_pic = request.POST['profile_pic']
+        student.profile_pic = handle_uploaded_file(
+            request.FILES['profile_pic'])
         student.path_photos = "face_recognition/dataset/Etudiant_" + \
             first_name + "_" + last_name + "/"
         student.telephone = request.POST['telephone']
         student.code_apogee = request.POST['code_apogee']
         student.save()
     return redirect(to='add_student_groups', id=student.id)
+
+
+def handle_uploaded_file(f):
+    filebase, extension = f.name.split('.')
+    now = time.time()
+    stamp = datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d-%H-%M-%S')
+    name = str(stamp)+'.'+extension
+    path = os.path.join('media/img/etudiant/', name)
+    with open(path, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+    return path
 
 
 @api_view(['GET'])

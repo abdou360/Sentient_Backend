@@ -5,7 +5,7 @@ from rest_framework import serializers
 class ChapitreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapitre
-        fields = '__all__'
+        fields = ['id', 'libelle', 'description', 'image']
 
 
 class TraitementSerializerImage(serializers.ModelSerializer):

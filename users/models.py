@@ -5,6 +5,15 @@ from django.core.validators import RegexValidator
 from django.urls import reverse
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+import datetime
+import time
+
+
+def image_upload_location(instance, filename):
+    filebase, extension = filename.split('.')
+    now = time.time()
+    stamp = datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d-%H-%M-%S')
+    return 'img/etudiant/%s.%s' % (str(stamp), extension)
 
 
 class SessionYearModel(models.Model):
@@ -35,7 +44,8 @@ class Admin(models.Model):
 class Professeur(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    admin = models.ForeignKey(Admin, on_delete=models.CASCADE, null=True)
+    admin = models.ForeignKey(
+        Admin, on_delete=models.CASCADE, null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     specialite = models.CharField(max_length=45, default="Informatique")
@@ -57,7 +67,7 @@ class Students(models.Model):
     code_apogee = models.CharField(max_length=100, default="")
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     admin = models.ForeignKey(Admin, on_delete=models.CASCADE)
-    profile_pic = models.FileField(null=True)
+    profile_pic = models.FileField(null=True, upload_to=image_upload_location)
     groupes = models.ManyToManyField('semestre.Groupe', null=True)
 
 
