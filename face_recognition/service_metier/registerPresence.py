@@ -5,6 +5,8 @@
 """
 
 
+from requests import Response
+from emploie.api.serializers import PresenceSerializer
 from emploie.models import Presence, Seance
 from datetime import date
 
@@ -52,4 +54,6 @@ def registerPresenceDB(idSalle):
         # enregister les images des étudiants
         backup(filiere, niveau, groupe, seance.id)
         
-        return students_with_presence
+        serializer = PresenceSerializer(students_with_presence, many=True)
+    
+        return Response(serializer.data) 
