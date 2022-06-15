@@ -25,7 +25,7 @@ Add Student
                     {# {% include 'admin/form_template.html' with messages=messages form=form action_path=action_path
                     button_text="Save & Add Groups" %}#} -->
                     <div class="container" style="padding: 1%">
-                        <form method="post" action="{% url 'add_student_save' %}">
+                        <form method="post" action="{% url 'add_student_save' %}" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="row" style="padding: 1%">
                                 <div class="col">

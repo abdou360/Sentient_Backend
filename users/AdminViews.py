@@ -47,36 +47,36 @@ def add_teacher_save(request):
         matricule = request.POST.get('matricule')
         telephone = request.POST.get('telephone')
 
-        try:
-            if not CustomUser.objects.filter(email=email).exists:
-                user = CustomUser()
+        # try:
+        # if not CustomUser.objects.filter(email=email).exists:
+        user = CustomUser()
 
-                user.user_type = 2
-                user.first_name = first_name
-                user.last_name = last_name
-                user.email = email
-                user.username = username
-                user.password = password
+        user.user_type = 2
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.username = username
+        user.password = password
 
-                user.save()
+        user.save()
 
-                professeur = Professeur.objects.get(user=user)
+        professeur = Professeur.objects.get(user=user)
 
-                professeur.specialite = specialite
-                professeur.matricule = matricule
-                professeur.telephone = telephone
-                professeur.user = user
+        professeur.specialite = specialite
+        professeur.matricule = matricule
+        professeur.telephone = telephone
+        professeur.user = user
 
-                professeur.save()
-                messages.success(request, "teacher Added Successfully!")
-                return redirect('add_teacher')
-            else:
-                messages.error(
-                    request, "Cet email est associé à un autre compte")
-                return redirect('add_teacher')
-        except:
-            messages.error(request, "Failed to Add teacher!")
-            return redirect('add_teacher')
+        professeur.save()
+        messages.success(request, "teacher Added Successfully!")
+        return redirect('add_teacher')
+        # else:
+        #     messages.error(
+        #         request, "Cet email est associé à un autre compte")
+        #     return redirect('add_teacher')
+        # except:
+        #     messages.error(request, "Failed to Add teacher!")
+        #     return redirect('add_teacher')
 
 
 def manage_teacher(request):
