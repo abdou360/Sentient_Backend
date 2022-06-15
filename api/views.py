@@ -1,17 +1,25 @@
-from api.serializers import RegisterUserSerializer
+from api.serializers import UserLoginSerializer
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
 
-class CustomUserCreate(APIView):
-    permission_classes = [AllowAny]
+
+class UserLoginView(RetrieveAPIView):
+
+    permission_classes = (AllowAny,)
+    serializer_class = UserLoginSerializer
 
     def post(self, request):
-        reg_serializer = RegisterUserSerializer(data=request.data)
-        if reg_serializer.is_valid():
-            new_user = reg_serializer.save()
-            if new_user:
-                return Response(status=status.HTTP_201_CREATED)
-            return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = {
+            'success' : 'True',
+            'status code' : status.HTTP_200_OK,
+            'message': 'Utilisateur est connecté avec succès !',
+            'token' : serializer.data['token'],
+            }
+        status_code = status.HTTP_200_OK
+
+        return Response(response, status=status_code)

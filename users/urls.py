@@ -21,12 +21,11 @@ urlpatterns = [
                   path('logout_user/', views.logout_user, name="logout_user"),
                   path('admin_home/', AdminViews.admin_home, name="admin_home"),
                   # UnivIt responsable : Ettafssaoui Youssef 
-                  path('add_teacher/', AdminViews.add_teacher, name="add_teacher"),
-                  path('add_teacher_save/', AdminViews.add_teacher_save, name="add_teacher_save"),
-                  path('manage_teacher/', AdminViews.manage_teacher, name="manage_teacher"),
-                  path('edit_teacher/<teacher_id>/', AdminViews.edit_teacher, name="edit_teacher"),
-                  path('edit_teacher_save/', AdminViews.edit_teacher_save, name="edit_teacher_save"),
-                  path('delete_teacher/<teacher_id>/', AdminViews.delete_teacher, name="delete_teacher"),
+                  path('add_professeur_save/', AdminViews.add_professeur_save, name="add_professeur_save"),
+                  path('manage_professeur/', AdminViews.manage_professeur, name="manage_professeur"),
+                  path('edit_professeur/<professeur_id>/', AdminViews.edit_professeur, name="edit_professeur"),
+                  path('edit_professeur_save/', AdminViews.edit_professeur_save, name="edit_professeur_save"),
+                  path('delete_professeur/<professeur_id>/', AdminViews.delete_professeur, name="delete_professeur"),
                   
                   # UnivIt responsable : Ettafssaoui Youssef 
                #    path('manage_session/', AdminViews.manage_session, name="manage_session"),

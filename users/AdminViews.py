@@ -6,37 +6,47 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 import json
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from semestre.models import Groupe
+from filiere.models import Filiere, Etablissement
+from emploie.models import Planning
+from module.models import ElementModule, Module
 from users.models import CustomUser, Professeur, Students
 
 
 def admin_home(request):
     all_student_count = Students.objects.all().count()
-    # course_count = Courses.objects.all().count()
-    all_teacher_count = Professeur.objects.all().count()
+    all_filiere_count = Filiere.objects.all().count()
+    all_professeur_count = Professeur.objects.all().count()
+    all_etablissements_count = Etablissement.objects.all().count()
+    all_emploie_count = Planning.objects.all().count()
+    all_module_count = Module.objects.all().count()
+    all_elem_modules_count = ElementModule.objects.all().count()
 
     # Total Subjects and students in Each Module
 
-    # For Teachers : Statistics
+    # For professeurs : Statistics :
 
-    # For Students : Statistics
+    # For Students : Statistics :
 
     context = {
         "all_student_count": all_student_count,
-        "all_teacher_count": all_teacher_count
+        "all_professeur_count": all_professeur_count,
+        "all_filiere_count": all_filiere_count,
+        "all_etablissements_count": all_etablissements_count,
+        "all_emploie_count": all_emploie_count,
+        "all_module_count": all_module_count,
+        "all_elem_modules_count": all_elem_modules_count
+        
     }
     return render(request, "admin/home_content.html", context)
 
 
-def add_teacher(request):
-    return render(request, "admin/add_teacher_template.html")
-
-
-def add_teacher_save(request):
+def add_professeur_save(request):
     if request.method != "POST":
         messages.error(request, "Invalid Method ")
-        return redirect('add_teacher')
+        return redirect('manage_professeur')
     else:
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -50,58 +60,63 @@ def add_teacher_save(request):
         try:
             if not CustomUser.objects.filter(email=email).exists:
                 user = CustomUser()
-
                 user.user_type = 2
                 user.first_name = first_name
                 user.last_name = last_name
                 user.email = email
                 user.username = username
                 user.password = password
-
                 user.save()
-
                 professeur = Professeur.objects.get(user=user)
-
                 professeur.specialite = specialite
                 professeur.matricule = matricule
                 professeur.telephone = telephone
                 professeur.user = user
-
                 professeur.save()
-                messages.success(request, "teacher Added Successfully!")
-                return redirect('add_teacher')
+                messages.success(request, "Professeur ajouté avec succès !")
+                return redirect('manage_professeur')
             else:
                 messages.error(
-                    request, "Cet email est associé à un autre compte")
-                return redirect('add_teacher')
+                    request, "Cet email est associé à un autre compte !")
+                return redirect('manage_professeur')
         except:
-            messages.error(request, "Failed to Add teacher!")
-            return redirect('add_teacher')
+            messages.error(request, "Impossible d'ajouter le Professeur !")
+            return redirect('manage_professeur')
 
 
-def manage_teacher(request):
-    teachers = Professeur.objects.all()
+def manage_professeur(request):
+    professeurs = Professeur.objects.all().order_by('-created_at')
+    all_professeur_count = Professeur.objects.all().count()
+    page = request.GET.get('page', 1)
+    pag = Paginator(professeurs, 8)
+    try:
+        aprofesseurs = pag.page(page)
+    except PageNotAnInteger:
+        aprofesseurs = pag.page(1)
+    except EmptyPage:
+        aprofesseurs = pag.page(pag.num_pages)
     context = {
-        "teachers": teachers
+        "professeurs": aprofesseurs,
+        "all_professeur_count": all_professeur_count
     }
-    return render(request, "admin/manage_teacher_template.html", context)
+    return render(request, "admin/manage_professeur_template.html", context)
 
 
-def edit_teacher(request, teacher_id):
-    teacher = Professeur.objects.get(user=teacher_id)
+def edit_professeur(request, professeur_id):
+    professeur = Professeur.objects.get(user=professeur_id)
 
     context = {
-        "teacher": teacher,
-        "id": teacher_id
+        "professeur": professeur,
+        "id": professeur_id
     }
-    return render(request, "admin/edit_teacher_template.html", context)
+    return render(request, "admin/edit_professeur_template.html", context)
 
 
-def edit_teacher_save(request):
+def edit_professeur_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
-        teacher_id = request.POST.get('teacher_id')
+        professeur_id = request.POST.get('professeur_id')
         username = request.POST.get('username')
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
@@ -112,7 +127,7 @@ def edit_teacher_save(request):
 
         try:
             # INSERTING into Customuser Model
-            user = CustomUser.objects.get(id=teacher_id)
+            user = CustomUser.objects.get(id=professeur_id)
             user.first_name = first_name
             user.last_name = last_name
             user.email = email
@@ -120,29 +135,29 @@ def edit_teacher_save(request):
             user.save()
 
             # INSERTING into Professeur Model
-            teacher_model = Professeur.objects.get(user=teacher_id)
-            teacher_model.specialite = specialite
-            teacher_model.matricule = matricule
-            teacher_model.telephone = telephone
-            teacher_model.save()
+            professeur_model = Professeur.objects.get(user=professeur_id)
+            professeur_model.specialite = specialite
+            professeur_model.matricule = matricule
+            professeur_model.telephone = telephone
+            professeur_model.save()
 
-            messages.success(request, "Teacher Updated Successfully !")
-            return redirect('/edit_teacher/'+teacher_id)
+            messages.success(request, "professeur Updated Successfully !")
+            return redirect('/edit_professeur/'+professeur_id)
 
         except:
-            messages.error(request, "Failed to Update teacher !")
-            return redirect('/edit_teacher/'+teacher_id)
+            messages.error(request, "Failed to Update professeur !")
+            return redirect('/edit_professeur/'+professeur_id)
 
 
-def delete_teacher(request, teacher_id):
-    teacher = Professeur.objects.get(user=teacher_id)
+def delete_professeur(request, professeur_id):
+    professeur = Professeur.objects.get(user=professeur_id)
     try:
-        teacher.delete()
-        messages.success(request, "teacher Deleted Successfully.")
-        return redirect('manage_teacher')
+        professeur.delete()
+        messages.success(request, "professeur Supprimé avec succès !")
+        return redirect('manage_professeur')
     except:
-        messages.error(request, "Failed to Delete teacher.")
-        return redirect('manage_teacher')
+        messages.error(request, "Erreur lors la suppression du Professeur !")
+        return redirect('manage_professeur')
 
 
 def add_user(request):
@@ -152,7 +167,7 @@ def add_user(request):
 def add_user_save(request):
     if request.method != "POST":
         messages.error(request, "Invalid Method ")
-        return redirect('add_teacher')
+        return redirect('add_professeur')
     else:
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -193,7 +208,7 @@ def edit_user_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
-        user_id = request.POST.get('teacher_id')
+        user_id = request.POST.get('professeur_id')
         username = request.POST.get('username')
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
@@ -402,7 +417,7 @@ def admin_profile_update(request):
             return redirect('admin/admin_profile')
 
 
-def teacher_profile(request):
+def professeur_profile(request):
     pass
 
 

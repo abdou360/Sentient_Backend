@@ -8,13 +8,13 @@
             <div class="col-xl-4 col-md-6 mb-4">
               <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-header">
-                  <a href="{% url 'manage_student' %}" class="small-box-footer">Manage Students <i class="fas fa-arrow-circle-right"></i></a>
+                  <a href="{% url 'manage_student' %}" class="small-box-footer">Gestion des Etudiants <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
                   <div class="card-body">
                       <div class="row no-gutters align-items-center">
                           <div class="col mr-2">
                               <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Total Students</div>
+                                Nombre total des Etudiants</div>
                               <div class="h5 mb-0 font-weight-bold text-gray-800">{{ all_student_count }}</div>
                           </div>
                           <div class="col-auto">
@@ -28,17 +28,17 @@
           <div class="col-xl-4 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
               <div class="card-header">
-                <a href="{% url 'manage_teacher' %}" class="small-box-footer">Manage Teachers <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{% url 'manage_professeur' %}" class="small-box-footer">Gestion des Enseignants <i class="fas fa-arrow-circle-right"></i></a>
               </div>
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                              Total Teachers</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ all_teacher_count }}</div>
+                              Nombre total des Enseignants :</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ all_professeur_count }}</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -46,32 +46,118 @@
         </div>
 
 
-            
 
-            
-          </div>
-          <!-- /.row -->
-          <div class="row">
-            <div class="col-lg-6">
-              <!-- PIE CHART -->
-              <div class="card card-danger">
-                <div class="card-header">
-                  <h3 class="card-title">Student and Staff Chart</h3>
-
-                  <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                </div>
-                <!-- /.card-body -->
-              </div>
-              <!-- /.card -->
+        <div class="col-xl-4 col-md-6 mb-4">
+          <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-header">
+              <a href="{% url 'filiere' %}" class="small-box-footer">Gestion des Filieres <i class="fas fa-arrow-circle-right"></i></a>
             </div>
+              <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                          <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Nombre total des Filieres :</div>
+                          <div class="h5 mb-0 font-weight-bold text-gray-800">{{ all_filiere_count }}</div>
+                      </div>
+                      <div class="col-auto">
+                          <i class="fas fa-bookmark fa-2x text-gray-300"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
 
+
+      <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-dark shadow h-100 py-2">
+          <div class="card-header">
+            <a href="{% url 'etablissement' %}" class="small-box-footer">Gestion des Etablissements <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                          Nombre total des Etablissements :</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ all_etablissements_count }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-home fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-link shadow h-100 py-2">
+        <div class="card-header">
+          <a href="{% url 'emploie_admin' %}" class="small-box-footer">Gestion des Emploies <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+          <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-link text-uppercase mb-1">
+                        Nombre total des Emploies :</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ all_emploie_count }}</div>
+                  </div>
+                  <div class="col-auto">
+                      <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+  <div class="col-xl-4 col-md-6 mb-4">
+    <div class="card border-left-info shadow h-100 py-2">
+      <div class="card-header">
+        <a href="{% url 'manage_modules' %}" class="small-box-footer">Gestion des Modules <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                      Nombre total des Modules :</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ all_module_count }}</div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-book fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="col-xl-4 col-md-6 mb-4">
+  <div class="card border-left-warning shadow h-100 py-2">
+    <div class="card-header">
+      <a href="{% url 'manage_elem_modules' %}" class="small-box-footer">Gestion des Elements Modules <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+      <div class="card-body">
+          <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                    Nombre total des Elements Modules :</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{ all_elem_modules_count }}</div>
+              </div>
+              <div class="col-auto">
+                  <i class="fas fa-glob fa-2x text-gray-300"></i>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+            
+
+            
           </div>
 
 
@@ -79,64 +165,3 @@
       </section>
 
   {% endblock content %}
-
-  {% block custom_js %}
-
-  <script>
-    $(document).ready(function(){
-      var donutChartCanvas = $('#pieChart').get(0).getContext('2d')
-      var pieData        = {
-        labels: [
-            'Students', 
-            'Teachers',
-        ],
-        datasets: [
-          {
-            data: [{{ all_student_count }}, {{ teacher_count }}],
-            backgroundColor : ['#f56954', '#00a65a'],
-          }
-        ]
-      }
-
-      //-------------
-      //- PIE CHART -
-      //-------------
-      // Get context with jQuery - using jQuery's .get() method.
-      var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-      var pieData        = pieData;
-      var pieOptions     = {
-        maintainAspectRatio : false,
-        responsive : true,
-      }
-      //Create pie or douhnut chart
-      // You can switch between pie and douhnut using the method below.
-      var pieChart = new Chart(pieChartCanvas, {
-        type: 'pie',
-        data: pieData,
-        options: pieOptions      
-      })
-
-
-      
-
-      // Total Students in Each Course
-
-
-
-
-      // Total Students in Each Subject
-
-
-
-
-
-
-
-    
-
-
-     
-    })
-  </script>
-
-  {% endblock custom_js %}

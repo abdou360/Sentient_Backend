@@ -1,7 +1,7 @@
 {% extends 'admin/base-home.html' %}
 
 {% block title %}
-    Add Teacher
+    Ajouter Professeur
 {% endblock title %}
 
 {% block content %}
@@ -16,14 +16,12 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Add teacher</h3>
+                    <h3 class="card-title">Ajouter Professeur</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form role="form" method="POST" action="{% url 'add_teacher_save' %}">
+                <form role="form" method="POST" action="{% url 'add_professeur_save' %}">
                     {% csrf_token %}
-
-                    
                             {% comment %} Display Messages {% endcomment %}
                             {% if messages %}
                             <div class="form-group">
@@ -95,7 +93,7 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Add teacher</button>
+                    <button type="submit" class="btn btn-primary">Add professeur</button>
                     </div>
                 </form>
                 </div>
