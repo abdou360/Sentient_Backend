@@ -31,6 +31,10 @@ urlpatterns = [
     path('modules/elements_module/filtrebyModule<str:name_>', ModuleViews.search_elem_modules_modules , name="search_elem_modules_modules"),
     path('edit_element_module_level/<str:name_>/<str:id_>', ModuleViews.edit_element_module_level, name="edit_element_module_level"),
     path('edit_element_module_save', ModuleViews.edit_element_module_save),
+    path('modules/liste_modules', ModuleViews.liste_modules ,name ="liste_modules"),
+    path('modules/liste_ElementModule', ModuleViews.liste_ElementModule,name ="liste_ElementModule"),
+    path('modules/liste_Perequis', ModuleViews.liste_Perequis,name ="liste_Perequis"),
+
     
     
     #*@author ABDELHADI MOUZAFIR END

@@ -56,6 +56,7 @@
             </div>
         </div>
     </li>
+    <li class="nav-item active">
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block" />
@@ -98,6 +99,26 @@
                 </div>
             </div>
     </li>
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block" />
+
+        <!-- Gestion des Salles  -->
+        <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-landmark"></i>
+                    <span>Gestion des Salles</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Salles :</h6>
+                        <a class="collapse-item" href="{% url 'AddTypeSalle' %}">Type de salle</a>
+                        <a class="collapse-item" href="{% url 'AddSalle' %}">Salle</a>
+                    </div>
+                </div>
+        </li>
 
 
     <!-- Divider -->

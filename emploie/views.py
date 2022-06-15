@@ -5,13 +5,13 @@
 """
 
 from django.shortcuts import render
-from emploie.forms import PlanningForm
+from emploie.forms import PlanningForm, SalleForm, TypeSalleForm
 from semestre.models import Semestre, Groupe, Niveau
 from filiere.models import Filiere
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from slugify import slugify
-from emploie.models import Planning, Presence, Seance
+from emploie.models import Planning, Presence, Seance, TypeSalle, Salle
 
 
 ###   ESPACE ADMIN  ###
@@ -21,7 +21,7 @@ selectefilliere: Filiere
 selecteniveau: Niveau
 selectegroupe: Groupe
 
-
+#   CRUD SCEANCE    #
 def EmploieAdmin(request):
     fillieres = Filiere.objects.all()
     semestres = Semestre.objects.all()
@@ -32,17 +32,13 @@ def AddPlanning (request):
         form = PlanningForm(request.POST) 
         if form.is_valid():  
             try:  
-                plan=form.save()  
+                plan=form.save() 
                 return redirect('')  
-            except:  
+            except: 
                 pass  
-
-
-    else:   
+    else:  
         form = PlanningForm()
     return render(request,'emploie/espace_admin/pages/emploie_calendar.addSchedule.html',{"form":form})
-
-    
 
 def all(request):  
     plannings = Planning.objects.all()
@@ -60,11 +56,76 @@ def update(request, id):
         return redirect("emploie/all")  
     return render(request, 'emploie/espace_admin/pages/emploie_calendar.edit.html', {'plannings': plannings})  
 
-
 def destroy(request, id):  
     planning = Planning.objects.get(id=id)  
     planning.delete()  
     return redirect("/emploie/all")
+
+#   CRUD TYPESALLE    #
+def AddTypeSalle(request):  
+    typesalles = TypeSalle.objects.all()
+    if request.method == "POST":  
+        form = TypeSalleForm(request.POST)  
+        if form.is_valid():  
+            try:  
+                form.save()  
+                return redirect('')  
+            except:  
+                pass  
+    else:  
+        form = TypeSalleForm()  
+    return render(request,'emploie/espace_admin/pages/emploie_calendar.addTypeSalle.html',{'form':form,"typesalles": typesalles})  
+
+def destroyTypeSalle(request, id):  
+    typesalle = TypeSalle.objects.get(id=id)  
+    typesalle.delete()  
+    return redirect("../AddTypeSalle")
+
+def editTypeSalle(request, id):  
+    typesalle = TypeSalle.objects.get(id=id)  
+    return render(request,'emploie/espace_admin/pages/emploie_calendar.editTypeSalle.html', {'typesalle':typesalle})  
+
+def updateTypeSalle(request, id):  
+    typesalle = TypeSalle.objects.get(id=id)  
+    form = TypeSalleForm(request.POST, instance = typesalle)  
+    if form.is_valid():  
+        form.save()  
+        return redirect("../AddTypeSalle")  
+    return render(request, 'emploie/espace_admin/pages/emploie_calendar.editTypeSalle.html', {'typesalle': typesalle})
+
+#   CRUD SALLE    #
+
+def AddSalle(request): 
+    salles = Salle.objects.all() 
+    if request.method == "POST":  
+        form = SalleForm(request.POST)  
+        if form.is_valid():  
+            try:  
+                form.save()  
+                return redirect('')  
+            except:  
+                pass  
+    else:  
+        form = SalleForm()  
+    return render(request,'emploie/espace_admin/pages/emploie_calendar.addSalle.html',{'form':form,"salles":salles})  
+
+def destroySalle(request, id):  
+    salle = Salle.objects.get(id=id)  
+    salle.delete()  
+    return redirect("../AddSalle")
+
+def editSalle(request, id):  
+    salle = Salle.objects.get(id=id)  
+    return render(request,'emploie/espace_admin/pages/emploie_calendar.editSalle.html', {'salle':salle})  
+
+def updateSalle(request, id):  
+    salle = Salle.objects.get(id=id)  
+    form = SalleForm(request.POST, instance = salle)  
+    if form.is_valid():  
+        form.save()  
+        return redirect("../AddSalle")  
+    return render(request, 'emploie/espace_admin/pages/emploie_calendar.editSalle.html', {'salle': salle})
+
 
 def GetNiveaux(request):
     if request.method == 'POST':

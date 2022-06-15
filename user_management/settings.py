@@ -109,6 +109,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ar-crud',
+        # 'NAME': 'ar-crud-project-1',
         'USER': 'root',
         'PASSWORD': 'root',
         'PORT': '8889',
@@ -162,6 +163,7 @@ STATICFILES_DIRS = [
     'cours/static',
     'emploie/static',
     'face_recognition/static',
+    'face_recognition/service_metier/backup/',
 ]
 
 MEDIA_URL = '/media/'
