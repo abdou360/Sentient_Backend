@@ -25,8 +25,10 @@ urlpatterns = [
     
     # rest framework 
     path('mobile/salles/', getSalles, name='salles_list'),
+    path('mobile/salles', getSalles, name='salles_list'),
     path('mobile/filieres', filiere_liste, name='filiere_liste'),
     path('mobile/niveau/<str:nom_filiere>', Niveau_liste, name='niveau_liste'),
+    path('mobile/salle', RegisterFromPhone, name='RegisterFromPhone'),
     path('mobile/niveau_Choisi', post_niveau, name='post_niveau'),
     
     

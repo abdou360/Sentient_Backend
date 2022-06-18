@@ -3,10 +3,10 @@
     @author : KANNOUFA FATIMA EZZAHRA
 """
 
-from emploie.models import Planning, Seance
+from emploie.models import Planning, Presence, Seance
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import SeanceSerializer
+from .serializers import PresenceSerializer, SeanceSerializer
 from django.http import FileResponse
 
 
@@ -26,6 +26,15 @@ def getSeances(request, idProf):
     
     return Response(serializer.data) 
 
+#   Modifier la présence - API  #
+@api_view(['GET'])
+def modifierPresenceAPI(request, idSeance, idEtudiant):
+    presence = Presence.objects.get(etudiant_id = idEtudiant, seance_id = idSeance)
+    presence.is_present = not presence.is_present
+    presence.save()
+    
+    serializer = PresenceSerializer(presence, many=False)
+    return Response(serializer.data)
 
 #   retourner une image à partir de son chemin    #
 def getPhoto(response, path_image):

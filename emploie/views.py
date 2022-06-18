@@ -191,3 +191,4 @@ def ModifierPresence(request, idSeance, idEtudiant):
     
     return redirect('ListePresence', slug=slug, idSeance=idSeance)
 
+
