@@ -1,3 +1,7 @@
+<!--
+  EQUIPE  : Univit
+  @author : Koutar OUBENADDI et OUGOUD Khadija
+-->
 {% extends "cours/base.html" %}
 
 {% load static %}
@@ -83,19 +87,61 @@
                         <div class="row content">
                             {% for document in documents %}
 
-                            <div class="col-lg-4 col-sm-6 mb-4">
-
-                                <img class="Description" src="/media/img/cours/document_images/{{document.type}}.png"
-                                    alt="image" class="rounded">
-
-                                <p>{{document.titre}}</p>
-                                <div>
-                                    <a href="{% url 'delete_document' document.id %}"
-                                        class="btn btn-primary">Supprimer</a>
+                           
+                            <div class="col-xl-4 mb-4">
+                                <div href="" class="card lift border-left-success h-100">
+                                    <div class="card-body d-flex justify-content-center flex-column">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="me-3">
+                                                <div width="24" height="24" class="feather feather-package feather-xl text-primary mb-3">
+                                                    {% if document.type == "pdf" %}
+                                                    <i class="fas fa-file-pdf fa-2x text-center"></i>
+                                                     {% endif %}
+                                                     {% if document.type == "jpg" %}
+                                                     <i class="fas fa-file-image fa-2x text-success"></i>
+                                                     {% endif %}
+                                                  
+                                                     {% if document.type == "txt" %}
+                                                    <i class="fas fa-file-text-o fa-2x text-success"></i>
+                                                     {% endif %}
+                                                     {% if document.type == "ppt" %}
+                                                     <i class="fas fa-file-powerpoint fa-2x text-success"></i>
+                                                      {% endif %}
+                                                     {% if  document.type == "docx" %}
+                                                     <i class="fas fa-file-word fa-2x text-succes"></i>
+                                                    {% endif %}
+                                                     {% if  document.type == "autre" %}
+                                                     <i class="fas fa-file fa-2x text-danger"></i>
+                                                     {% endif %}
+                                                </div>
+                                                <h4 class=" font-weight-bold text-primary text-uppercase mb-1 text-gray-800">{{document.titre}}</h4>
+                                                <!-- <div class="text-muted small">Lorem ipsum dolor sit amet consectetur adipisicing elit. </div> -->
+                                                <div class="mt-2">
+                                                    
+                                                    {% load static %}
+                                                    <a href="{% get_media_prefix %}{{document.path}}"> <i class="fas fa-eye text-info"></i></a>
+                                                    
+                                                    <a href="{% url 'update_document' document.id %}" class="m-2">
+                                                        <i class="fas fa-pen text-warning"></i>
+                                                    </a>
+                            
+                                                    <a  class="tooltip_delete delete_doc" id="delete_doc" href="{% url 'delete_document' document.id %}" class="m-2">
+                                                        <i class="fas fa-trash text-danger"></i>
+                                                    </a>
+                                                </div>   
+                                            </div>
+                                          
+                                            <img src="/media/{{document.image}}" alt="" style="width: 7rem">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
                         </div>
+                        <a href="{% url 'add_document' chapitre.id%}" class="float" id="tooltip_add"
+                            title="Ajouter un nouveau document">
+                            <i class="fa fa-plus my-float"></i>
+                        </a>
                     </div>
 
                     <div id="ar" class="tab-pane fade">
@@ -159,6 +205,8 @@
                 </div>
             </div>
         </div>
+   
+  
     </div>
 </div>
 
@@ -180,6 +228,9 @@
 
     $('.delete_object').click(function () {
         return confirm('Vous êtes sûr que vous voulez supprimer ce modèle ?');
+    })
+    $('.delete_doc').click(function () {
+        return confirm('Vous êtes sûr que vous voulez supprimer ce document ?');
     })
 
     $(document).ready(function () {

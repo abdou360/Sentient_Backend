@@ -1,8 +1,14 @@
 
+
+#   EQUIPE  : Univit
+#   @author : Koutar OUBENADDI et OUGOUD Khadija
+
 import os
+from pydoc import doc
 import time
 import datetime
 from django.db.models import Q
+from scipy.fft import ifftn
 from cours.serializers import *
 from functools import reduce
 from users.models import Professeur
@@ -24,7 +30,13 @@ from distutils.command import check
 import sys
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import FileSerializer, Modele3DSerializer, TraitementSerializer, DocumentSerializer
+from .serializers import FileSerializer, Modele3DSerializer, TraitementSerializer
+
+
+from django.shortcuts import render, redirect
+  
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse, HttpResponseNotFound
 
 NoneType = type(None)
 
@@ -43,33 +55,13 @@ def get_traitement(request):
         Modele3Ds = Modele3D.objects.filter(
             id=Traitements[0].modele3D_id).first()
         Files = File.objects.filter(modele3D=Modele3Ds.id)
-        # a = Q(label_traitement__icontains=',a,')
-        # b =Q(label_traitement__icontains=',b,')
-        # c = Q(label_traitement__icontains=',c,')
-
-        # filters = reduce(lambda x, y: x | y, [Q(label_traitement__contains=word) for word in list])
-        # for item in list :
-        #   print("hi")
-
-        # qs = Traitement.objects.filter(
-        #   (filters)).annotate(a_filter_cnt=Count('id', filter=a)).annotate(b_filter_cnt=Count('id', filter=b)).annotate(c_filter_cnt=Count('id', filter=c)).annotate(total_filter_cnt=F('a_filter_cnt') +
-        #                              F('b_filter_cnt') +
-        #                              F('c_filter_cnt')).order_by('-total_filter_cnt')
-
+       
+       
         serializer = FileSerializer(Files, many=True)
         return Response(serializer.data)
     except File.DoesNotExist:
         return Response([])
 
-
-@api_view(['GET'])
-def get_Document(request, id):
-    try:
-        Documents = Document.objects.filter(chapitre_id=id).all()
-        serializer = DocumentSerializer(Documents, many=True)
-        return Response(serializer.data)
-    except Document.DoesNotExist:
-        return Response([])
 
 
 @login_required
@@ -306,6 +298,69 @@ def update_chapitre(request, id):
                 request, 'Erreur : Le chapitre n\'a pas été modifié')
             return redirect('update_chapitre')
     return render(request, 'cours/update_chapitre.html', context={'updated_chapitre': updated_chapitre})
+#Documents Methods-----------
+EXTENSIONS_DOC = ['pdf', 'docx', 'ppt', 'txt']
+
+@login_required
+def add_document(request,id):
+    professeur = Professeur.objects.filter(
+        user_id=request.user.id).first()
+    chapitre = Chapitre.objects.filter(id=id).first()
+    print("")
+    if request.method == "GET":
+        new_document = DocumentForm(request=request)
+    elif request.method == "POST":
+        # print('<message>', file=sys.stderr)
+        print('post : ', request.POST)
+
+        new_document = DocumentForm(
+             request.POST, request.FILES, request=request)
+           
+        invalid_extension = 0
+        if new_document.is_valid():
+                        file = request.FILES.get('path')
+                        filename = file.name
+                        # for f in files:
+                        #   filebase, extension = f.name.split('.')
+                        #   if EXTENSIONS_DOC.__contains__(extension):
+                        #    ...
+                        #   else:
+                        #     invalid_extension += 1
+                        #     messages.error(
+                        #     request, 'Erreur : L\'extension n\'est pas autorisée !')
+                        #     return redirect('add_document')
+
+                        # if invalid_extension == 0:
+                        document = new_document.save(commit=False)   
+                        document.chapitre = chapitre
+                        if filename.endswith('.docx') or filename.endswith('.doc') :
+                           document.type="docx"
+                        elif  filename.endswith('.pdf'):
+                           document.type="pdf"
+                        elif filename.endswith('.txt'):
+                           document.type="txt"
+                        elif filename.endswith('.ppt'):
+                           document.type="ppt"
+                        elif filename.endswith('.jpg')or filename.endswith('.jpeg') or filename.endswith('.png') or filename.endswith('.jfif'):
+                           document.type="jpg"
+                        else :
+                           document.type="autre"
+                        document.save()
+                        messages.success(request, ('Le document a été ajouté avec succes!'))
+                        return redirect('chapitres_list')
+                        # else: 
+                        #     messages.error(
+                        #     request, 'Erreur : Le document que vous avez entrer ne peut pas être acceptée  !')
+                        #     return redirect('add_document')
+
+        else:
+                        messages.error(
+                            request, 'Erreur : Le document que vous avez entrer ne peut pas être acceptée !')
+                        return redirect('add_document')
+
+    
+
+    return render(request, 'cours/add_document.html',context={'new_document': new_document})
 
 
 @login_required
@@ -316,6 +371,64 @@ def delete_document(request, id):
     else:
         messages.error(request, 'Erreur : Le document n\'a pas été supprimé')
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
+
+
+@login_required
+def update_document(request, id):
+    document = Document.objects.get(id=id)
+    if request.method == "GET":
+        updated_document = DocumentForm(instance=document, request=request)
+    elif request.method == "POST":
+        updated_document = DocumentForm(
+            request.POST, request.FILES, instance=document, request=request)
+        if updated_document.is_valid():
+            document = updated_document.save(commit=False)  
+            file = request.FILES.get('path')
+            filename = file.name
+            if filename.endswith('.docx')  :
+                           document.type="docx"
+            elif filename.endswith('.pdf'):
+                           document.type="pdf"
+            elif filename.endswith('.txt'):
+                           document.type="txt"
+            elif filename.endswith('.ppt'):
+                           document.type="ppt"
+            elif filename.endswith('.jpg')or filename.endswith('.jpeg') or filename.endswith('.png') or filename.endswith('.jfif'):
+                           document.type="jpg"
+            else :
+                           document.type="autre"
+            document.save()
+            messages.success(
+                request, ('Le document a été modifié avec succès'))
+            return redirect('chapitres_list')
+        else:
+            messages.error(
+                request, 'Erreur : Le docuement n\'a pas été modifié')
+            return redirect('update_document')
+    return render(request, 'cours/update_document.html', context={'updated_document': updated_document})
+
+
+
+@api_view(['GET'])
+def documents_list_api(request, id_chapitre):
+ try:
+    documents = Document.objects.filter(chapitre_id=id_chapitre).defer('id')
+    documents_serializer = DocumentSerializerImage(documents, many=True)
+    return Response(documents_serializer.data)
+ except Document.DoesNotExist:
+    return Response([])
+
+@api_view(['GET'])
+def get_Document(request, id):
+    try:
+        Documents = Document.objects.filter(chapitre_id=id).all()
+        serializer = DocumentSerializerImage(Documents, many=True)
+        return Response(serializer.data)
+    except Document.DoesNotExist:
+        return Response([])
+
+
 
 
 @login_required

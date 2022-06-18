@@ -1,3 +1,7 @@
+
+#   EQUIPE  : Univit
+#   @author : Koutar OUBENADDI et OUGOUD Khadija
+
 from cours.models import *
 from rest_framework import serializers
 
@@ -14,6 +18,11 @@ class TraitementSerializerImage(serializers.ModelSerializer):
         # fields = '__all__'
         fields = ['id', 'titre_traitement']
 
+class DocumentSerializerImage(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        # fields = '__all__'
+        fields = ['id', 'titre','image','path']
 
 class Modele3DSerializerImage(serializers.ModelSerializer):
     class Meta:
@@ -51,7 +60,3 @@ class FileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class DocumentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Document
-        fields = '__all__'
