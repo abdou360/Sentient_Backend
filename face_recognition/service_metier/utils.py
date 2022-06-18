@@ -31,6 +31,7 @@ def getHaarcascadeXML():
     return cv2.CascadeClassifier("face_recognition/service_metier/models/haarcascade_frontalface_default.xml")
 
 def getModel(filiere, niveau, groupe):
+    print('face_recognition/service_metier/saved_model/'+ filiere +'/' + niveau +'/' + groupe +'/s_model_'+ filiere + '_' + niveau +'_' + groupe+ '.yml')
     return 'face_recognition/service_metier/saved_model/'+ filiere +'/' + niveau +'/' + groupe +'/s_model_'+ filiere + '_' + niveau +'_' + groupe+ '.yml'
 
 

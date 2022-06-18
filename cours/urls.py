@@ -48,12 +48,13 @@ urlpatterns = [
          documents_list_api, name='documents_list_api'),
 
 
-    path('api/chapitres', chapitres_list_api, name='chapitres_list_api'),
+    path('api/chapitres/<int:id_module>',
+         chapitres_list_api, name='chapitres_list_api'),
     path('api/chapitre/<int:id_chapitre>',
          chapitre_details_api, name='chapitre_details_api'),
-    path('api/traitements/<int:id_chapitre>',
+    path('api/modeles/<int:id_chapitre>',
          traitements_list_api, name='traitements_list_api'),
-    path('api/traitement/<int:id>',
+    path('api/modele/<int:id>',
          traitement_api, name='traitement_api'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

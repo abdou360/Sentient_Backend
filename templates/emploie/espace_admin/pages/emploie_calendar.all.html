@@ -35,10 +35,10 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Mardi 03/05/2022</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{% now "l d F Y, H:i" %}</h6>
             <h2 class="m-0 font-weight-bold text-success">All session</h2>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="idTable ">
             <table class="table table-hover">
                 <thead>
 
@@ -60,7 +60,7 @@
                   <tr>
                     <th scope="row">1</th>
                     <td>{{ planning.groupe.nom_group}}</td>
-                    <td>{{ planning.professeur.admin.first_name}}</td>
+                    <td>{{ planning.professeur.user.first_name }} {{ planning.professeur.user.last_name }}</td>
                     <td>{{ planning.salle.nom_salle}}</td>
                     <td>{{ planning.element_module.libelle_element_module}}</td>
                     <td>{{ planning.jour}}</td>

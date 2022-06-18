@@ -2,9 +2,6 @@
   EQUIPE  : CodeVerse
   @author : KANNOUFA FATIMA EZZAHRA
 -->
-<!--
-    EN COURS DE TRAITEMENT : (Affichage des images )
--->
 
 {% load presence_tags %}
 {% load static %}
@@ -23,13 +20,12 @@
                 {% if images|length > 0 %}
                     <div id="imagesCarousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="{% static 'SIR/SIR/G2/1/frame20.jpg' %}" class="d-block w-100" alt="images">
-                            </div>                               
+                                                         
                             {% for image in images %}
-                                <div class="carousel-item">
-                                    <!-- affichage d'image ici-->
-                                    <img src="{% static 'SIR/SIR/G2/1/frame20.jpg' %}" class="d-block w-100" alt="images">
+                                <div class="carousel-item {% if forloop.first %} active {% endif %}">
+                                    {% with image as image_static %}
+                                        <img src="{% static image_static %}" class="d-block w-100" alt="images"/>          
+                                    {% endwith %}
                                 </div>  
                             {% endfor %}    
                         </div>

@@ -31,6 +31,7 @@ urlpatterns = [
     path('delete/<int:id>',destroy, name='destroy'),  
     path('destroyTypeSalle/<int:id>',destroyTypeSalle, name='destroyTypeSalle'),  
     path('destroySalle/<int:id>',destroySalle, name='destroySalle'),  
+
     
     
     # ecpace prof :

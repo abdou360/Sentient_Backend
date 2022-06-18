@@ -466,7 +466,7 @@ def delete_Traitement(request, id):
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 
-EXTENSIONS = ['jpg', 'png', 'bin', 'gltf']
+EXTENSIONS = ['jpg', 'png', 'bin', 'gltf', 'glb']
 
 
 @login_required
@@ -728,8 +728,8 @@ def update_traitement(request, id):
 # API
 
 @api_view(['GET'])
-def chapitres_list_api(request):
-    chapitres = Chapitre.objects.all()
+def chapitres_list_api(request, id_module):
+    chapitres = Chapitre.objects.filter(element_module_id=id_module)
     chapitre_serializer = ChapitreSerializer(
         chapitres, many=True)
 
@@ -763,7 +763,7 @@ def traitements_list_api(request, id_chapitre):
 
     for i in range(0, len(traitement_serializer.data)):
 
-        print(traitements[i].modele3D_id)
+        # print(traitements[i].modele3D_id)
 
         modele3d = Modele3D.objects.get(
             id=traitements[i].modele3D_id)
@@ -776,14 +776,35 @@ def traitements_list_api(request, id_chapitre):
         except Image.DoesNotExist:
             image = None
             image_serializer = None
-        print(image)
+        # print(image)
         if image != None:
             path_image = image_serializer.data['path_image']
         else:
             path_image = None
+
+        files_set = []
+        files = File.objects.filter(modele3D=modele3d)
+        file_serializer = FileSerializerImage(files, many=True)
+        for val in file_serializer.data:
+            files_set.append(val['path_file'])
+        file = None
+        for val in files_set:
+            ext = val.split('.')[-1]
+            # print(ext)
+            if(ext == 'glb'):
+                file = val
+            elif(ext == 'gltf'):
+                file = val
+            # elif(ext == 'png'):
+            #     file = val
+            # elif(ext == 'jpg'):
+            #     file = val
+
         res.append(
-            {'traitement': traitement_serializer.data[i],
-             'path_modele3d': modele3d_serializer.data['path_modele3d'],
+            {'id': traitement_serializer.data[i]['id'],
+             'nom': traitement_serializer.data[i]['titre_traitement'],
+             #  'path_modele3d': modele3d_serializer.data['path_modele3d'],
+             'path_modele3d': file,
              'path_image': path_image
              })
 
@@ -800,21 +821,22 @@ def traitement_api(request, id):
         id=traitement.modele3D_id).first()
 
     files_set = []
-
     files = File.objects.filter(modele3D=modele3d)
     file_serializer = FileSerializerImage(files, many=True)
-
     for val in file_serializer.data:
         files_set.append(val['path_file'])
-
     file = None
-
     for val in files_set:
         ext = val.split('.')[-1]
-        print(ext)
-        if(ext == 'png'):
+        # print(ext)
+        # if(ext == 'png'):
+        #     file = val
+        # elif(ext == 'jpg'):
+        #     file = val
+
+        if(ext == 'glb'):
             file = val
-        elif(ext == 'jpg'):
+        elif(ext == 'gltf'):
             file = val
 
     image_serializer = None
