@@ -41,8 +41,9 @@ urlpatterns = [
  
     
     # API
-    path('api/prof/<int:idProf>/seances', getSeances),
-    path('api/get-photo/<path:path_image>', getPhoto, name="getPhoto"),
+    path('api/prof/<int:idProf>/seances/', getSeances),
+    path('api/get-photo/<path:path_image>/', getPhoto, name="getPhoto"),
+    path('api/modifier-presence/<int:idSeance>/<int:idEtudiant>/', modifierPresenceAPI),
     
     
 
