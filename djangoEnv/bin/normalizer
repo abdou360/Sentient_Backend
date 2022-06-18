@@ -1,4 +1,4 @@
-#!/home/akihiki/PycharmProjects/irisi2.realite_augmentee_et_gestion_presence/djangoEnv/bin/python
+#!/home/akihiki/PycharmProjects/last/irisi2.realite_augmentee_et_gestion_presence/djangoEnv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
