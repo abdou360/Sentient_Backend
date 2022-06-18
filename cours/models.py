@@ -1,3 +1,7 @@
+
+#   EQUIPE  : Univit
+#   @author : Koutar OUBENADDI et OUGOUD Khadija et ERROUK Ismail et ETTAFSSAOUI Youssef
+
 from django.db import models
 from pymysql import NULL
 from module.models import ElementModule
@@ -21,6 +25,11 @@ def document_image_upload_location(instance, filename):
     stamp = datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d-%H-%M-%S')
     return 'img/cours/document_images/%s.%s' % (str(stamp), extension)
 
+def document_file_upload_location(instance, filename):
+    filebase, extension = filename.split('.')
+    now = time.time()
+    stamp = datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d-%H-%M-%S')
+    return 'img/cours/document_files/%s.%s' % (str(stamp), extension)
 
 def model_location(modelName):
     now = time.time()
@@ -60,7 +69,7 @@ class Chapitre(models.Model):
 class Document(models.Model):
     titre = models.CharField(max_length=40, null=False)
     type = models.CharField(max_length=20, null=False)
-    path = models.CharField(max_length=100, null=False)
+    path = models.FileField(upload_to=document_file_upload_location, null=False, max_length=255)
     image = models.ImageField(
         upload_to=document_image_upload_location, default=NULL)
     chapitre = models.ForeignKey(

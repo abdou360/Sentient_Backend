@@ -12,14 +12,13 @@ from .registerPresence import registerPresenceDB
 from .utils import assure_path_exists, CAMERA_PORT
 
 
-def RecognizerMethod():
-        print('hiii')
+def RecognizerMethod(idSalle):
         # gauth = GoogleAuth()
         # drive = GoogleDrive(gauth)
         path_dir = "face_recognition/service_metier/folder/"
         assure_path_exists(path_dir) 
         i=0
-        cap = cv2.VideoCapture(CAMERA_PORT, cv2.CAP_DSHOW)    
+        cap = cv2.VideoCapture(CAMERA_PORT)
         ret, frame = cap.read()
         
         while(i <8):
@@ -46,4 +45,4 @@ def RecognizerMethod():
         cap.release()
         cv2.destroyAllWindows()
 
-        return registerPresenceDB(2)
+        return registerPresenceDB(idSalle)

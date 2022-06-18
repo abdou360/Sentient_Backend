@@ -1,3 +1,7 @@
+
+#   EQUIPE  : Univit
+#   @author : Koutar OUBENADDI et OUGOUD Khadija
+
 from dataclasses import fields
 from pyexpat import model
 from django import forms
@@ -52,18 +56,19 @@ class ChapitreForm(forms.ModelForm):
         self.fields['element_module'].queryset = ElementModule.objects.filter(
             prof_id=get_prof_id(self.request))
 
+CHOICES = [('pdf', 'pdf'), ('docx', 'docx'), ('ppt', 'ppt')]
 
 class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
         fields = (
             'titre',
-            'type',
             'path',
+            'image',
+
         )
         labels = {
             'titre': 'Nom du Document',
-            'type': 'Type du Document',
             'path': 'Fichier',
             'image': 'Image',
         }
@@ -71,11 +76,23 @@ class DocumentForm(forms.ModelForm):
             'titre': forms.TextInput(attrs={'placeholder': 'Nom du Document',
                                             'class': 'form-control',
                                             }),
-            'path': forms.TextInput(attrs={'placeholder': 'Fichier',
-                                           'class': 'form-control',
-                                           }),
+            
+            # 'type': forms.RadioSelect(choices=CHOICES
+            #                                      #   , attrs={'class': 'custom-control-input'}
+            #                                      ),
+           'path': forms.ClearableFileInput(attrs={'multiple': False}),
+
         }
 
+    
+    def __init__(self, *args, **kwargs):
+        # if kwargs.__contains__("request"):
+        self.request = kwargs.pop("request")
+        super().__init__(*args, **kwargs)
+        self.fields['titre'].label = ''
+        self.fields['path'].label = ''
+        self.fields['image'].label = ''
+       
 
 class Modele3DForm(forms.ModelForm):
     class Meta:

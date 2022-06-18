@@ -1,4 +1,8 @@
 
+
+#   EQUIPE  : Univit
+#   @author : Koutar OUBENADDI et OUGOUD Khadija
+
 from django import views
 from django.urls import path
 # from .views import chapitres_list
@@ -36,7 +40,13 @@ urlpatterns = [
     path('traitement_details',
          traitement_details, name='traitement_details'),
 
+# Documents URL and APIs
+    path('add_document/<int:id>', add_document, name='add_document'),
     path('delete_document/<int:id>', delete_document, name='delete_document'),
+    path('update_document/<int:id>', update_document, name='update_document'),
+    path('api/documents/<int:id_chapitre>',
+         documents_list_api, name='documents_list_api'),
+
 
     path('api/chapitres/<int:id_module>',
          chapitres_list_api, name='chapitres_list_api'),
