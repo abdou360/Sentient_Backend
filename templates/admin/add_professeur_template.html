@@ -15,8 +15,8 @@
             <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="card card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Ajouter Professeur</h3>
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title">Ajouter un Nouveau Professeur</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -46,13 +46,23 @@
                             </div>
                             </div>
                             {% endif %}
-                        
 
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Email address</label>
-                            <input type="email" class="form-control" name="email" placeholder="Enter email" id="id_email">
+                            <label for="">Admin : </label>
+                                <select required name="select_admin">
+                                    {% for admin in admins %}
+                                        <option value="{{ admin.id }}">{{ admin.admin.first_name }}
+                                            {{admin.admin.last_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
                         </div>
+
+                            <div class="form-group">
+                                <label>Email address</label>
+                                <input type="email" class="form-control" name="email" placeholder="Enter email" id="id_email">
+                            </div>
 
                         <div class="form-group">
                             <label>Username</label>
@@ -86,14 +96,14 @@
 
                         <div class="form-group">
                             <label>Speciality</label>
-                            <input type="text" class="form-control" name="specialite" placeholder="Speciality">
                         </div>
 
                     </div>
                     <!-- /.card-body -->
 
                     <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Add professeur</button>
+                    <a href="{% url 'manage_professeur' %}" class="btn btn-danger">Annuler l'Ajout</a>
+                    <button type="submit" class="btn btn-primary">Ajouter Professeur</button>
                     </div>
                 </form>
                 </div>

@@ -5,11 +5,11 @@
 
 <section class="content">
     <div class="content-wrapper mt-5">
-    <button class="btn btn-primary btn-sm"
-            data-toggle="modal"
-            data-target="#pModal"
+    <a 
+    href="{% url 'add_professeur' %}"
+    class="btn btn-primary btn-sm"
             id="submit"><i class="fas fa-plus"></i>&nbsp;Ajouter un Nouveau Professeur
-    </button>
+    </a>
     <br />&nbsp; {% if messages %}
     <div class="form-group">
     <div class="col-12">

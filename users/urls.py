@@ -21,19 +21,14 @@ urlpatterns = [
                   path('logout_user/', views.logout_user, name="logout_user"),
                   path('admin_home/', AdminViews.admin_home, name="admin_home"),
                   # UnivIt responsable : Ettafssaoui Youssef 
+                  path('upload_csv/', AdminViews.upload_csv, name="upload_csv"),
+                  path('add_professeur/', AdminViews.add_professeur, name="add_professeur"),
+                  path('manage_users/', AdminViews.manage_users, name="manage_users"),
                   path('add_professeur_save/', AdminViews.add_professeur_save, name="add_professeur_save"),
                   path('manage_professeur/', AdminViews.manage_professeur, name="manage_professeur"),
                   path('edit_professeur/<professeur_id>/', AdminViews.edit_professeur, name="edit_professeur"),
                   path('edit_professeur_save/', AdminViews.edit_professeur_save, name="edit_professeur_save"),
                   path('delete_professeur/<professeur_id>/', AdminViews.delete_professeur, name="delete_professeur"),
-                  
-                  # UnivIt responsable : Ettafssaoui Youssef 
-               #    path('manage_session/', AdminViews.manage_session, name="manage_session"),
-               #    path('add_session/', AdminViews.add_session, name="add_session"),
-               #    path('add_session_save/', AdminViews.add_session_save, name="add_session_save"),
-               #    path('edit_session/<session_id>', AdminViews.edit_session, name="edit_session"),
-               #    path('edit_session_save/', AdminViews.edit_session_save, name="edit_session_save"),
-               #    path('delete_session/<session_id>/', AdminViews.delete_session, name="delete_session"),
                   # UnivIt responsable : ismail errouk
                   path('students/', StudentViews.getAllStudents, name="get_all_students"),
                   path('add_student/', StudentViews.add_student, name="add_student"),
